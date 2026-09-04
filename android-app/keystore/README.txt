@@ -1,11 +1,3 @@
-Upload keystore lives here on your machine only.
-
-File: mobile-market-upload.jks
-Alias: upload
-
-Copy ../keystore.example.properties to keystore.properties and fill
-passwords locally. Do not commit:
-
-  password.txt
-  keystore.properties
-  *.jks
+Put upload-keystore.jks here on your computer. Do not commit it.
+Copy ../keystore.example.properties to keystore.properties and fill passwords locally.
+See README-PUBLISHING.md sections C and D.

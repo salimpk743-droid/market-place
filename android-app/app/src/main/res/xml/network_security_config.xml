@@ -5,9 +5,4 @@
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    <domain-config cleartextTrafficPermitted="false">
-        <domain includeSubdomains="true">market-place-six-chi.vercel.app</domain>
-        <domain includeSubdomains="true">pagead2.googlesyndication.com</domain>
-        <domain includeSubdomains="true">googleads.g.doubleclick.net</domain>
-    </domain-config>
 </network-security-config>

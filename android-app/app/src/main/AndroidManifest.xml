@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <queries>
         <intent>
@@ -10,6 +11,30 @@
         <intent>
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="whatsapp" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.GET_CONTENT" />
+            <data android:mimeType="image/*" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SEND" />
+            <data android:mimeType="text/plain" />
         </intent>
     </queries>
 
@@ -23,16 +48,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MobileMarket"
         android:usesCleartextTraffic="false"
-        android:networkSecurityConfig="@xml/network_security_config">
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:enableOnBackInvokedCallback="true">
 
         <meta-data
             android:name="asset_statements"
             android:resource="@string/asset_statements" />
 
         <activity
-            android:name="com.google.androidbrowserhelper.trusted.LauncherActivity"
+            android:name=".TwaLauncherActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:alwaysRetainTaskState="true"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.MobileMarket.Launcher">
 
             <meta-data
@@ -56,6 +85,9 @@
             <meta-data
                 android:name="android.support.customtabs.trusted.FALLBACK_ACTIVITY"
                 android:value="pk.mobilemarket.app.FallbackActivity" />
+            <meta-data
+                android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+                android:value="${applicationId}.fileprovider" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,9 +115,27 @@
             android:theme="@style/Theme.MobileMarket" />
 
         <activity
-            android:name=".PrivacyActivity"
+            android:name=".OfflineActivity"
             android:exported="false"
-            android:label="@string/privacy_title"
             android:theme="@style/Theme.MobileMarket" />
+
+        <service
+            android:name="com.google.androidbrowserhelper.trusted.DelegationService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 </manifest>

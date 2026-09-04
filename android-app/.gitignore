@@ -5,8 +5,13 @@ local.properties
 *.iml
 .idea/
 .DS_Store
+*.jks
+*.keystore
+*.p12
+keystore.properties
 keystore/password.txt
-keystore/keystore.properties
 keystore/*.jks
-keystore/*.p12
 keystore/*.keystore
+keystore/*.p12
+**/password.txt
+**/*secret*
