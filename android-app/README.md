@@ -8,35 +8,43 @@ This is **not** a WebView wrapper. Google Play often rejects “website in a Web
 
 - uses the same listings, cities, post-ad, edit, sold and delete flow
 - keeps AdSense valid on the website (the supported way to earn from ads)
-- meets current Play target API (35), HTTPS-only, no extra permissions
+- targets Android 16 (API 36), HTTPS-only, no extra permissions
 
 Package name: `pk.mobilemarket.app`  
 App name: **Mobile Market**
 
+**Build stack:** Android Gradle Plugin 8.11.1, Gradle 8.13, Kotlin 2.1.10, `compileSdk` / `targetSdk` 36.
+
 ## 1. Open in Android Studio
 
-1. Install [Android Studio](https://developer.android.com/studio).
-2. **Open** this folder (`Mobile-Market-Android`).
+1. Install [Android Studio](https://developer.android.com/studio) (SDK Platform 36).
+2. **Open** this folder.
 3. Let Gradle sync.
 4. Run on a phone or emulator to preview.
 
-Signing key is already in `keystore/` (see `keystore/password.txt`). Keep that folder private — if you lose it you cannot update the Play listing.
+## 2. Signing (upload key)
 
-## 2. Build the file Play Console wants
+The previous key and password files were retired. Passwords are **not** stored in this project.
+
+1. Place `mobile-market-upload.jks` in `keystore/` (do not commit it).
+2. Copy `keystore.example.properties` → `keystore/keystore.properties` and fill the passwords **on your machine only**.
+3. Alias is `upload`.
+
+`keystore/password.txt` and `keystore/keystore.properties` are gitignored. Do not put them in a zip you share.
+
+In Android Studio you can also skip the properties file and use **Build → Generate Signed App Bundle**, then pick the `.jks` and type the password there.
+
+If you lose the upload key you cannot ship updates under the same Play listing.
+
+## 3. Build the file Play Console wants
 
 Play Console accepts an **Android App Bundle (.aab)**, not a raw APK.
 
-In Android Studio: **Build → Generate Signed App Bundle / APK → Android App Bundle**.
-
-Use:
-
-- keystore: `keystore/mobile-market-upload.jks`
-- alias: `upload`
-- passwords: `keystore/password.txt`
+**Build → Generate Signed App Bundle / APK → Android App Bundle.**
 
 The file appears under `app/release/app-release.aab`.
 
-## 3. Google Play Console (avoid common rejections)
+## 4. Google Play Console (avoid common rejections)
 
 Create the app named **Mobile Market**, package `pk.mobilemarket.app`.
 
@@ -52,7 +60,7 @@ Create the app named **Mobile Market**, package `pk.mobilemarket.app`.
 
 Do **not** add AdSense JavaScript inside a WebView. Do **not** copy another brand’s store listing.
 
-## 4. Turn on AdSense (earn from ads)
+## 5. Turn on AdSense (earn from ads)
 
 1. Apply at [google.com/adsense](https://www.google.com/adsense) with the live website URL.
 2. After approval, edit `js/ads-config.js` on the website:
@@ -70,11 +78,11 @@ window.MW_ADS = {
 
 Ads then show on the website **and** in the Android app, because the app displays that same site.
 
-## 5. Why this passes policy
+## 6. Why this passes policy
 
 - TWA / Digital Asset Links (verified via `https://market-place-six-chi.vercel.app/.well-known/assetlinks.json`)
 - HTTPS only
 - Internet permission only
 - Privacy policy URL
 - No AdSense-in-WebView
-- minSdk 26, targetSdk 35, 64-bit, no compressed JNI (16 KB page-size ready)
+- minSdk 26, targetSdk 36, 64-bit, no compressed JNI (16 KB page-size ready)
