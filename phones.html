@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Used Phones for Sale - MobileWheels PK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+  <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
+      <a href="index.html" class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></a>
+      <nav class="hidden md:flex space-x-6 font-medium">
+        <a href="phones.html" class="text-yellow-300">Used Phones</a>
+        <a href="index.html#brands" class="hover:text-yellow-300">Brands</a>
+        <a href="index.html#cities" class="hover:text-yellow-300">Cities</a>
+      </nav>
+      <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow">+ Post An Ad</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
+    <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900" id="page-title">Used phones for sale</h1>
+    <p class="text-sm text-gray-500 mt-1 mb-6" id="page-sub"></p>
+
+    <form id="filters" class="bg-white border rounded-xl p-4 mb-8 grid gap-3 md:grid-cols-6">
+      <input name="q" id="q" type="text" placeholder="Search model…" class="md:col-span-2 p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+      <select name="city" id="city" class="p-2.5 border rounded-lg bg-white"></select>
+      <select name="area" id="area" class="p-2.5 border rounded-lg bg-white"></select>
+      <select name="brand" id="brand" class="p-2.5 border rounded-lg bg-white"></select>
+      <select name="pta" id="pta" class="p-2.5 border rounded-lg bg-white">
+        <option value="">Any PTA status</option>
+      </select>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg md:col-span-6">Apply filters</button>
+    </form>
+
+    <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+    <p id="empty" class="hidden text-center text-gray-500 py-16">No phones match those filters. Try another city or brand.</p>
+  </main>
+
+  <footer class="bg-gray-900 text-gray-400 py-8 border-t">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-white">Home</a>
+        <a href="sell.html" class="hover:text-white">Post Ad</a>
+        <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ui = MW.ui;
+    const f = {
+      q: ui.qs('q'),
+      city: ui.qs('city'),
+      area: ui.qs('area'),
+      brand: ui.qs('brand'),
+      pta: ui.qs('pta'),
+      featuredOnly: ui.qs('featured') === '1',
+    };
+
+    document.getElementById('q').value = f.q;
+    ui.bindCityArea(document.getElementById('city'), document.getElementById('area'), { allowAll: true, city: f.city, area: f.area });
+
+    const brandSel = document.getElementById('brand');
+    brandSel.innerHTML = '<option value="">All brands</option>' + MW.BRANDS.map((b) =>
+      '<option value="' + b.name + '"' + (f.brand === b.name ? ' selected' : '') + '>' + b.name + '</option>'
+    ).join('');
+
+    const ptaSel = document.getElementById('pta');
+    MW.PTA.forEach((p) => {
+      const o = document.createElement('option');
+      o.value = p.id; o.textContent = p.label;
+      if (f.pta === p.id) o.selected = true;
+      ptaSel.appendChild(o);
+    });
+
+    const rows = ui.filterListings(f);
+    const bits = [];
+    if (f.brand) bits.push(f.brand);
+    if (f.city) bits.push(ui.cityName(f.city));
+    if (f.area) bits.push(f.area);
+    document.getElementById('page-title').textContent = bits.length
+      ? 'Used ' + (f.brand || 'phones') + (f.city ? ' in ' + ui.cityLabel(f.city, f.area) : '')
+      : (f.featuredOnly ? 'Featured phones' : 'Used phones for sale');
+    document.getElementById('page-sub').textContent = rows.length + ' listing' + (rows.length === 1 ? '' : 's');
+
+    if (!rows.length) document.getElementById('empty').classList.remove('hidden');
+    document.getElementById('results').innerHTML = rows.map(ui.cardHtml).join('');
+  </script>
+</body>
+</html>

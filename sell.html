@@ -1,102 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Mobile Ad - MobileWheels PK</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post Mobile Ad - MobileWheels PK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 min-h-screen">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-    <header class="bg-blue-700 text-white shadow-md p-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold">Mobile<span class="text-yellow-400">Wheels</span></a>
-            <a href="index.html" class="text-sm bg-blue-800 px-3 py-1.5 rounded hover:bg-blue-900">← Back to Home</a>
-        </div>
-    </header>
-
-    <div class="max-w-xl mx-auto my-8 bg-white p-8 rounded-xl shadow-md">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Post Your Mobile Phone Ad</h2>
-        
-        <form class="space-y-4">
-            <!-- Brand -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
-                <select class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Select Brand</option>
-                    <option>Apple</option>
-                    <option>Samsung</option>
-                    <option>Xiaomi / Redmi</option>
-                    <option>Vivo</option>
-                    <option>Oppo</option>
-                    <option>Infinix</option>
-                </select>
-            </div>
-
-            <!-- Model -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Model</label>
-                <input type="text" placeholder="e.g. iPhone 13 Pro Max" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- City -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
-                <select class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Select City</option>
-                    <option>Karachi</option>
-                    <option>Lahore</option>
-                    <option>Islamabad</option>
-                    <option>Rawalpindi</option>
-                </select>
-            </div>
-
-            <!-- PTA Status -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">PTA Status</label>
-                <select class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Official PTA Approved</option>
-                    <option>Non-PTA (Tax Pending)</option>
-                    <option>CPID / Patch Approved</option>
-                    <option>JV (SIM Locked)</option>
-                </select>
-            </div>
-
-            <!-- Photo Upload Section -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Upload Photos (Max 5)</label>
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition cursor-pointer relative bg-gray-50">
-                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
-                    <p class="text-sm font-medium text-gray-600">Click or drag photos here to upload</p>
-                    <p class="text-xs text-gray-400 mt-1">Upload clear photos of front, back, and IMEI/settings</p>
-                    <input type="file" multiple accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
-                </div>
-            </div>
-
-            <!-- Battery Health -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Battery Health (%)</label>
-                <input type="number" min="1" max="100" placeholder="e.g. 85" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Demand Price -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Demand Price (PKR)</label>
-                <input type="number" placeholder="e.g. 150000" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Description -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Condition / Description</label>
-                <textarea placeholder="Describe screen condition, scratches, accessories included, etc." class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none h-24"></textarea>
-            </div>
-
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg transition duration-200">
-                Submit Listing
-            </button>
-        </form>
+  <header class="bg-blue-700 text-white shadow-md p-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold">Mobile<span class="text-yellow-400">Wheels</span></a>
+      <a href="index.html" class="text-sm bg-blue-800 px-3 py-1.5 rounded hover:bg-blue-900">← Back to Home</a>
     </div>
+  </header>
 
+  <div class="max-w-xl mx-auto my-8 bg-white p-8 rounded-xl shadow-md w-full">
+    <h1 class="text-2xl font-bold mb-2 text-gray-800 text-center">Post your mobile phone ad</h1>
+    <p class="text-sm text-gray-500 text-center mb-6">Photos, city, area, PTA status and price — same flow as a real classifieds listing.</p>
+
+    <form id="sell-form" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+        <select id="brand" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Phone model</label>
+        <select id="model" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></select>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Storage</label>
+          <select id="storage" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">RAM</label>
+          <select id="ram" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Optional</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+        <select id="city" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Area</label>
+        <select id="area" required class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">PTA status</label>
+        <select id="pta" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"></select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Photo</label>
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition relative bg-gray-50">
+          <img id="preview" class="hidden mx-auto mb-3 max-h-40 rounded-lg object-cover">
+          <i class="fa-solid fa-cloud-arrow-up text-3xl text-gray-400 mb-2"></i>
+          <p class="text-sm font-medium text-gray-600">Click to upload a clear photo</p>
+          <p class="text-xs text-gray-400 mt-1">Front of the phone works best</p>
+          <input id="photo" type="file" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Battery health (%)</label>
+          <input id="battery" type="number" min="1" max="100" placeholder="e.g. 85" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Condition</label>
+          <select id="condition" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Demand price (PKR)</label>
+        <input id="price" type="number" required min="1000" placeholder="e.g. 150000" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Color</label>
+          <input id="color" type="text" placeholder="e.g. Sierra Blue" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+          <input id="year" type="number" min="2016" max="2026" value="2024" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Your name</label>
+        <input id="seller" type="text" required placeholder="Seller or shop name" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp / phone</label>
+        <input id="phone" type="tel" required placeholder="03xx-xxxxxxx" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Phone condition / description</label>
+        <textarea id="description" placeholder="Screen, scratches, accessories, box pack…" class="w-full p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none h-24"></textarea>
+      </div>
+      <p id="error" class="hidden text-sm text-red-600"></p>
+      <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg">
+        Submit listing
+      </button>
+    </form>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ui = MW.ui;
+    const brandEl = document.getElementById('brand');
+    const modelEl = document.getElementById('model');
+    brandEl.innerHTML = MW.BRANDS.map((b) => '<option value="' + b.name + '">' + b.name + '</option>').join('');
+
+    function fillModels() {
+      const models = MW.MODELS_BY_BRAND[brandEl.value] || [];
+      modelEl.innerHTML = models.map((m) => '<option>' + m + '</option>').join('') || '<option>Other</option>';
+    }
+    brandEl.addEventListener('change', fillModels);
+    fillModels();
+
+    document.getElementById('storage').innerHTML = MW.STORAGE_OPTIONS.map((n) =>
+      '<option value="' + n + '"' + (n === 128 ? ' selected' : '') + '>' + n + ' GB</option>'
+    ).join('');
+    MW.RAM_OPTIONS.forEach((n) => {
+      const o = document.createElement('option');
+      o.value = n; o.textContent = n + ' GB';
+      document.getElementById('ram').appendChild(o);
+    });
+    document.getElementById('pta').innerHTML = MW.PTA.map((p) => '<option value="' + p.id + '">' + p.label + '</option>').join('');
+    document.getElementById('condition').innerHTML = MW.CONDITIONS.map((c) => '<option>' + c + '</option>').join('');
+
+    ui.bindCityArea(document.getElementById('city'), document.getElementById('area'), { allowAll: false });
+
+    let photoData = '';
+    document.getElementById('photo').addEventListener('change', async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      try {
+        const bitmap = await createImageBitmap(file);
+        const max = 1200;
+        const scale = Math.min(1, max / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        let q = 0.72;
+        photoData = canvas.toDataURL('image/jpeg', q);
+        while (photoData.length > 350000 && q > 0.4) {
+          q -= 0.08;
+          photoData = canvas.toDataURL('image/jpeg', q);
+        }
+        const img = document.getElementById('preview');
+        img.src = photoData;
+        img.classList.remove('hidden');
+      } catch {
+        document.getElementById('error').textContent = 'Could not read that photo. Try a JPG or PNG.';
+        document.getElementById('error').classList.remove('hidden');
+      }
+    });
+
+    document.getElementById('sell-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const city = document.getElementById('city').value;
+      const area = document.getElementById('area').value;
+      if (!city || !area) {
+        document.getElementById('error').textContent = 'Pick a city and area.';
+        document.getElementById('error').classList.remove('hidden');
+        return;
+      }
+      const listing = {
+        id: 'user-' + Date.now(),
+        brand: brandEl.value,
+        model: modelEl.value,
+        storageGb: Number(document.getElementById('storage').value) || null,
+        ramGb: Number(document.getElementById('ram').value) || null,
+        pricePkr: Number(document.getElementById('price').value),
+        citySlug: city,
+        area,
+        ptaStatus: document.getElementById('pta').value,
+        batteryHealth: Number(document.getElementById('battery').value) || null,
+        condition: document.getElementById('condition').value,
+        description: document.getElementById('description').value,
+        color: document.getElementById('color').value,
+        year: Number(document.getElementById('year').value) || null,
+        imageUrl: photoData || ui.brandImage(brandEl.value, modelEl.value),
+        featured: false,
+        sellerName: document.getElementById('seller').value,
+        contactPhone: document.getElementById('phone').value,
+        createdAtHours: 0,
+      };
+      ui.saveUserListing(listing);
+      location.href = 'phone.html?id=' + encodeURIComponent(listing.id);
+    });
+  </script>
 </body>
 </html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phone listing - MobileWheels PK</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+  <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
+      <a href="index.html" class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></a>
+      <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow">+ Post An Ad</a>
+    </div>
+  </header>
+
+  <main id="main" class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full"></main>
+
+  <footer class="bg-gray-900 text-gray-400 py-8 border-t">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-white">Home</a>
+        <a href="phones.html" class="hover:text-white">Used Phones</a>
+        <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ui = MW.ui;
+    const listing = ui.getListing(ui.qs('id'));
+    const main = document.getElementById('main');
+
+    if (!listing) {
+      main.innerHTML = '<div class="max-w-xl mx-auto text-center py-20"><h1 class="text-3xl font-bold">Listing not found</h1><p class="mt-2 text-gray-500">It may have been sold or removed.</p><a href="phones.html" class="mt-6 inline-block text-blue-700 underline">Back to used phones</a></div>';
+    } else {
+      document.title = ui.listingTitle(listing) + ' - MobileWheels PK';
+      const pta = ui.ptaMeta(listing.ptaStatus);
+      const specs = [
+        listing.storageGb ? ['Storage', listing.storageGb + ' GB'] : null,
+        listing.ramGb ? ['RAM', listing.ramGb + ' GB'] : null,
+        listing.batteryHealth ? ['Battery', listing.batteryHealth + '%'] : null,
+        listing.condition ? ['Condition', listing.condition] : null,
+        listing.color ? ['Color', listing.color] : null,
+        listing.year ? ['Year', String(listing.year)] : null,
+        ['PTA', pta.label],
+      ].filter(Boolean);
+      const related = ui.filterListings({ brand: listing.brand }).filter((r) => r.id !== listing.id).slice(0, 3);
+      const img = listing.imageUrl || ui.brandImage(listing.brand, listing.model);
+      const phone = listing.contactPhone || '';
+
+      main.innerHTML =
+        '<a href="phones.html" class="text-sm text-blue-700 hover:underline">← All used phones</a>' +
+        '<div class="mt-4 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">' +
+          '<div>' +
+            '<div class="overflow-hidden rounded-xl border bg-white shadow-sm">' +
+              '<img src="' + img + '" alt="' + ui.listingTitle(listing).replace(/"/g,'') + '" class="w-full aspect-[4/3] object-cover">' +
+            '</div>' +
+            '<div class="mt-6 bg-white border rounded-xl p-6">' +
+              '<h2 class="font-bold text-lg mb-2">Seller comments</h2>' +
+              '<p class="text-sm leading-relaxed text-gray-600">' + (listing.description || '') + '</p>' +
+            '</div>' +
+          '</div>' +
+          '<aside class="bg-white border rounded-xl p-6 h-fit shadow-sm">' +
+            '<div class="flex flex-wrap gap-1.5 mb-3">' +
+              (listing.featured ? '<span class="bg-yellow-400 text-gray-900 text-xs font-bold px-2 py-0.5 rounded">Featured</span>' : '') +
+              '<span class="' + pta.cls + ' text-xs font-bold px-2 py-0.5 rounded">' + pta.label + '</span>' +
+            '</div>' +
+            '<h1 class="text-2xl font-extrabold">' + ui.listingTitle(listing) + '</h1>' +
+            '<p class="text-3xl font-extrabold text-blue-700 mt-2">' + ui.formatPkr(listing.pricePkr) + '</p>' +
+            '<p class="text-sm text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>' + ui.cityLabel(listing.citySlug, listing.area) + '</p>' +
+            '<p class="text-xs text-gray-400 mt-1">' + ui.timeAgo(listing.createdAtHours) + '</p>' +
+            '<dl class="mt-5 grid grid-cols-2 gap-3 text-sm">' +
+              specs.map((s) => '<div><dt class="text-xs text-gray-400">' + s[0] + '</dt><dd class="font-semibold">' + s[1] + '</dd></div>').join('') +
+            '</dl>' +
+            '<div class="mt-6 border-t pt-4">' +
+              '<p class="text-sm font-semibold">' + (listing.sellerName || 'Seller') + '</p>' +
+              (phone
+                ? '<a id="call-btn" href="#" class="mt-3 flex w-full items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-phone"></i> Show seller number</a>'
+                : '<p class="text-xs text-gray-400 mt-2">No phone listed.</p>') +
+            '</div>' +
+          '</aside>' +
+        '</div>' +
+        (related.length
+          ? '<section class="mt-12"><h2 class="text-xl font-bold mb-5">More ' + listing.brand + ' phones</h2><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">' + related.map(ui.cardHtml).join('') + '</div></section>'
+          : '');
+
+      const btn = document.getElementById('call-btn');
+      if (btn && phone) {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          btn.outerHTML = '<a href="tel:' + phone.replace(/[^0-9+]/g,'') + '" class="mt-3 flex w-full items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 rounded-lg"><i class="fa-solid fa-phone"></i> ' + phone + '</a>';
+        });
+      }
+    }
+  </script>
+</body>
+</html>

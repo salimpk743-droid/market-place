@@ -1,309 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MobileWheels PK - Buy & Sell Used Mobile Phones in Pakistan</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MobileWheels PK - Buy & Sell Used Mobile Phones in Pakistan</title>
+  <meta name="description" content="Search verified used iPhone, Samsung, Xiaomi and more across 200+ cities in Pakistan.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
-    <!-- Header / Navbar -->
-    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></a>
-            <nav class="hidden md:flex space-x-6 font-medium">
-                <a href="index.html" class="hover:text-yellow-300">Home</a>
-                <a href="#featured" class="hover:text-yellow-300">Used Phones</a>
-                <a href="#brands" class="hover:text-yellow-300">Brands</a>
-            </nav>
-            <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow inline-block">
-                + Post An Ad
-            </a>
-        </div>
-    </header>
+  <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center gap-3">
+      <a href="index.html" class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></a>
+      <nav class="hidden md:flex space-x-6 font-medium">
+        <a href="phones.html" class="hover:text-yellow-300">Used Phones</a>
+        <a href="#brands" class="hover:text-yellow-300">Brands</a>
+        <a href="#cities" class="hover:text-yellow-300">Cities</a>
+      </nav>
+      <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow inline-block">
+        + Post An Ad
+      </a>
+    </div>
+  </header>
 
-    <!-- Hero Search Section -->
-    <section class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4">
-        <div class="max-w-4xl mx-auto text-center">
-            <h2 class="text-3xl md:text-4xl font-extrabold mb-3">Find Used Mobile Phones in Pakistan</h2>
-            <p class="text-blue-100 mb-6">With thousands of verified listings for iPhone, Samsung, Xiaomi & more</p>
-            
-            <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-2">
-                <input type="text" placeholder="Search Mobile Brand or Model..." class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <select class="p-3 border rounded-lg bg-white text-gray-600">
-                    <select class="p-3 border rounded-lg bg-white text-gray-700 w-full focus:ring-2 focus:ring-blue-500 outline-none">
-    <option value="">All Cities / Locations</option>
-<select name="city" id="city" class="p-3 border rounded-lg bg-white text-gray-700 w-full focus:ring-2 focus:ring-blue-500 outline-none">
-    <option value="">All Cities / Locations</option>
+  <section class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4">
+    <div class="max-w-4xl mx-auto">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-300 mb-2" id="loc-count">Used mobiles · Pakistan</p>
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Find used mobile phones in Pakistan</h1>
+      <p class="text-blue-100 mb-6">Search verified listings for iPhone, Samsung, Xiaomi & more — filter by city, area, PTA status and price.</p>
 
-    <optgroup label="Federal Capital">
-        <option value="islamabad">Islamabad</option>
-    </optgroup>
+      <form action="phones.html" method="get" class="bg-white p-3 md:p-4 rounded-xl shadow-lg text-gray-800 grid gap-2 md:grid-cols-[1fr_1fr_1fr_auto]">
+        <input name="q" type="text" placeholder="Search brand or model — e.g. iPhone 13 Pro" class="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Search brand or model">
+        <select name="city" id="city" class="p-3 border rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"></select>
+        <select name="area" id="area" class="p-3 border rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"></select>
+        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg">
+          <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
+        </button>
+      </form>
+    </div>
+  </section>
 
-    <optgroup label="Punjab - Major Cities & Districts">
-        <option value="lahore">Lahore</option>
-        <option value="faisalabad">Faisalabad</option>
-        <option value="rawalpindi">Rawalpindi</option>
-        <option value="multan">Multan</option>
-        <option value="gujranwala">Gujranwala</option>
-        <option value="sargodha">Sargodha</option>
-        <option value="sialkot">Sialkot</option>
-        <option value="bahawalpur">Bahawalpur</option>
-        <option value="jhang">Jhang</option>
-        <option value="sheikhupura">Sheikhupura</option>
-        <option value="rahim-yar-khan">Rahim Yar Khan</option>
-        <option value="gujrat">Gujrat</option>
-        <option value="kasur">Kasur</option>
-        <option value="sahiwal">Sahiwal</option>
-        <option value="okara">Okara</option>
-        <option value="wah-cantt">Wah Cantt</option>
-        <option value="dera-ghazi-khan">Dera Ghazi Khan</option>
-        <option value="mirpur-khas">Mirpur Khas</option>
-        <option value="nankana-sahib">Nankana Sahib</option>
-        <option value="hafizabad">Hafizabad</option>
-        <option value="jhelum">Jhelum</option>
-        <option value="chiniot">Chiniot</option>
-        <option value="khanewal">Khanewal</option>
-        <option value="attock">Attock</option>
-        <option value="muzaffargarh">Muzaffargarh</option>
-        <option value="mianwali">Mianwali</option>
-        <option value="bhakkar">Bhakkar</option>
-        <option value="toba-tek-singh">Toba Tek Singh</option>
-        <option value="bahawalnagar">Bahawalnagar</option>
-        <option value="vehari">Vehari</option>
-        <option value="layyah">Layyah</option>
-        <option value="pakpattan">Pakpattan</option>
-        <option value="lodhran">Lodhran</option>
-        <option value="chakwal">Chakwal</option>
-    </optgroup>
+  <main class="max-w-6xl mx-auto px-4 py-10 space-y-12 flex-grow w-full">
 
-    <optgroup label="Punjab - Popular Tehsils & Towns">
-        <option value="taxila">Taxila</option>
-        <option value="murree">Murree</option>
-        <option value="gujar-khan">Gujar Khan</option>
-        <option value="kot-radha-kishan">Kot Radha Kishan</option>
-        <option value="pattoki">Pattoki</option>
-        <option value="chunian">Chunian</option>
-        <option value="raiwind">Raiwind</option>
-        <option value="model-town-lahore">Model Town (Lahore)</option>
-        <option value="kamoke">Kamoke</option>
-        <option value="daska">Daska</option>
-        <option value="sambrial">Sambrial</option>
-        <option value="bhalwal">Bhalwal</option>
-        <option value="shorkot">Shorkot</option>
-        <option value="taunsa-sharif">Taunsa Sharif</option>
-        <option value="ahmedpur-east">Ahmedpur East</option>
-        <option value="sadiqabad">Sadiqabad</option>
-        <option value="burewala">Burewala</option>
-        <option value="chishtian">Chishtian</option>
-    </optgroup>
-
-    <optgroup label="Sindh - Major Cities & Districts">
-        <option value="karachi">Karachi (All Zones)</option>
-        <option value="karachi-central">Karachi Central</option>
-        <option value="karachi-east">Karachi East</option>
-        <option value="karachi-south">Karachi South</option>
-        <option value="karachi-west">Karachi West</option>
-        <option value="korangi">Korangi</option>
-        <option value="malir">Malir</option>
-        <option value="hyderabad">Hyderabad</option>
-        <option value="sukkur">Sukkur</option>
-        <option value="larkana">Larkana</option>
-        <option value="nawabshah">Nawabshah (Shaheed Benazirabad)</option>
-        <option value="mirpurkhas">Mirpurkhas</option>
-        <option value="shikarpur">Shikarpur</option>
-        <option value="jacobabad">Jacobabad</option>
-        <option value="khairpur">Khairpur</option>
-        <option value="dadu">Dadu</option>
-        <option value="ghotki">Ghotki</option>
-        <option value="thatta">Thatta</option>
-        <option value="badin">Badin</option>
-        <option value="umerkot">Umerkot</option>
-        <option value="tharparkar">Tharparkar (Mithi)</option>
-        <option value="kashmore">Kashmore</option>
-        <option value="tando-allahyar">Tando Allahyar</option>
-        <option value="tando-muhammad-khan">Tando Muhammad Khan</option>
-        <option value="sanghar">Sanghar</option>
-    </optgroup>
-
-    <optgroup label="Sindh - Towns & Tehsils">
-        <option value="liaquatabad">Liaquatabad</option>
-        <option value="nazimabad">Nazimabad</option>
-        <option value="gulberg-karachi">Gulberg (Karachi)</option>
-        <option value="federal-b-area">Federal B Area</option>
-        <option value="clifton-dha-karachi">Clifton / DHA Karachi</option>
-        <option value="kotri">Kotri</option>
-        <option value="rohri">Rohri</option>
-        <option value="gambhat">Gambhat</option>
-        <option value="moro">Moro</option>
-        <option value="sehwan-sharif">Sehwan Sharif</option>
-        <option value="shahdadkot">Shahdadkot</option>
-    </optgroup>
-
-    <optgroup label="Khyber Pakhtunkhwa (KP)">
-        <option value="peshawar">Peshawar</option>
-        <option value="mardan">Mardan</option>
-        <option value="swat">Mingora (Swat)</option>
-        <option value="kohat">Kohat</option>
-        <option value="abbottabad">Abbottabad</option>
-        <option value="dera-ismail-khan">Dera Ismail Khan</option>
-        <option value="nowshera">Nowshera</option>
-        <option value="charsadda">Charsadda</option>
-        <option value="swabi">Swabi</option>
-        <option value="mansehra">Mansehra</option>
-        <option value="haripur">Haripur</option>
-        <option value="bannu">Bannu</option>
-        <option value="timergara">Timergara (Lower Dir)</option>
-        <option value="buner">Buner</option>
-        <option value="chitral">Chitral</option>
-        <option value="lakki-marwat">Lakki Marwat</option>
-        <option value="tank">Tank</option>
-        <option value="parachinar">Parachinar</option>
-    </optgroup>
-
-    <optgroup label="Balochistan">
-        <option value="quetta">Quetta</option>
-        <option value="turbat">Turbat (Kech)</option>
-        <option value="gwadar">Gwadar</option>
-        <option value="khuzdar">Khuzdar</option>
-        <option value="sibi">Sibi</option>
-        <option value="chaman">Chaman</option>
-        <option value="zhob">Zhob</option>
-        <option value="dera-murad-jamali">Dera Murad Jamali</option>
-        <option value="pasni">Pasni</option>
-        <option value="loralai">Loralai</option>
-        <option value="nushki">Nushki</option>
-        <option value="jafarabad">Jafarabad</option>
-    </optgroup>
-
-    <optgroup label="Azad Kashmir & Gilgit-Baltistan">
-        <option value="muzaffarabad">Muzaffarabad</option>
-        <option value="mirpur-ajk">Mirpur (AJK)</option>
-        <option value="rawalakot">Rawalakot</option>
-        <option value="kotli">Kotli</option>
-        <option value="bhimber">Bhimber</option>
-        <option value="gilgit">Gilgit</option>
-        <option value="skardu">Skardu</option>
-        <option value="hunza">Hunza</option>
-        <option value="ghanche">Ghanche</option>
-    </optgroup>
-</select>
-    
-    </optgroup>
-</select>
-                </select>
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg">
-                    Search
-                </button>
-            </div>
-        </div>
+    <section id="brands">
+      <div class="flex justify-between items-end mb-4">
+        <h2 class="text-xl font-bold text-gray-800">Browse by brand</h2>
+        <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline">View all</a>
+      </div>
+      <div id="brand-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
     </section>
 
-    <!-- Main Content Area -->
-    <main class="max-w-6xl mx-auto px-4 py-10 space-y-12 flex-grow">
+    <section id="featured">
+      <div class="flex justify-between items-end mb-6">
+        <h2 class="text-xl font-bold text-gray-800">Featured phones for sale</h2>
+        <a href="phones.html?featured=1" class="text-sm font-medium text-blue-700 hover:underline">View all</a>
+      </div>
+      <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+    </section>
 
-        <!-- Browse by Brand -->
-        <section id="brands">
-            <h3 class="text-xl font-bold mb-4 text-gray-800">Browse by Popular Brands</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-center">
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-brands fa-apple text-3xl mb-1 text-gray-800"></i>
-                    <p class="font-semibold text-sm">Apple</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-solid fa-mobile-screen-button text-3xl mb-1 text-blue-600"></i>
-                    <p class="font-semibold text-sm">Samsung</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-solid fa-mobile-button text-3xl mb-1 text-orange-500"></i>
-                    <p class="font-semibold text-sm">Xiaomi</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-solid fa-mobile text-3xl mb-1 text-blue-500"></i>
-                    <p class="font-semibold text-sm">Vivo</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-solid fa-mobile-screen text-3xl mb-1 text-green-600"></i>
-                    <p class="font-semibold text-sm">Oppo</p>
-                </div>
-                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
-                    <i class="fa-solid fa-phone text-3xl mb-1 text-red-500"></i>
-                    <p class="font-semibold text-sm">Infinix</p>
-                </div>
-            </div>
-        </section>
+    <section id="cities">
+      <div class="flex justify-between items-end mb-2">
+        <h2 class="text-xl font-bold text-gray-800">Used phones by city</h2>
+        <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline" id="all-locs">All locations</a>
+      </div>
+      <p class="text-sm text-gray-500 mb-5">Districts, tehsils and major towns across every province, AJK and GB.</p>
+      <ul id="city-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-1"></ul>
+    </section>
 
-        <!-- Featured Phone Ads Grid -->
-        <section id="featured">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-gray-800">Featured Phones for Sale</h3>
-            </div>
+  </main>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                
-                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
-                        <i class="fa-solid fa-image text-4xl"></i>
-                    </div>
-                    <div class="p-4">
-                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-0.5 rounded">PTA Approved</span>
-                        <h4 class="font-bold text-lg mt-2">iPhone 13 Pro (128 GB)</h4>
-                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 185,000</p>
-                        <div class="text-xs text-gray-500 mt-2 space-y-1">
-                            <p><i class="fa-solid fa-battery-three-quarters mr-1"></i> Battery Health: 87%</p>
-                            <p><i class="fa-solid fa-location-dot mr-1"></i> Lahore, Hafeez Centre</p>
-                        </div>
-                    </div>
-                </div>
+  <footer class="bg-gray-900 text-gray-400 py-8 border-t">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+      <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+      <div class="flex space-x-6">
+        <a href="index.html" class="hover:text-white">Home</a>
+        <a href="phones.html" class="hover:text-white">Used Phones</a>
+        <a href="sell.html" class="hover:text-white">Post Ad</a>
+        <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
 
-                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
-                        <i class="fa-solid fa-image text-4xl"></i>
-                    </div>
-                    <div class="p-4">
-                        <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-0.5 rounded">CPID Approved</span>
-                        <h4 class="font-bold text-lg mt-2">Samsung Galaxy S23 Ultra</h4>
-                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 210,000</p>
-                        <div class="text-xs text-gray-500 mt-2 space-y-1">
-                            <p><i class="fa-solid fa-memory mr-1"></i> 12GB RAM / 256GB</p>
-                            <p><i class="fa-solid fa-location-dot mr-1"></i> Karachi, Saddar</p>
-                        </div>
-                    </div>
-                </div>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    const ui = MW.ui;
+    document.getElementById('loc-count').textContent = 'Used mobiles · ' + MW.CITY_COUNT + ' locations';
+    document.getElementById('all-locs').textContent = 'All ' + MW.CITY_COUNT + ' locations';
+    ui.bindCityArea(document.getElementById('city'), document.getElementById('area'), { allowAll: true });
 
-                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
-                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
-                        <i class="fa-solid fa-image text-4xl"></i>
-                    </div>
-                    <div class="p-4">
-                        <span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-0.5 rounded">Non-PTA</span>
-                        <h4 class="font-bold text-lg mt-2">Google Pixel 7 Pro</h4>
-                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 115,000</p>
-                        <div class="text-xs text-gray-500 mt-2 space-y-1">
-                            <p><i class="fa-solid fa-shield mr-1"></i> Clean IMEI / 10/10 Condition</p>
-                            <p><i class="fa-solid fa-location-dot mr-1"></i> Islamabad, F-10</p>
-                        </div>
-                    </div>
-                </div>
+    const counts = {};
+    ui.allListings().forEach((l) => { counts[l.brand] = (counts[l.brand] || 0) + 1; });
+    document.getElementById('brand-grid').innerHTML = MW.BRANDS.map((b) => {
+      const n = counts[b.name] || 0;
+      return '<a href="phones.html?brand=' + encodeURIComponent(b.name) + '" class="bg-white p-4 rounded-xl border hover:shadow-md text-center block">' +
+        '<p class="font-semibold text-sm">' + b.name + '</p>' +
+        '<p class="text-[11px] text-gray-500 mt-1">' + (n ? n + ' ad' + (n === 1 ? '' : 's') : 'Browse') + '</p></a>';
+    }).join('');
 
-            </div>
-        </section>
+    const featured = ui.filterListings({ featuredOnly: true }).slice(0, 6);
+    document.getElementById('featured-grid').innerHTML = featured.map(ui.cardHtml).join('');
 
-    </main>
-
-    <!-- Footer for Google AdSense Compliance -->
-    <footer class="bg-gray-900 text-gray-400 py-8 border-t">
-        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
-            <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
-            <div class="flex space-x-6">
-                <a href="index.html" class="hover:text-white">Home</a>
-                <a href="sell.html" class="hover:text-white">Post Ad</a>
-                <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
-            </div>
-        </div>
-    </footer>
-
+    const cityCounts = {};
+    ui.allListings().forEach((l) => { cityCounts[l.citySlug] = (cityCounts[l.citySlug] || 0) + 1; });
+    const popular = MW.CITIES.filter((c) => c.popular);
+    document.getElementById('city-list').innerHTML = popular.map((c) =>
+      '<li><a href="phones.html?city=' + c.slug + '" class="flex justify-between gap-2 rounded-md px-1 py-1.5 text-sm hover:bg-white">' +
+      '<span class="font-medium text-blue-800">' + c.name + '</span>' +
+      '<span class="text-xs text-gray-400">' + (cityCounts[c.slug] || 0) + '</span></a></li>'
+    ).join('');
+  </script>
 </body>
 </html>
