@@ -3,87 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sell Used Phone - Mobile Marketplace Pakistan</title>
-    <!-- Tailwind CSS CDN -->
+    <title>MobileWheels PK - Buy & Sell Used Mobile Phones in Pakistan</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-lg">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center">Post Your Mobile Phone Ad</h2>
-        
-        <form class="space-y-4">
-            <!-- Brand -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+    <!-- Header / Navbar -->
+    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></h1>
+            <nav class="hidden md:flex space-x-6 font-medium">
+                <a href="#" class="hover:text-yellow-300">Home</a>
+                <a href="#" class="hover:text-yellow-300">Used Phones</a>
+                <a href="#" class="hover:text-yellow-300">PTA Checker</a>
+                <a href="#" class="hover:text-yellow-300">Prices</a>
+            </nav>
+            <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow">
+                + Post An Ad
+            </button>
+        </div>
+    </header>
 
-                <select class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Select Brand</option>
-                    <option>Apple</option>
-                    <option>Samsung</option>
-                    <option>Xiaomi / Redmi</option>
-                    <option>Vivo</option>
-                    <option>Oppo</option>
-                    <option>Infinix</option>
-                    <option>Tecno</option>
-                </select>
-            </div>
-
-            <!-- Model -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone Model</label>
-
-                <input type="text" placeholder="e.g. iPhone 13 Pro Max, Galaxy S23" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- City -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
-
-                <select class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Select City</option>
+    <!-- Hero Search Section -->
+    <section class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-3">Find Used Mobile Phones in Pakistan</h2>
+            <p class="text-blue-100 mb-6">With thousands of verified listings for iPhone, Samsung, Xiaomi & more</p>
+            
+            <!-- Quick Search Bar -->
+            <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-2">
+                <input type="text" placeholder="Search Mobile Brand or Model..." class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <select class="p-3 border rounded-lg bg-white text-gray-600">
+                    <option>All Cities</option>
                     <option>Karachi</option>
                     <option>Lahore</option>
                     <option>Islamabad</option>
                     <option>Rawalpindi</option>
-                    <option>Faisalabad</option>
-                    <option>Peshawar</option>
-                    <option>Multan</option>
                 </select>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg">
+                    Search
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-12">
+
+        <!-- Browse by Brand -->
+        <section>
+            <h3 class="text-xl font-bold mb-4 text-gray-800">Browse by Popular Brands</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-center">
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-brands fa-apple text-3xl mb-1 text-gray-800"></i>
+                    <p class="font-semibold text-sm">Apple</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-solid fa-mobile-screen-button text-3xl mb-1 text-blue-600"></i>
+                    <p class="font-semibold text-sm">Samsung</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-solid fa-mobile-button text-3xl mb-1 text-orange-500"></i>
+                    <p class="font-semibold text-sm">Xiaomi</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-solid fa-mobile text-3xl mb-1 text-blue-500"></i>
+                    <p class="font-semibold text-sm">Vivo</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-solid fa-mobile-screen text-3xl mb-1 text-green-600"></i>
+                    <p class="font-semibold text-sm">Oppo</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
+                    <i class="fa-solid fa-phone text-3xl mb-1 text-red-500"></i>
+                    <p class="font-semibold text-sm">Infinix</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Phone Ads Grid -->
+        <section>
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800">Featured Phones for Sale</h3>
+                <a href="#" class="text-blue-600 font-semibold text-sm hover:underline">View All Ads &rarr;</a>
             </div>
 
-            <!-- PTA Status -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">PTA Status</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                
+                <!-- Listing Card 1 -->
+                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
+                        <i class="fa-solid fa-image text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <span class="bg-green-100 text-green-800 text-xs font-bold px-2.5 py-0.5 rounded">PTA Approved</span>
+                        <h4 class="font-bold text-lg mt-2">iPhone 13 Pro (128 GB)</h4>
+                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 185,000</p>
+                        <div class="text-xs text-gray-500 mt-2 space-y-1">
+                            <p><i class="fa-solid fa-battery-three-quarters mr-1"></i> Battery Health: 87%</p>
+                            <p><i class="fa-solid fa-location-dot mr-1"></i> Lahore, Hafeez Centre</p>
+                        </div>
+                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
+                            View Details
+                        </button>
+                    </div>
+                </div>
 
-                <select class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    <option>Official PTA Approved</option>
-                    <option>Non-PTA (Tax Pending)</option>
-                    <option>CPID / Patch Approved</option>
-                    <option>JV (SIM Locked)</option>
-                </select>
+                <!-- Listing Card 2 -->
+                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
+                        <i class="fa-solid fa-image text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <span class="bg-yellow-100 text-yellow-800 text-xs font-bold px-2.5 py-0.5 rounded">CPID Approved</span>
+                        <h4 class="font-bold text-lg mt-2">Samsung Galaxy S23 Ultra</h4>
+                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 210,000</p>
+                        <div class="text-xs text-gray-500 mt-2 space-y-1">
+                            <p><i class="fa-solid fa-memory mr-1"></i> 12GB RAM / 256GB</p>
+                            <p><i class="fa-solid fa-location-dot mr-1"></i> Karachi, Saddar</p>
+                        </div>
+                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Listing Card 3 -->
+                <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
+                        <i class="fa-solid fa-image text-4xl"></i>
+                    </div>
+                    <div class="p-4">
+                        <span class="bg-red-100 text-red-800 text-xs font-bold px-2.5 py-0.5 rounded">Non-PTA</span>
+                        <h4 class="font-bold text-lg mt-2">Google Pixel 7 Pro</h4>
+                        <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 115,000</p>
+                        <div class="text-xs text-gray-500 mt-2 space-y-1">
+                            <p><i class="fa-solid fa-shield mr-1"></i> Clean IMEI / 10/10 Condition</p>
+                            <p><i class="fa-solid fa-location-dot mr-1"></i> Islamabad, F-10</p>
+                        </div>
+                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+
             </div>
+        </section>
 
-            <!-- Battery Health -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Battery Health (%)</label>
+    </main>
 
-                <input type="number" min="1" max="100" placeholder="e.g. 85" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Price -->
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Demand Price (PKR)</label>
-
-                <input type="number" placeholder="e.g. 150000" class="w-full p-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
-
-            <!-- Submit Button -->
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold p-3 rounded-lg transition duration-200 mt-4">
-                Post Mobile Ad
-            </button>
-        </form>
-    </div>
+    <!-- Simple Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-6 border-t text-center text-sm">
+        <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+    </footer>
 
 </body>
 </html>
