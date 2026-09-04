@@ -7,21 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
     <!-- Header / Navbar -->
     <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></h1>
+            <a href="index.html" class="text-2xl font-bold tracking-wide">Mobile<span class="text-yellow-400">Wheels</span></a>
             <nav class="hidden md:flex space-x-6 font-medium">
-                <a href="#" class="hover:text-yellow-300">Home</a>
-                <a href="#" class="hover:text-yellow-300">Used Phones</a>
-                <a href="#" class="hover:text-yellow-300">PTA Checker</a>
-                <a href="#" class="hover:text-yellow-300">Prices</a>
+                <a href="index.html" class="hover:text-yellow-300">Home</a>
+                <a href="#featured" class="hover:text-yellow-300">Used Phones</a>
+                <a href="#brands" class="hover:text-yellow-300">Brands</a>
             </nav>
-            <button class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow">
+            <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow inline-block">
                 + Post An Ad
-            </button>
+            </a>
         </div>
     </header>
 
@@ -31,7 +30,6 @@
             <h2 class="text-3xl md:text-4xl font-extrabold mb-3">Find Used Mobile Phones in Pakistan</h2>
             <p class="text-blue-100 mb-6">With thousands of verified listings for iPhone, Samsung, Xiaomi & more</p>
             
-            <!-- Quick Search Bar -->
             <div class="bg-white p-3 rounded-xl shadow-lg text-gray-800 flex flex-col md:flex-row gap-2">
                 <input type="text" placeholder="Search Mobile Brand or Model..." class="flex-grow p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <select class="p-3 border rounded-lg bg-white text-gray-600">
@@ -49,10 +47,10 @@
     </section>
 
     <!-- Main Content Area -->
-    <main class="max-w-6xl mx-auto px-4 py-10 space-y-12">
+    <main class="max-w-6xl mx-auto px-4 py-10 space-y-12 flex-grow">
 
         <!-- Browse by Brand -->
-        <section>
+        <section id="brands">
             <h3 class="text-xl font-bold mb-4 text-gray-800">Browse by Popular Brands</h3>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-center">
                 <div class="bg-white p-4 rounded-xl border hover:shadow-md cursor-pointer">
@@ -83,15 +81,13 @@
         </section>
 
         <!-- Featured Phone Ads Grid -->
-        <section>
+        <section id="featured">
             <div class="flex justify-between items-center mb-6">
                 <h3 class="text-xl font-bold text-gray-800">Featured Phones for Sale</h3>
-                <a href="#" class="text-blue-600 font-semibold text-sm hover:underline">View All Ads &rarr;</a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 
-                <!-- Listing Card 1 -->
                 <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
                     <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
                         <i class="fa-solid fa-image text-4xl"></i>
@@ -104,13 +100,9 @@
                             <p><i class="fa-solid fa-battery-three-quarters mr-1"></i> Battery Health: 87%</p>
                             <p><i class="fa-solid fa-location-dot mr-1"></i> Lahore, Hafeez Centre</p>
                         </div>
-                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
-                            View Details
-                        </button>
                     </div>
                 </div>
 
-                <!-- Listing Card 2 -->
                 <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
                     <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
                         <i class="fa-solid fa-image text-4xl"></i>
@@ -123,13 +115,9 @@
                             <p><i class="fa-solid fa-memory mr-1"></i> 12GB RAM / 256GB</p>
                             <p><i class="fa-solid fa-location-dot mr-1"></i> Karachi, Saddar</p>
                         </div>
-                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
-                            View Details
-                        </button>
                     </div>
                 </div>
 
-                <!-- Listing Card 3 -->
                 <div class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition">
                     <div class="bg-gray-200 h-48 flex items-center justify-center text-gray-400">
                         <i class="fa-solid fa-image text-4xl"></i>
@@ -142,9 +130,6 @@
                             <p><i class="fa-solid fa-shield mr-1"></i> Clean IMEI / 10/10 Condition</p>
                             <p><i class="fa-solid fa-location-dot mr-1"></i> Islamabad, F-10</p>
                         </div>
-                        <button class="w-full mt-4 bg-gray-900 text-white py-2 rounded-lg text-sm font-semibold hover:bg-gray-800">
-                            View Details
-                        </button>
                     </div>
                 </div>
 
@@ -153,9 +138,16 @@
 
     </main>
 
-    <!-- Simple Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-6 border-t text-center text-sm">
-        <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+    <!-- Footer for Google AdSense Compliance -->
+    <footer class="bg-gray-900 text-gray-400 py-8 border-t">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4 text-sm">
+            <p>&copy; 2026 MobileWheels PK. All rights reserved.</p>
+            <div class="flex space-x-6">
+                <a href="index.html" class="hover:text-white">Home</a>
+                <a href="sell.html" class="hover:text-white">Post Ad</a>
+                <a href="privacy.html" class="hover:text-white">Privacy Policy</a>
+            </div>
+        </div>
     </footer>
 
 </body>
