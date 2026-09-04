@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MobileWheels PK - Buy & Sell Used Mobile Phones in Pakistan</title>
-  <meta name="description" content="Search verified used iPhone, Samsung, Xiaomi and more across 200+ cities in Pakistan.">
+  <meta name="description" content="Search used iPhone, Samsung, Xiaomi and more by brand, PTA status and city across Pakistan.">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -18,25 +18,66 @@
         <a href="#brands" class="hover:text-yellow-300">Brands</a>
         <a href="#cities" class="hover:text-yellow-300">Cities</a>
       </nav>
-      <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow inline-block">
-        + Post An Ad
-      </a>
+      <a href="sell.html" class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold px-4 py-2 rounded-lg text-sm shadow">+ Post An Ad</a>
     </div>
   </header>
 
   <section class="bg-gradient-to-r from-blue-800 to-blue-600 text-white py-12 px-4">
-    <div class="max-w-4xl mx-auto">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-300 mb-2" id="loc-count">Used mobiles · Pakistan</p>
+    <div class="max-w-5xl mx-auto">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-yellow-300 mb-2">Used mobiles · 214 locations</p>
       <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Find used mobile phones in Pakistan</h1>
-      <p class="text-blue-100 mb-6">Search verified listings for iPhone, Samsung, Xiaomi & more — filter by city, area, PTA status and price.</p>
+      <p class="text-blue-100 mb-6">Pick a brand, PTA status and city — then search. Same idea as PakWheels, for mobiles.</p>
 
-      <form action="phones.html" method="get" class="bg-white p-3 md:p-4 rounded-xl shadow-lg text-gray-800 grid gap-2 md:grid-cols-[1fr_1fr_1fr_auto]">
-        <input name="q" type="text" placeholder="Search brand or model — e.g. iPhone 13 Pro" class="p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" aria-label="Search brand or model">
-        <select name="city" id="city" class="p-3 border rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"></select>
-        <select name="area" id="area" class="p-3 border rounded-lg bg-white text-gray-700 focus:ring-2 focus:ring-blue-500 outline-none"></select>
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg">
-          <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
-        </button>
+      <form action="phones.html" method="get" class="bg-white p-4 rounded-xl shadow-lg text-gray-800">
+        <div class="grid gap-3 md:grid-cols-4">
+          <label class="block text-left">
+            <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Mobile brand</span>
+            <select name="brand" id="brand" class="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="">All brands</option>
+              <option>Apple</option>
+              <option>Samsung</option>
+              <option>Xiaomi</option>
+              <option>Vivo</option>
+              <option>Oppo</option>
+              <option>Infinix</option>
+              <option>Google</option>
+              <option>OnePlus</option>
+              <option>Realme</option>
+              <option>Tecno</option>
+              <option>Huawei</option>
+              <option>Nothing</option>
+            </select>
+          </label>
+          <label class="block text-left">
+            <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">PTA status</span>
+            <select name="pta" id="pta" class="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="">PTA approved & Non-PTA</option>
+              <option value="official">PTA Approved</option>
+              <option value="cpid">CPID / Patch Approved</option>
+              <option value="non-pta">Non-PTA (Tax Pending)</option>
+              <option value="jv">JV (SIM Locked)</option>
+            </select>
+          </label>
+          <label class="block text-left">
+            <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">City / location</span>
+            <select name="city" id="city" class="w-full p-3 border rounded-lg bg-white text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none">
+              <option value="">All cities in Pakistan</option>
+              <option value="islamabad">Islamabad</option>
+              <option value="lahore">Lahore</option>
+              <option value="karachi">Karachi</option>
+              <option value="rawalpindi">Rawalpindi</option>
+              <option value="faisalabad">Faisalabad</option>
+              <option value="multan">Multan</option>
+              <option value="peshawar">Peshawar</option>
+              <option value="quetta">Quetta</option>
+            </select>
+          </label>
+          <div class="flex items-end">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3 rounded-lg">
+              <i class="fa-solid fa-magnifying-glass mr-1"></i> Search phones
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </section>
@@ -45,27 +86,198 @@
 
     <section id="brands">
       <div class="flex justify-between items-end mb-4">
-        <h2 class="text-xl font-bold text-gray-800">Browse by brand</h2>
+        <div>
+          <h2 class="text-xl font-bold text-gray-800">Browse by brand</h2>
+          <p class="text-sm text-gray-500">Tap a brand to see used phones, memory and PTA filters.</p>
+        </div>
         <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline">View all</a>
       </div>
-      <div id="brand-grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
+      <div id="brand-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <a href="phones.html?brand=Apple" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1"><i class="fa-brands fa-apple"></i></p>
+          <p class="font-semibold text-sm">Apple</p>
+          <p class="text-[11px] text-gray-500 mt-1">iPhone · PTA & Non-PTA</p>
+        </a>
+        <a href="phones.html?brand=Samsung" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-blue-600"><i class="fa-solid fa-mobile-screen-button"></i></p>
+          <p class="font-semibold text-sm">Samsung</p>
+          <p class="text-[11px] text-gray-500 mt-1">Galaxy S / A / Z Fold</p>
+        </a>
+        <a href="phones.html?brand=Xiaomi" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-orange-500"><i class="fa-solid fa-mobile-button"></i></p>
+          <p class="font-semibold text-sm">Xiaomi</p>
+          <p class="text-[11px] text-gray-500 mt-1">Xiaomi · Redmi · Poco</p>
+        </a>
+        <a href="phones.html?brand=Vivo" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-blue-500"><i class="fa-solid fa-mobile"></i></p>
+          <p class="font-semibold text-sm">Vivo</p>
+          <p class="text-[11px] text-gray-500 mt-1">V series · Y series</p>
+        </a>
+        <a href="phones.html?brand=Oppo" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-green-600"><i class="fa-solid fa-mobile-screen"></i></p>
+          <p class="font-semibold text-sm">Oppo</p>
+          <p class="text-[11px] text-gray-500 mt-1">Reno · Find · A series</p>
+        </a>
+        <a href="phones.html?brand=Infinix" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-red-500"><i class="fa-solid fa-phone"></i></p>
+          <p class="font-semibold text-sm">Infinix</p>
+          <p class="text-[11px] text-gray-500 mt-1">Note · Hot · Zero</p>
+        </a>
+        <a href="phones.html?brand=Google" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-slate-700"><i class="fa-brands fa-google"></i></p>
+          <p class="font-semibold text-sm">Google</p>
+          <p class="text-[11px] text-gray-500 mt-1">Pixel 7 · 8 · 9</p>
+        </a>
+        <a href="phones.html?brand=OnePlus" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-red-600"><i class="fa-solid fa-circle"></i></p>
+          <p class="font-semibold text-sm">OnePlus</p>
+          <p class="text-[11px] text-gray-500 mt-1">12 · 13 · Nord</p>
+        </a>
+        <a href="phones.html?brand=Realme" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-yellow-600"><i class="fa-solid fa-bolt"></i></p>
+          <p class="font-semibold text-sm">Realme</p>
+          <p class="text-[11px] text-gray-500 mt-1">GT · Number · C series</p>
+        </a>
+        <a href="phones.html?brand=Tecno" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-sky-600"><i class="fa-solid fa-signal"></i></p>
+          <p class="font-semibold text-sm">Tecno</p>
+          <p class="text-[11px] text-gray-500 mt-1">Spark · Camon · Phantom</p>
+        </a>
+        <a href="phones.html?brand=Huawei" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1 text-red-500"><i class="fa-solid fa-fan"></i></p>
+          <p class="font-semibold text-sm">Huawei</p>
+          <p class="text-[11px] text-gray-500 mt-1">P · Nova · Mate</p>
+        </a>
+        <a href="phones.html?brand=Nothing" class="bg-white p-4 rounded-xl border hover:shadow-md text-center">
+          <p class="text-2xl mb-1"><i class="fa-solid fa-ghost"></i></p>
+          <p class="font-semibold text-sm">Nothing</p>
+          <p class="text-[11px] text-gray-500 mt-1">Phone (1) (2) (3)</p>
+        </a>
+      </div>
     </section>
 
     <section id="featured">
       <div class="flex justify-between items-end mb-6">
-        <h2 class="text-xl font-bold text-gray-800">Featured phones for sale</h2>
-        <a href="phones.html?featured=1" class="text-sm font-medium text-blue-700 hover:underline">View all</a>
+        <div>
+          <h2 class="text-xl font-bold text-gray-800">Featured phones for sale</h2>
+          <p class="text-sm text-gray-500">Verified ads with photos, memory, PTA status and city.</p>
+        </div>
+        <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline">View all</a>
       </div>
-      <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+      <div id="featured-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <a href="phone.html?id=lst-iphone-13-pro-lhr" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/iphone-13-pro.jpg" alt="iPhone 13 Pro" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">PTA</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">iPhone 13 Pro (128 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 185,000</p>
+            <p class="text-xs text-gray-500 mt-1">128 GB · 6 GB RAM · 87% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Lahore, Hafeez Centre</p>
+          </div>
+        </a>
+        <a href="phone.html?id=lst-s23-ultra-khi" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/s23-ultra.jpg" alt="Galaxy S23 Ultra" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">CPID</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">Samsung Galaxy S23 Ultra (256 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 210,000</p>
+            <p class="text-xs text-gray-500 mt-1">256 GB · 12 GB RAM · 91% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Karachi, Saddar</p>
+          </div>
+        </a>
+        <a href="phone.html?id=lst-pixel-7-pro-isb" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/pixel-7-pro.jpg" alt="Pixel 7 Pro" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded">Non-PTA</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">Google Pixel 7 Pro (128 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 115,000</p>
+            <p class="text-xs text-gray-500 mt-1">128 GB · 12 GB RAM · 89% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Islamabad, F-10</p>
+          </div>
+        </a>
+        <a href="phone.html?id=lst-iphone-15-pm-rwp" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/iphone-15-pro-max.jpg" alt="iPhone 15 Pro Max" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">PTA</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">iPhone 15 Pro Max (256 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 320,000</p>
+            <p class="text-xs text-gray-500 mt-1">256 GB · 8 GB RAM · 96% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Rawalpindi, Saddar</p>
+          </div>
+        </a>
+        <a href="phone.html?id=lst-xiaomi-14-fsd" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/xiaomi-14.jpg" alt="Xiaomi 14" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">PTA</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">Xiaomi 14 (256 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 125,000</p>
+            <p class="text-xs text-gray-500 mt-1">256 GB · 12 GB RAM · 94% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Faisalabad, D Ground</p>
+          </div>
+        </a>
+        <a href="phone.html?id=lst-s24-ultra-khi" class="bg-white border rounded-xl overflow-hidden shadow-sm hover:shadow-md">
+          <div class="relative aspect-[4/3] bg-slate-100">
+            <img src="ads/s24-ultra.jpg" alt="Galaxy S24 Ultra" class="h-full w-full object-cover">
+            <div class="absolute left-2.5 top-2.5 flex gap-1.5">
+              <span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>
+              <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">PTA</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold">Samsung Galaxy S24 Ultra (256 GB)</h3>
+            <p class="text-xl font-extrabold text-blue-700 mt-1">PKR 245,000</p>
+            <p class="text-xs text-gray-500 mt-1">256 GB · 12 GB RAM · 97% battery</p>
+            <p class="text-xs text-gray-500 mt-2"><i class="fa-solid fa-location-dot mr-1"></i>Karachi, DHA Phase 5</p>
+          </div>
+        </a>
+      </div>
     </section>
 
     <section id="cities">
       <div class="flex justify-between items-end mb-2">
         <h2 class="text-xl font-bold text-gray-800">Used phones by city</h2>
-        <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline" id="all-locs">All locations</a>
+        <a href="phones.html" class="text-sm font-medium text-blue-700 hover:underline">All 214 locations</a>
       </div>
       <p class="text-sm text-gray-500 mb-5">Districts, tehsils and major towns across every province, AJK and GB.</p>
-      <ul id="city-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-1"></ul>
+      <ul id="city-list" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-4 gap-y-1">
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=lahore">Lahore</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=karachi">Karachi</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=islamabad">Islamabad</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=rawalpindi">Rawalpindi</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=faisalabad">Faisalabad</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=multan">Multan</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=gujranwala">Gujranwala</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=peshawar">Peshawar</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=quetta">Quetta</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=sialkot">Sialkot</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=hyderabad">Hyderabad</a></li>
+        <li><a class="flex justify-between py-1.5 text-sm font-medium text-blue-800 hover:underline" href="phones.html?city=abbottabad">Abbottabad</a></li>
+      </ul>
     </section>
 
   </main>
@@ -85,31 +297,38 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    const ui = MW.ui;
-    document.getElementById('loc-count').textContent = 'Used mobiles · ' + MW.CITY_COUNT + ' locations';
-    document.getElementById('all-locs').textContent = 'All ' + MW.CITY_COUNT + ' locations';
-    ui.bindCityArea(document.getElementById('city'), document.getElementById('area'), { allowAll: true });
-
-    const counts = {};
-    ui.allListings().forEach((l) => { counts[l.brand] = (counts[l.brand] || 0) + 1; });
-    document.getElementById('brand-grid').innerHTML = MW.BRANDS.map((b) => {
-      const n = counts[b.name] || 0;
-      return '<a href="phones.html?brand=' + encodeURIComponent(b.name) + '" class="bg-white p-4 rounded-xl border hover:shadow-md text-center block">' +
-        '<p class="font-semibold text-sm">' + b.name + '</p>' +
-        '<p class="text-[11px] text-gray-500 mt-1">' + (n ? n + ' ad' + (n === 1 ? '' : 's') : 'Browse') + '</p></a>';
-    }).join('');
-
-    const featured = ui.filterListings({ featuredOnly: true }).slice(0, 6);
-    document.getElementById('featured-grid').innerHTML = featured.map(ui.cardHtml).join('');
-
-    const cityCounts = {};
-    ui.allListings().forEach((l) => { cityCounts[l.citySlug] = (cityCounts[l.citySlug] || 0) + 1; });
-    const popular = MW.CITIES.filter((c) => c.popular);
-    document.getElementById('city-list').innerHTML = popular.map((c) =>
-      '<li><a href="phones.html?city=' + c.slug + '" class="flex justify-between gap-2 rounded-md px-1 py-1.5 text-sm hover:bg-white">' +
-      '<span class="font-medium text-blue-800">' + c.name + '</span>' +
-      '<span class="text-xs text-gray-400">' + (cityCounts[c.slug] || 0) + '</span></a></li>'
-    ).join('');
+    (function () {
+      if (!window.MW || !MW.ui) return;
+      var ui = MW.ui;
+      ui.fillCitySelect(document.getElementById("city"), "", true);
+      var counts = {};
+      ui.allListings().forEach(function (l) {
+        counts[l.brand] = (counts[l.brand] || 0) + 1;
+      });
+      var grid = document.getElementById("brand-grid");
+      if (grid) {
+        grid.querySelectorAll("a").forEach(function (a) {
+          var name = new URL(a.href, location.href).searchParams.get("brand");
+          var n = counts[name] || 0;
+          var sub = a.querySelector("p.text-\\[11px\\], p[class*='text-[11px]']");
+          if (sub && n) sub.textContent = n + " ad" + (n === 1 ? "" : "s") + " · tap to filter";
+        });
+      }
+      var featured = ui.filterListings({ featuredOnly: true }).slice(0, 6);
+      if (featured.length) ui.renderGrid(document.getElementById("featured-grid"), featured);
+      var cityCounts = {};
+      ui.allListings().forEach(function (l) {
+        cityCounts[l.citySlug] = (cityCounts[l.citySlug] || 0) + 1;
+      });
+      var list = document.getElementById("city-list");
+      if (list) {
+        list.innerHTML = MW.CITIES.filter(function (c) { return c.popular; }).map(function (c) {
+          return '<li><a href="phones.html?city=' + c.slug + '" class="flex justify-between gap-2 rounded-md px-1 py-1.5 text-sm hover:bg-white">' +
+            '<span class="font-medium text-blue-800">' + c.name + '</span>' +
+            '<span class="text-xs text-gray-400">' + (cityCounts[c.slug] || 0) + '</span></a></li>';
+        }).join("");
+      }
+    })();
   </script>
 </body>
 </html>

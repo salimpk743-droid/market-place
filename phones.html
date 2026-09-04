@@ -23,21 +23,65 @@
 
   <main class="max-w-6xl mx-auto px-4 py-8 flex-grow w-full">
     <h1 class="text-2xl md:text-3xl font-extrabold text-gray-900" id="page-title">Used phones for sale</h1>
-    <p class="text-sm text-gray-500 mt-1 mb-6" id="page-sub"></p>
+    <p class="text-sm text-gray-500 mt-1 mb-6" id="page-sub">Filter by brand, memory, PTA status and city.</p>
 
-    <form id="filters" class="bg-white border rounded-xl p-4 mb-8 grid gap-3 md:grid-cols-6">
-      <input name="q" id="q" type="text" placeholder="Search model…" class="md:col-span-2 p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
-      <select name="city" id="city" class="p-2.5 border rounded-lg bg-white"></select>
-      <select name="area" id="area" class="p-2.5 border rounded-lg bg-white"></select>
-      <select name="brand" id="brand" class="p-2.5 border rounded-lg bg-white"></select>
-      <select name="pta" id="pta" class="p-2.5 border rounded-lg bg-white">
-        <option value="">Any PTA status</option>
-      </select>
-      <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg md:col-span-6">Apply filters</button>
+    <form id="filters" class="bg-white border rounded-xl p-4 mb-8" method="get" action="phones.html">
+      <p class="text-sm font-bold text-gray-800 mb-3">Refine your search</p>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <label class="block">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Mobile brand</span>
+          <select name="brand" id="brand" class="w-full p-2.5 border rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">All brands</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Memory / storage</span>
+          <select name="storage" id="storage" class="w-full p-2.5 border rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Any memory</option>
+            <option value="64">64 GB</option>
+            <option value="128">128 GB</option>
+            <option value="256">256 GB</option>
+            <option value="512">512 GB</option>
+            <option value="1024">1 TB</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">PTA status</span>
+          <select name="pta" id="pta" class="w-full p-2.5 border rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">PTA approved & Non-PTA</option>
+            <option value="official">PTA Approved</option>
+            <option value="cpid">CPID / Patch Approved</option>
+            <option value="non-pta">Non-PTA (Tax Pending)</option>
+            <option value="jv">JV (SIM Locked)</option>
+          </select>
+        </label>
+        <label class="block">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">City / location</span>
+          <select name="city" id="city" class="w-full p-2.5 border rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">All cities in Pakistan</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 mt-3">
+        <label class="block">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Area</span>
+          <select name="area" id="area" class="w-full p-2.5 border rounded-lg bg-white outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">All areas</option>
+          </select>
+        </label>
+        <label class="block lg:col-span-2">
+          <span class="block text-xs font-bold uppercase tracking-wide text-gray-500 mb-1">Keyword</span>
+          <input name="q" id="q" type="text" placeholder="e.g. iPhone 13 Pro, Sierra Blue…" class="w-full p-2.5 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+        </label>
+        <div class="flex items-end gap-2">
+          <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2.5 rounded-lg">Apply filters</button>
+          <a href="phones.html" class="px-4 py-2.5 rounded-lg border text-sm font-semibold text-gray-600 hover:bg-gray-50">Clear</a>
+        </div>
+      </div>
     </form>
 
     <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
-    <p id="empty" class="hidden text-center text-gray-500 py-16">No phones match those filters. Try another city or brand.</p>
+    <p id="empty" class="hidden text-center text-gray-500 py-16">No phones match those filters. Try another brand, city or PTA status.</p>
   </main>
 
   <footer class="bg-gray-900 text-gray-400 py-8 border-t">
@@ -54,44 +98,44 @@
   <script src="js/data.js"></script>
   <script src="js/app.js"></script>
   <script>
-    const ui = MW.ui;
-    const f = {
-      q: ui.qs('q'),
-      city: ui.qs('city'),
-      area: ui.qs('area'),
-      brand: ui.qs('brand'),
-      pta: ui.qs('pta'),
-      featuredOnly: ui.qs('featured') === '1',
-    };
+    (function () {
+      if (!window.MW || !MW.ui) return;
+      var ui = MW.ui;
+      var f = {
+        q: ui.qs("q"),
+        city: ui.qs("city"),
+        area: ui.qs("area"),
+        brand: ui.qs("brand"),
+        pta: ui.qs("pta"),
+        storage: ui.qs("storage"),
+        featuredOnly: ui.qs("featured") === "1"
+      };
 
-    document.getElementById('q').value = f.q;
-    ui.bindCityArea(document.getElementById('city'), document.getElementById('area'), { allowAll: true, city: f.city, area: f.area });
+      document.getElementById("q").value = f.q;
+      ui.fillBrandSelect(document.getElementById("brand"), f.brand, true);
+      ui.fillPtaSelect(document.getElementById("pta"), f.pta, true);
+      ui.fillStorageSelect(document.getElementById("storage"), f.storage);
+      ui.bindCityArea(document.getElementById("city"), document.getElementById("area"), {
+        allowAll: true,
+        city: f.city,
+        area: f.area
+      });
 
-    const brandSel = document.getElementById('brand');
-    brandSel.innerHTML = '<option value="">All brands</option>' + MW.BRANDS.map((b) =>
-      '<option value="' + b.name + '"' + (f.brand === b.name ? ' selected' : '') + '>' + b.name + '</option>'
-    ).join('');
+      var rows = ui.filterListings(f);
+      var bits = [];
+      if (f.brand) bits.push(f.brand);
+      if (f.storage) bits.push(f.storage + " GB");
+      if (f.pta) bits.push(ui.ptaMeta(f.pta).label);
+      if (f.city) bits.push(ui.cityLabel(f.city, f.area));
+      document.getElementById("page-title").textContent = bits.length
+        ? bits.join(" · ")
+        : (f.featuredOnly ? "Featured phones" : "Used phones for sale");
+      document.getElementById("page-sub").textContent =
+        rows.length + " listing" + (rows.length === 1 ? "" : "s") + " match your filters";
 
-    const ptaSel = document.getElementById('pta');
-    MW.PTA.forEach((p) => {
-      const o = document.createElement('option');
-      o.value = p.id; o.textContent = p.label;
-      if (f.pta === p.id) o.selected = true;
-      ptaSel.appendChild(o);
-    });
-
-    const rows = ui.filterListings(f);
-    const bits = [];
-    if (f.brand) bits.push(f.brand);
-    if (f.city) bits.push(ui.cityName(f.city));
-    if (f.area) bits.push(f.area);
-    document.getElementById('page-title').textContent = bits.length
-      ? 'Used ' + (f.brand || 'phones') + (f.city ? ' in ' + ui.cityLabel(f.city, f.area) : '')
-      : (f.featuredOnly ? 'Featured phones' : 'Used phones for sale');
-    document.getElementById('page-sub').textContent = rows.length + ' listing' + (rows.length === 1 ? '' : 's');
-
-    if (!rows.length) document.getElementById('empty').classList.remove('hidden');
-    document.getElementById('results').innerHTML = rows.map(ui.cardHtml).join('');
+      if (!rows.length) document.getElementById("empty").classList.remove("hidden");
+      document.getElementById("results").innerHTML = rows.map(ui.cardHtml).join("");
+    })();
   </script>
 </body>
 </html>
