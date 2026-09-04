@@ -1,6 +1,9 @@
 /* MobileWheels PK — shared UI */
 (function () {
-  const LS_KEY = "mw_user_listings_v1";
+  var LS_KEY = "mw_user_listings_v1";
+  var LS_OVERRIDES = "mw_overrides_v1";
+  var LS_DELETED = "mw_deleted_v1";
+  var LS_UNLOCKED = "mw_unlocked_v1";
 
   function cityBySlug(slug) {
     return (MW.CITIES || []).find(function (c) {
@@ -37,30 +40,149 @@
     return l.storageGb ? name + " (" + l.storageGb + " GB)" : name;
   }
 
-  function loadUserListings() {
+  function loadJson(key, fallback) {
     try {
-      var raw = localStorage.getItem(LS_KEY);
-      var arr = raw ? JSON.parse(raw) : [];
-      return Array.isArray(arr) ? arr : [];
+      var v = JSON.parse(localStorage.getItem(key) || "null");
+      return v == null ? fallback : v;
     } catch (e) {
-      return [];
+      return fallback;
     }
   }
 
-  function saveUserListing(listing) {
-    var all = loadUserListings();
-    all.unshift(listing);
-    localStorage.setItem(LS_KEY, JSON.stringify(all));
+  function saveJson(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
   }
 
-  function allListings() {
-    return loadUserListings().concat(MW.SEED_LISTINGS || []);
+  function loadUserListings() {
+    var arr = loadJson(LS_KEY, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  function loadOverrides() {
+    var o = loadJson(LS_OVERRIDES, {});
+    return o && typeof o === "object" ? o : {};
+  }
+
+  function loadDeleted() {
+    var arr = loadJson(LS_DELETED, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  function loadUnlocked() {
+    var arr = loadJson(LS_UNLOCKED, []);
+    return Array.isArray(arr) ? arr : [];
+  }
+
+  function saveUserListing(listing) {
+    var all = loadUserListings().filter(function (l) {
+      return l.id !== listing.id;
+    });
+    all.unshift(listing);
+    saveJson(LS_KEY, all);
+  }
+
+  function isUserCreated(id) {
+    return loadUserListings().some(function (l) {
+      return l.id === id;
+    });
+  }
+
+  function isMine(id) {
+    return isUserCreated(id) || loadUnlocked().indexOf(id) !== -1;
+  }
+
+  function digits(p) {
+    return String(p || "").replace(/\D/g, "");
+  }
+
+  function allListings(opts) {
+    opts = opts || {};
+    var deleted = loadDeleted();
+    var overrides = loadOverrides();
+    var user = loadUserListings();
+    var userIds = {};
+    user.forEach(function (l) {
+      userIds[l.id] = true;
+    });
+    var seed = (MW.SEED_LISTINGS || []).filter(function (l) {
+      return !userIds[l.id];
+    });
+    return user.concat(seed)
+      .map(function (l) {
+        var extra = overrides[l.id];
+        return extra ? Object.assign({}, l, extra) : Object.assign({}, l);
+      })
+      .filter(function (l) {
+        if (deleted.indexOf(l.id) !== -1) return false;
+        if (!opts.includeSold && l.sold) return false;
+        return true;
+      });
   }
 
   function getListing(id) {
-    return allListings().find(function (l) {
+    return allListings({ includeSold: true }).find(function (l) {
       return l.id === id;
     });
+  }
+
+  function myAds() {
+    return allListings({ includeSold: true }).filter(function (l) {
+      return isMine(l.id);
+    });
+  }
+
+  function unlockListing(id, phone) {
+    var l = getListing(id);
+    if (!l) return { ok: false, error: "Listing not found." };
+    var entered = digits(phone);
+    var listed = digits(l.contactPhone);
+    if (entered.length < 10 || entered !== listed) {
+      return { ok: false, error: "That number does not match the seller phone on this ad." };
+    }
+    var u = loadUnlocked();
+    if (u.indexOf(id) === -1) {
+      u.push(id);
+      saveJson(LS_UNLOCKED, u);
+    }
+    return { ok: true };
+  }
+
+  function updateListing(id, patch) {
+    if (!isMine(id)) return { ok: false, error: "Unlock this ad first." };
+    var users = loadUserListings();
+    var i = -1;
+    users.forEach(function (l, idx) {
+      if (l.id === id) i = idx;
+    });
+    if (i >= 0) {
+      users[i] = Object.assign({}, users[i], patch);
+      saveJson(LS_KEY, users);
+      return { ok: true };
+    }
+    var o = loadOverrides();
+    o[id] = Object.assign({}, o[id] || {}, patch);
+    saveJson(LS_OVERRIDES, o);
+    return { ok: true };
+  }
+
+  function markSold(id, sold) {
+    return updateListing(id, { sold: !!sold });
+  }
+
+  function deleteListing(id) {
+    if (!isMine(id)) return { ok: false, error: "Unlock this ad first." };
+    saveJson(
+      LS_KEY,
+      loadUserListings().filter(function (l) {
+        return l.id !== id;
+      })
+    );
+    var d = loadDeleted();
+    if (d.indexOf(id) === -1) {
+      d.push(id);
+      saveJson(LS_DELETED, d);
+    }
+    return { ok: true };
   }
 
   function qs(name) {
@@ -70,7 +192,7 @@
   function filterListings(f) {
     f = f || {};
     var q = (f.q || "").trim().toLowerCase();
-    return allListings().filter(function (l) {
+    return allListings({ includeSold: !!f.includeSold }).filter(function (l) {
       if (f.featuredOnly && !l.featured) return false;
       if (f.city && l.citySlug !== f.city) return false;
       if (f.area && (l.area || "") !== f.area) return false;
@@ -208,9 +330,18 @@
       .filter(Boolean)
       .join(" · ");
     var img = l.imageUrl || brandImage(l.brand, l.model);
-    var featured = l.featured
-      ? '<span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>'
-      : "";
+    var badges =
+      (l.sold
+        ? '<span class="bg-gray-900 text-white text-[10px] font-bold px-2 py-0.5 rounded">Sold</span>'
+        : "") +
+      (l.featured && !l.sold
+        ? '<span class="bg-yellow-400 text-gray-900 text-[10px] font-bold px-2 py-0.5 rounded">Featured</span>'
+        : "") +
+      '<span class="' +
+      pta.cls +
+      ' text-[10px] font-bold px-2 py-0.5 rounded">' +
+      pta.short +
+      "</span>";
     return (
       '<a href="phone.html?id=' +
       encodeURIComponent(l.id) +
@@ -218,14 +349,12 @@
       '<div class="relative aspect-[4/3] bg-slate-100 overflow-hidden">' +
       '<img src="' +
       img +
-      '" alt="" class="h-full w-full object-cover group-hover:scale-[1.03] transition duration-300">' +
+      '" alt="" class="h-full w-full object-cover group-hover:scale-[1.03] transition duration-300' +
+      (l.sold ? " opacity-50" : "") +
+      '">' +
       '<div class="absolute left-2.5 top-2.5 flex flex-wrap gap-1.5">' +
-      featured +
-      '<span class="' +
-      pta.cls +
-      ' text-[10px] font-bold px-2 py-0.5 rounded">' +
-      pta.short +
-      "</span></div></div>" +
+      badges +
+      "</div></div>" +
       '<div class="p-4">' +
       '<h3 class="font-bold text-gray-900 leading-snug">' +
       listingTitle(l) +
@@ -249,11 +378,7 @@
 
   function renderGrid(el, rows) {
     if (!el) return;
-    if (!rows.length) {
-      el.innerHTML = "";
-      return;
-    }
-    el.innerHTML = rows.map(cardHtml).join("");
+    el.innerHTML = rows.length ? rows.map(cardHtml).join("") : "";
   }
 
   window.MW.ui = {
@@ -267,6 +392,12 @@
     getListing: getListing,
     filterListings: filterListings,
     saveUserListing: saveUserListing,
+    updateListing: updateListing,
+    markSold: markSold,
+    deleteListing: deleteListing,
+    unlockListing: unlockListing,
+    isMine: isMine,
+    myAds: myAds,
     qs: qs,
     bindCityArea: bindCityArea,
     fillCitySelect: fillCitySelect,
