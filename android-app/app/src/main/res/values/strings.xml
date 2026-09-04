@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Mobile Market</string>
+    <string name="host_url">https://market-place-six-chi.vercel.app/</string>
+    <string name="privacy_url">https://market-place-six-chi.vercel.app/privacy.html</string>
+    <string name="privacy_title">Privacy policy</string>
+    <string name="asset_statements" translatable="false">
+        [{ \"relation\": [\"delegate_permission/common.handle_all_urls\"],
+           \"target\": { \"namespace\": \"web\",
+                         \"site\": \"https://market-place-six-chi.vercel.app\" } }]
+    </string>
+</resources>

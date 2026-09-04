@@ -6,6 +6,13 @@
   <title>Used Phones for Sale - MobileWheels PK</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta name="theme-color" content="#1d4ed8">
+  <meta name="application-name" content="Mobile Market">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mobile Market">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
 
@@ -81,6 +88,7 @@
       </div>
     </form>
 
+    <div id="ad-list" hidden class="mb-6 rounded-xl overflow-hidden"></div>
     <div id="results" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
     <p id="empty" class="hidden text-center text-gray-500 py-16">No phones match those filters. Try another brand, city or PTA status.</p>
   </main>
@@ -138,5 +146,9 @@
       document.getElementById("results").innerHTML = rows.map(ui.cardHtml).join("");
     })();
   </script>
+
+  <script src="js/ads-config.js"></script>
+  <script src="js/ads.js"></script>
+  <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
-# MobileWheels PK
+# Mobile Market (MobileWheels PK)
 
-Used mobile classifieds for Pakistan — search by city, area, brand and PTA status.
+Used mobile classifieds for Pakistan — search by brand, PTA status and city.
 
-Live site: https://market-place-six-chi.vercel.app/
+- Live website: https://market-place-six-chi.vercel.app/
+- Android app (Trusted Web Activity): see `android-app/`
