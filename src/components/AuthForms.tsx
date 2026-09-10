@@ -44,6 +44,10 @@ function oauthRedirect(next: string) {
   return `${window.location.origin}/auth/callback?next=${encodeURIComponent(dest)}`;
 }
 
+function googleOAuthRedirect() {
+  return "https://market-place-six-chi.vercel.app/auth/callback";
+}
+
 export function GoogleButton({
   next = "/my-ads",
   label = "Continue with Gmail",
@@ -65,7 +69,7 @@ export function GoogleButton({
     const { error: err } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: oauthRedirect(next),
+        redirectTo: googleOAuthRedirect(),
         queryParams: { prompt: "select_account" },
       },
     });

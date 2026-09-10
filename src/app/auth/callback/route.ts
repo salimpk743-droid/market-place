@@ -1,17 +1,21 @@
 import { NextResponse } from "next/server";
 import { createServerSupabase } from "@/lib/supabase/server";
-import { safeInternalPath } from "@/lib/market/site";
 
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = safeInternalPath(requestUrl.searchParams.get("next"), "/my-ads");
   if (requestUrl.searchParams.get("error")) {
-    return NextResponse.redirect(new URL(`/login?next=${encodeURIComponent(next)}`, requestUrl.origin));
+    return NextResponse.redirect(new URL("/login?error=oauth_provider_failed", requestUrl.origin));
   }
   if (code) {
     const supabase = await createServerSupabase();
-    if (supabase) await supabase.auth.exchangeCodeForSession(code);
+    if (!supabase) {
+      return NextResponse.redirect(new URL("/login?error=auth_not_configured", requestUrl.origin));
+    }
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      return NextResponse.redirect(new URL("/login?error=oauth_exchange_failed", requestUrl.origin));
+    }
   }
-  return NextResponse.redirect(new URL(next, requestUrl.origin));
+  return NextResponse.redirect(new URL("/my-ads", requestUrl.origin));
 }
