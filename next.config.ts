@@ -39,6 +39,18 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      {
+        source: "/",
+        has: [{ type: "host", value: "www.mobilemarket.pk" }],
+        destination: "https://mobilemarket.pk/",
+        permanent: true,
+      },
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.mobilemarket.pk" }],
+        destination: "https://mobilemarket.pk/:path*",
+        permanent: true,
+      },
       { source: "/accessories/power-banks", destination: "/accessories/power-bank", permanent: true },
       { source: "/accessories/chargers", destination: "/accessories/charger-cable", permanent: true },
       { source: "/accessories/covers", destination: "/accessories/cover-case", permanent: true },

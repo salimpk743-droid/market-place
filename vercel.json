@@ -3,6 +3,20 @@
   "framework": "nextjs",
   "buildCommand": "next build",
   "installCommand": "npm install",
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.mobilemarket.pk" }],
+      "destination": "https://mobilemarket.pk/",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.mobilemarket.pk" }],
+      "destination": "https://mobilemarket.pk/:path*",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/.well-known/assetlinks.json",
