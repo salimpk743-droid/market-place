@@ -1,0 +1,59 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { ListingCard } from "@/components/ListingCard";
+import { EmptyState } from "@/components/EmptyState";
+import { JsonLd } from "@/components/JsonLd";
+import { getPhoneBrandBySlug } from "@/lib/market/catalog";
+import { searchListings } from "@/lib/market/listings";
+import { absoluteUrl } from "@/lib/market/site";
+import { ListingGrid, Page, PageTitle } from "@/components/ui";
+
+type Props = { params: Promise<{ brand: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { brand } = await params;
+  const b = getPhoneBrandBySlug(brand);
+  if (!b) return { title: "Brand not found" };
+  return {
+    title: `Used ${b.name} phones in Pakistan`,
+    description: `Browse used ${b.name} phones for sale on Mobile Market. Filter by city, PTA status and storage.`,
+    alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
+  };
+}
+
+export default async function BrandPage({ params }: Props) {
+  const { brand } = await params;
+  const b = getPhoneBrandBySlug(brand);
+  if (!b) notFound();
+  const result = await searchListings({ brand: b.name, category: "phone" });
+  const indexable = result.total > 0;
+  return (
+    <Page>
+      {!indexable ? <meta name="robots" content="noindex,follow" /> : null}
+      <PageTitle
+        kicker="Brand"
+        title={`Used ${b.name} phones`}
+        description={`Live classifieds for ${b.name} posted by sellers. PTA status and condition are declared by the seller — confirm independently before you pay.`}
+      />
+      {result.rows.length ? (
+        <ListingGrid>
+          {result.rows.map((l) => (
+            <ListingCard key={l.id} listing={l} />
+          ))}
+        </ListingGrid>
+      ) : (
+        <EmptyState title={`No live ${b.name} ads yet`} body="When a seller posts a real listing, it will show up here." actionHref="/sell" actionLabel="Sell your phone" />
+      )}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+            { "@type": "ListItem", position: 2, name: b.name, item: absoluteUrl(`/phones/${b.slug}`) },
+          ],
+        }}
+      />
+    </Page>
+  );
+}

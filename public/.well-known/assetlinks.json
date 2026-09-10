@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "pk.mobilemarket.app",
+      "sha256_cert_fingerprints": [
+        "D6:DA:C5:37:B3:55:30:A2:24:B2:07:8C:81:B2:7E:41:C9:9E:5A:0B:DD:AA:D3:23:ED:D3:00:83:31:D4:83:F8"
+      ]
+    }
+  }
+]

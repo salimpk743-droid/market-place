@@ -1,0 +1,30 @@
+# secrets and local env — never commit
+.env
+.env.local
+.env.*.local
+.env.production
+*.pem
+*.p12
+*.jks
+*.keystore
+service-role*
+**/password.txt
+**/*secret*
+
+# deps / build
+node_modules
+.next
+out
+dist
+coverage
+*.log
+.DS_Store
+.vercel
+
+# android signing (if present)
+keystore.properties
+*.jks
+*.keystore
+
+# local listing photo cache (private bucket copies for signed serving)
+.data
