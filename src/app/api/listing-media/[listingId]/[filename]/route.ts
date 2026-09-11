@@ -12,6 +12,13 @@ const FILENAME_RE = /^[A-Za-z0-9._-]+\.(?:jpe?g|png|webp)$/i;
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
+function notFound(reason: string) {
+  return new NextResponse("Not found", {
+    status: 404,
+    headers: { "x-media-reason": reason },
+  });
+}
+
 function publicClient() {
   const { url, anonKey, configured } = getSupabasePublicConfig();
   if (!configured) return null;
@@ -25,13 +32,13 @@ export async function GET(
   const { listingId, filename } = await params;
   const file = decodeURIComponent(filename || "");
   if (!listingId || listingId.length > 80 || !FILENAME_RE.test(file)) {
-    return new NextResponse("Not found", { status: 404 });
+    return notFound("filename");
   }
 
   const admin = createAdminSupabase();
   const sessionClient = await createServerSupabase();
   const supabase = sessionClient || publicClient();
-  if (!supabase && !admin) return new NextResponse("Not found", { status: 404 });
+  if (!supabase && !admin) return notFound("no_client");
 
   const url = new URL(request.url);
   const signed = verifyMediaSig(listingId, file, url.searchParams.get("exp") || "", url.searchParams.get("sig") || "");
@@ -44,9 +51,9 @@ export async function GET(
 
   const select = PUBLIC_LISTING_COLUMNS.join(",");
   const reader = admin || supabase;
-  if (!reader) return new NextResponse("Not found", { status: 404 });
+  if (!reader) return notFound("no_client");
   const { data: listing } = await reader.from("listings").select(select).eq("id", listingId).maybeSingle();
-  if (!listing) return new NextResponse("Not found", { status: 404 });
+  if (!listing) return notFound("listing");
 
   const status = String((listing as { status?: string }).status || "");
   const publicOk = status === "active" || status === "sold";
@@ -55,8 +62,8 @@ export async function GET(
     const owned = await sessionClient.from("listings").select("id").eq("id", listingId).eq("seller_id", user.id).maybeSingle();
     isOwner = Boolean(owned.data);
   }
-  if (!publicOk && !isOwner) return new NextResponse("Not found", { status: 404 });
-  if (!signed && !isOwner) return new NextResponse("Not found", { status: 404 });
+  if (!publicOk && !isOwner) return notFound("status");
+  if (!signed && !isOwner) return notFound("hmac");
 
   const paths = storagePathsFromStored((listing as { image_url?: string }).image_url);
   const images = await reader.from("listing_images").select("storage_path, public_url").eq("listing_id", listingId);
@@ -69,11 +76,11 @@ export async function GET(
   const match = paths
     .map(parseListingStoragePath)
     .find((p) => p && p.listingId === listingId.toLowerCase() && p.filename.toLowerCase() === wanted);
-  if (!match) return new NextResponse("Not found", { status: 404 });
+  if (!match) return notFound("path");
 
   const image =
     readCachedImage(match.path) || (await downloadListingImage(match.path, [admin, sessionClient, supabase]));
-  if (!image) return new NextResponse("Not found", { status: 404 });
+  if (!image) return notFound("download");
 
   return new NextResponse(new Uint8Array(image.bytes), {
     status: 200,
