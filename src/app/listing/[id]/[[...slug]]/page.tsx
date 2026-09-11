@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { ContactSeller } from "@/components/ContactSeller";
 import { ShareButton } from "@/components/ShareButton";
 import { ListingCard } from "@/components/ListingCard";
@@ -13,8 +13,17 @@ import { getListingById, getListingImages, getRelatedListings, isOwnListing } fr
 import { absoluteUrl } from "@/lib/market/site";
 import { OwnerTools } from "@/components/OwnerTools";
 import { MapPin, ShieldAlert } from "lucide-react";
+import type { PublicListing } from "@/lib/market/types";
 
 type Props = { params: Promise<{ id: string; slug?: string[] }> };
+
+function listingPlainCopy(listing: PublicListing, title: string) {
+  const seller = listing.description?.trim();
+  if (seller) return seller;
+  const cat = getCategory(listing.category).name;
+  const place = cityLabel(listing.city_slug, listing.area);
+  return `${title} is listed under ${cat} in ${place} for ${formatPkr(listing.price_pkr)}.`;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
@@ -28,7 +37,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ptaBit = pta ? ` Seller-declared ${pta.label}.` : "";
   const desc = `${title} (${cat.name}) in ${cityLabel(listing.city_slug, listing.area)} — ${formatPkr(listing.price_pkr)}.${ptaBit}`;
   const index = listing.status === "active";
-  const image = listing.image_url ? absoluteUrl(listing.image_url) : undefined;
+  const image = listing.image_url
+    ? { url: absoluteUrl(listing.image_url), alt: title }
+    : { url: "/og.jpg", width: 1200, height: 630, alt: title };
   return {
     title,
     description: desc,
@@ -39,7 +50,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: desc,
       url: absoluteUrl(listingPath(listing)),
       type: "website",
-      images: image ? [{ url: image, alt: title }] : undefined,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      images: [image],
     },
   };
 }
@@ -50,7 +65,7 @@ export default async function ListingPage({ params }: Props) {
   if (!listing || listing.status === "removed") notFound();
   const want = listingSlug(listing);
   const got = slug?.[0];
-  if (got !== want) redirect(listingPath(listing));
+  if (got !== want) permanentRedirect(listingPath(listing));
 
   const [images, related, mine] = await Promise.all([
     getListingImages(listing.id),
@@ -61,11 +76,16 @@ export default async function ListingPage({ params }: Props) {
   const cat = getCategory(listing.category);
   const pta = ptaMeta(listing.pta_status);
   const title = listingTitle(listing);
+  const body = listingPlainCopy(listing, title);
   const gallery = images.length
     ? images
     : listing.image_url
       ? [{ id: "cover", url: listing.image_url }]
       : [];
+  const productImages = gallery
+    .map((img) => img.url)
+    .filter((url): url is string => Boolean(url))
+    .map((url) => absoluteUrl(url));
   const sold = listing.status === "sold";
   const specs: [string, string][] = [
     ["Category", cat.name],
@@ -77,6 +97,24 @@ export default async function ListingPage({ params }: Props) {
     listing.year ? ["Year", String(listing.year)] : null,
     phone && pta ? ["PTA", pta.label] : null,
   ].filter(Boolean) as [string, string][];
+
+  const product: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: title,
+    description: body,
+    brand: { "@type": "Brand", name: listing.brand },
+    category: cat.name,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "PKR",
+      price: listing.price_pkr,
+      availability: "https://schema.org/InStock",
+      url: absoluteUrl(listingPath(listing)),
+      itemCondition: "https://schema.org/UsedCondition",
+    },
+  };
+  if (productImages.length) product.image = productImages;
 
   return (
     <Page className="pb-24 lg:pb-0">
@@ -91,9 +129,7 @@ export default async function ListingPage({ params }: Props) {
           <ListingGallery images={gallery} title={title} sold={sold} />
           <div className="card mt-5 p-5 sm:p-6">
             <h2 className="text-base font-semibold">Description</h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink-soft">
-              {listing.description || "No extra details provided."}
-            </p>
+            <p className="mt-2 text-sm leading-relaxed text-ink-soft">{body}</p>
           </div>
         </div>
         <aside className="card h-fit p-5 sm:p-6">
@@ -169,30 +205,7 @@ export default async function ListingPage({ params }: Props) {
           ],
         }}
       />
-      {listing.status === "active" ? (
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: title,
-            description: listing.description || title,
-            image: gallery
-              .map((img) => img.url)
-              .filter((url): url is string => Boolean(url))
-              .map((url) => absoluteUrl(url)),
-            brand: { "@type": "Brand", name: listing.brand },
-            category: cat.name,
-            offers: {
-              "@type": "Offer",
-              priceCurrency: "PKR",
-              price: listing.price_pkr,
-              availability: "https://schema.org/InStock",
-              url: absoluteUrl(listingPath(listing)),
-              itemCondition: "https://schema.org/UsedCondition",
-            },
-          }}
-        />
-      ) : null}
+      {listing.status === "active" ? <JsonLd data={product} /> : null}
     </Page>
   );
 }
