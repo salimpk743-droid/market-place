@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { absoluteUrl } from "@/lib/market/site";
+import { absoluteUrl, BRAND } from "@/lib/market/site";
 
 export const metadata: Metadata = {
   title: "About Mobile Market",
   description: "Mobile Market is a classifieds marketplace for used mobile phones and mobile accessories in Pakistan.",
   alternates: { canonical: absoluteUrl("/about") },
+  openGraph: {
+    url: absoluteUrl("/about"),
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: BRAND }],
+  },
 };
 
 export default function AboutPage() {

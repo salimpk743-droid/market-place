@@ -24,7 +24,10 @@ export const metadata: Metadata = {
   description:
     "Search used iPhone, Samsung, AirPods, chargers, power banks, covers and more by city across Pakistan.",
   alternates: { canonical: absoluteUrl("/") },
-  openGraph: { url: absoluteUrl("/") },
+  openGraph: {
+    url: absoluteUrl("/"),
+    images: [{ url: "/og.jpg", width: 1200, height: 630, alt: BRAND }],
+  },
 };
 
 const CATEGORY_ICON: Record<string, typeof Smartphone> = {

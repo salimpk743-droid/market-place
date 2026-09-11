@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { CatalogResults } from "@/components/CatalogResults";
 import { searchListings } from "@/lib/market/listings";
 import { cityLabel, ptaMeta } from "@/lib/market/catalog";
-import { absoluteUrl } from "@/lib/market/site";
+import { absoluteUrl, BRAND } from "@/lib/market/site";
 import type { ListingFilters } from "@/lib/market/types";
 
 type Props = { searchParams: Promise<ListingFilters> };
@@ -14,6 +14,10 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: filtered ? "Filtered used phones" : "Used phones for sale",
     description: "Browse used mobile phones for sale across Pakistan. Filter by brand, PTA status, city and storage.",
     alternates: { canonical: absoluteUrl("/phones") },
+    openGraph: {
+      url: absoluteUrl("/phones"),
+      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: BRAND }],
+    },
     robots: filtered ? { index: false, follow: true } : { index: true, follow: true },
   };
 }
