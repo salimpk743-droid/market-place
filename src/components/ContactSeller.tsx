@@ -9,11 +9,13 @@ export function ContactSeller({
   sellerName,
   sold,
   priceLabel,
+  isPhone = true,
 }: {
   listingId: string;
   sellerName: string;
   sold?: boolean;
   priceLabel?: string;
+  isPhone?: boolean;
 }) {
   const [phone, setPhone] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -74,7 +76,8 @@ export function ContactSeller({
           </button>
         )}
         <p className="mt-2 text-xs text-muted">
-          Meet in public, inspect the phone, and never send advance money to someone you do not know.
+          Meet in public, inspect the {isPhone ? "phone" : "item"}, and never send advance money to someone you do not
+          know.
         </p>
         {error ? (
           <p className="mt-2 text-xs text-danger" role="alert">

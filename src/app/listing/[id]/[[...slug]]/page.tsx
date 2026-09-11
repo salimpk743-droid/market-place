@@ -114,7 +114,13 @@ export default async function ListingPage({ params }: Props) {
             ))}
           </dl>
           <div className="mt-5 border-t border-line pt-4">
-            <ContactSeller listingId={listing.id} sellerName={listing.seller_name || "Seller"} sold={sold} priceLabel={formatPkr(listing.price_pkr)} />
+            <ContactSeller
+              listingId={listing.id}
+              sellerName={listing.seller_name || "Seller"}
+              sold={sold}
+              priceLabel={formatPkr(listing.price_pkr)}
+              isPhone={isPhoneCategory(listing.category)}
+            />
             <ShareButton title={title} text={`${title} — ${formatPkr(listing.price_pkr)}`} />
             <Link href={`/report?listing=${encodeURIComponent(listing.id)}`} className="mt-3 flex items-center justify-center gap-1.5 text-sm text-danger hover:underline">
               <ShieldAlert className="h-3.5 w-3.5" aria-hidden />
