@@ -3,7 +3,7 @@ import Link from "next/link";
 import { absoluteUrl, BRAND } from "@/lib/market/site";
 
 export const metadata: Metadata = {
-  title: "About Mobile Market",
+  title: { absolute: "About Mobile Market" },
   description: "Mobile Market is a classifieds marketplace for used mobile phones and mobile accessories in Pakistan.",
   alternates: { canonical: absoluteUrl("/about") },
   openGraph: {

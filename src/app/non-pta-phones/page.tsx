@@ -6,11 +6,15 @@ import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 import Link from "next/link";
 
-export const metadata: Metadata = {
-  title: "Non-PTA used phones",
-  description: "Used phones whose sellers declared non-PTA (tax pending) status.",
-  alternates: { canonical: absoluteUrl("/non-pta-phones") },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const result = await searchListings({ pta: "non-pta" });
+  return {
+    title: "Non-PTA used phones",
+    description: "Used phones whose sellers declared non-PTA (tax pending) status.",
+    alternates: { canonical: absoluteUrl("/non-pta-phones") },
+    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+  };
+}
 
 export default async function NonPtaPage() {
   const result = await searchListings({ pta: "non-pta" });

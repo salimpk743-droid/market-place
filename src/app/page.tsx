@@ -20,7 +20,7 @@ import { countBy, featuredListings, recentListings } from "@/lib/market/listings
 import { BRAND, absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
-  title: `${BRAND} — Buy & sell used phones and mobile accessories in Pakistan`,
+  title: { absolute: "Mobile Market — Buy & Sell Phones & Accessories in Pakistan" },
   description:
     "Search used iPhone, Samsung, AirPods, chargers, power banks, covers and more by city across Pakistan.",
   alternates: { canonical: absoluteUrl("/") },
@@ -210,8 +210,14 @@ export default async function HomePage() {
       <JsonLd
         data={{
           "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [{ "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") }],
+          "@type": "WebSite",
+          name: BRAND,
+          url: absoluteUrl("/"),
+          potentialAction: {
+            "@type": "SearchAction",
+            target: `${absoluteUrl("/browse")}?q={search_term_string}`,
+            "query-input": "required name=search_term_string",
+          },
         }}
       />
     </main>

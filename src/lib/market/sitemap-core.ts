@@ -1,0 +1,17 @@
+export const SITEMAP_CORE_PATHS = [
+  "",
+  "/phones",
+  "/accessories",
+  "/guides",
+  "/guides/inspect-used-phone",
+  "/guides/pta-status",
+  "/guides/battery-health",
+  "/guides/common-scams",
+  "/about",
+  "/buyer-safety",
+  "/privacy",
+  "/terms",
+  "/seller-terms",
+  "/rules",
+  "/prohibited",
+] as const;

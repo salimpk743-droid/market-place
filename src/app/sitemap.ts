@@ -1,60 +1,57 @@
 import type { MetadataRoute } from "next";
-import { ACCESSORY_SLUGS, BRANDS, popularCities } from "@/lib/market/catalog";
-import { recentListings } from "@/lib/market/listings";
+import { ACCESSORY_SLUGS, BRANDS, canonicalCategory, getCity } from "@/lib/market/catalog";
+import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
+import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
-  const staticPaths = [
-    "",
-    "/phones",
-    "/browse",
-    "/accessories",
-    "/about",
-    "/guides",
-    "/guides/inspect-used-phone",
-    "/guides/pta-status",
-    "/guides/battery-health",
-    "/guides/common-scams",
-    "/buyer-safety",
-    "/privacy",
-    "/terms",
-    "/seller-terms",
-    "/rules",
-    "/prohibited",
-    "/contact",
-    "/delete-account",
-    "/pta-approved-phones",
-    "/non-pta-phones",
-  ];
-  const { rows } = await recentListings(500);
-  const listingEntries = rows.map((l) => ({
-    url: `${base}${listingPath(l)}`,
-    lastModified: l.updated_at || l.created_at,
+  const [brandCounts, cityCounts, categoryCounts, ptaCounts, recent] = await Promise.all([
+    countBy("brand"),
+    countBy("city_slug"),
+    countBy("category"),
+    countBy("pta_status"),
+    recentListings(500),
+  ]);
+
+  const catalogPaths: string[] = [];
+
+  for (const brand of BRANDS) {
+    if ((brandCounts[brand.name] || 0) > 0) catalogPaths.push(`/phones/${brand.slug}`);
+  }
+
+  for (const slug of Object.keys(cityCounts)) {
+    if ((cityCounts[slug] || 0) > 0 && getCity(slug)) catalogPaths.push(`/used-phones/${slug}`);
+  }
+
+  for (const slug of ACCESSORY_SLUGS) {
+    const total = Object.entries(categoryCounts).reduce((sum, [key, count]) => {
+      return canonicalCategory(key) === slug ? sum + count : sum;
+    }, 0);
+    if (total > 0) catalogPaths.push(`/accessories/${slug}`);
+  }
+
+  if ((ptaCounts.official || 0) > 0) catalogPaths.push("/pta-approved-phones");
+  if ((ptaCounts["non-pta"] || 0) > 0) catalogPaths.push("/non-pta-phones");
+
+  const listingEntries = recent.rows.map((listing) => ({
+    url: `${base}${listingPath(listing)}`,
+    lastModified: listing.updated_at || listing.created_at,
     changeFrequency: "daily" as const,
     priority: 0.8,
   }));
+
   return [
-    ...staticPaths.map((path) => ({
+    ...SITEMAP_CORE_PATHS.map((path) => ({
       url: `${base}${path || "/"}`,
       changeFrequency: "weekly" as const,
       priority: path === "" ? 1 : 0.6,
     })),
-    ...BRANDS.map((b) => ({
-      url: `${base}/phones/${b.slug}`,
+    ...catalogPaths.map((path) => ({
+      url: `${base}${path}`,
       changeFrequency: "daily" as const,
       priority: 0.5,
-    })),
-    ...ACCESSORY_SLUGS.map((slug) => ({
-      url: `${base}/accessories/${slug}`,
-      changeFrequency: "daily" as const,
-      priority: 0.5,
-    })),
-    ...popularCities().map((c) => ({
-      url: `${base}/used-phones/${c.slug}`,
-      changeFrequency: "daily" as const,
-      priority: 0.4,
     })),
     ...listingEntries,
   ];

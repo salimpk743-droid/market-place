@@ -13,11 +13,13 @@ type Props = { params: Promise<{ city: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city } = await params;
   const c = getCity(city);
-  if (!c) return { title: "City not found" };
+  if (!c) return { title: "City not found", robots: { index: false, follow: true } };
+  const result = await searchListings({ city: c.slug });
   return {
     title: `Used phones in ${c.name}`,
     description: `Used mobile phones for sale in ${c.name}. Search by brand, PTA status and area on Mobile Market.`,
     alternates: { canonical: absoluteUrl(`/used-phones/${c.slug}`) },
+    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
@@ -28,7 +30,6 @@ export default async function CityPage({ params }: Props) {
   const result = await searchListings({ city: c.slug });
   return (
     <Page>
-      {result.total === 0 ? <meta name="robots" content="noindex,follow" /> : null}
       <PageTitle
         kicker="City"
         title={`Used phones in ${c.name}`}

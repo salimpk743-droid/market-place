@@ -20,7 +20,7 @@ const plex = IBM_Plex_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   title: {
-    default: `${BRAND} — Buy & sell used phones and mobile accessories in Pakistan`,
+    default: "Mobile Market — Buy & Sell Phones & Accessories in Pakistan",
     template: `%s | ${BRAND}`,
   },
   description: "Search used iPhone, Samsung, AirPods, chargers, power banks, covers and more by city across Pakistan.",
@@ -56,19 +56,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ConfigBanner configured={configured} />
         {children}
         <Footer />
-        <JsonLd
-          data={{
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: BRAND,
-            url: getSiteUrl(),
-            potentialAction: {
-              "@type": "SearchAction",
-              target: `${getSiteUrl()}/browse?q={search_term_string}`,
-              "query-input": "required name=search_term_string",
-            },
-          }}
-        />
         <JsonLd
           data={{
             "@context": "https://schema.org",

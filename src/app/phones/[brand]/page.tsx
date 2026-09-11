@@ -13,11 +13,13 @@ type Props = { params: Promise<{ brand: string }> };
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brand } = await params;
   const b = getPhoneBrandBySlug(brand);
-  if (!b) return { title: "Brand not found" };
+  if (!b) return { title: "Brand not found", robots: { index: false, follow: true } };
+  const result = await searchListings({ brand: b.name, category: "phone" });
   return {
     title: `Used ${b.name} phones in Pakistan`,
     description: `Browse used ${b.name} phones for sale on Mobile Market. Filter by city, PTA status and storage.`,
     alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
+    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
@@ -26,10 +28,8 @@ export default async function BrandPage({ params }: Props) {
   const b = getPhoneBrandBySlug(brand);
   if (!b) notFound();
   const result = await searchListings({ brand: b.name, category: "phone" });
-  const indexable = result.total > 0;
   return (
     <Page>
-      {!indexable ? <meta name="robots" content="noindex,follow" /> : null}
       <PageTitle
         kicker="Brand"
         title={`Used ${b.name} phones`}

@@ -9,11 +9,16 @@ import { absoluteUrl } from "@/lib/market/site";
 import type { ListingFilters } from "@/lib/market/types";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
-export const metadata: Metadata = {
-  title: "Mobile accessories for sale",
-  description: "Buy and sell power banks, chargers, AirPods, headphones, covers and other mobile accessories in Pakistan.",
-  alternates: { canonical: absoluteUrl("/accessories") },
-};
+export async function generateMetadata({ searchParams }: { searchParams: Promise<ListingFilters> }): Promise<Metadata> {
+  const f = await searchParams;
+  const filtered = Boolean(f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition);
+  return {
+    title: "Mobile accessories for sale",
+    description: "Buy and sell power banks, chargers, AirPods, headphones, covers and other mobile accessories in Pakistan.",
+    alternates: { canonical: absoluteUrl("/accessories") },
+    robots: filtered ? { index: false, follow: true } : { index: true, follow: true },
+  };
+}
 
 export default async function AccessoriesPage({ searchParams }: { searchParams: Promise<ListingFilters> }) {
   const f = await searchParams;

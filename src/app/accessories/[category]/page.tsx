@@ -12,15 +12,19 @@ export function generateStaticParams() {
   return ACCESSORY_SLUGS.map((category) => ({ category }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const { category } = await params;
   const canonical = canonicalCategory(category);
-  if (!ACCESSORY_SLUGS.includes(canonical)) return { title: "Not found" };
+  if (!ACCESSORY_SLUGS.includes(canonical)) return { title: "Not found", robots: { index: false, follow: true } };
   const cat = getCategory(canonical);
+  const f = await searchParams;
+  const filtered = Boolean(f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition);
+  const result = await searchListings({ category: cat.slug });
   return {
     title: `${cat.name} for sale in Pakistan`,
     description: `Buy and sell ${cat.name.toLowerCase()} on Mobile Market. ${cat.blurb}.`,
     alternates: { canonical: absoluteUrl(`/accessories/${cat.slug}`) },
+    robots: !filtered && result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
