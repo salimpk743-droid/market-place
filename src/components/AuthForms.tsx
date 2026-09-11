@@ -39,13 +39,15 @@ function AuthDivider() {
   );
 }
 
-function oauthRedirect(next: string) {
-  const dest = safeInternalPath(next, "/my-ads");
-  return `${window.location.origin}/auth/callback?next=${encodeURIComponent(dest)}`;
+function publicOrigin() {
+  const host = window.location.hostname;
+  if (host === "mobilemarket.pk" || host === "www.mobilemarket.pk") return "https://mobilemarket.pk";
+  return window.location.origin;
 }
 
-function googleOAuthRedirect() {
-  return "https://market-place-six-chi.vercel.app/auth/callback";
+function oauthRedirect(next: string) {
+  const dest = safeInternalPath(next, "/my-ads");
+  return `${publicOrigin()}/auth/callback?next=${encodeURIComponent(dest)}`;
 }
 
 export function GoogleButton({
@@ -66,17 +68,21 @@ export function GoogleButton({
       return;
     }
     setBusy(true);
-    const { error: err } = await supabase.auth.signInWithOAuth({
+    const { data, error: err } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: googleOAuthRedirect(),
-        queryParams: { prompt: "select_account" },
+        redirectTo: oauthRedirect(next),
+        skipBrowserRedirect: true,
+        queryParams: { prompt: "select_account", access_type: "online" },
       },
     });
-    if (err) {
+    if (err || !data?.url) {
       setBusy(false);
-      setError(err.message);
+      setError(err?.message || "Could not start Google sign-in.");
+      return;
     }
+    const target = window.top ?? window;
+    target.location.assign(data.url);
   }
 
   return (
@@ -259,7 +265,7 @@ export function ForgotForm() {
     }
     const email = String(new FormData(e.currentTarget).get("email") || "");
     const { error: err } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/update-password`,
+      redirectTo: `${publicOrigin()}/auth/update-password`,
     });
     if (err) setError(err.message);
     else setDone(true);

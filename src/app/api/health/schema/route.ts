@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { getSupabasePublicConfig } from "@/lib/supabase/env";
+import { getSupabaseSecretKey } from "@/lib/supabase/admin";
 
 const PUBLIC_PROBE =
   "id,category,brand,model,price_pkr,status,city_slug,image_url,seller_name,created_at";
 
-/** Live connectivity probe. Never returns row contents or contact numbers. */
+/** Live connectivity probe. Never returns row contents, keys, or contact numbers. */
 export async function GET() {
   const { url, anonKey, configured } = getSupabasePublicConfig();
+  const hasStorageAdmin = Boolean(getSupabaseSecretKey());
   if (!configured) {
     return NextResponse.json({
       configured: false,
       listings_reachable: false,
+      has_storage_admin: hasStorageAdmin,
       note: "Publishable URL and anon key are not set in this environment.",
     });
   }
@@ -45,6 +48,7 @@ export async function GET() {
     configured: true,
     listings_reachable: listingsRes.ok && Array.isArray(listingsJson),
     listings_http_status: listingsRes.status,
+    has_storage_admin: hasStorageAdmin,
     row_count_sample: rows.length,
     public_fields_present: sampleKeys,
     exposes_contact_phone: sampleKeys.includes("contact_phone"),

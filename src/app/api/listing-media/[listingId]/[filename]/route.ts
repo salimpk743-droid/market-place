@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
+import { getSupabasePublicConfig } from "@/lib/supabase/env";
 import { downloadListingImage, readCachedImage, verifyMediaSig } from "@/lib/market/listing-media.server";
 import { storagePathsFromStored, parseListingStoragePath } from "@/lib/market/media-path";
 import { PUBLIC_LISTING_COLUMNS } from "@/lib/market/types";
@@ -9,6 +11,12 @@ const FILENAME_RE = /^[A-Za-z0-9._-]+\.(?:jpe?g|png|webp)$/i;
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+function publicClient() {
+  const { url, anonKey, configured } = getSupabasePublicConfig();
+  if (!configured) return null;
+  return createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
+}
 
 export async function GET(
   request: Request,
@@ -20,35 +28,38 @@ export async function GET(
     return new NextResponse("Not found", { status: 404 });
   }
 
-  const supabase = await createServerSupabase();
-  if (!supabase) return new NextResponse("Not found", { status: 404 });
+  const admin = createAdminSupabase();
+  const sessionClient = await createServerSupabase();
+  const supabase = sessionClient || publicClient();
+  if (!supabase && !admin) return new NextResponse("Not found", { status: 404 });
 
   const url = new URL(request.url);
   const signed = verifyMediaSig(listingId, file, url.searchParams.get("exp") || "", url.searchParams.get("sig") || "");
 
-  const { data: userData } = await supabase.auth.getUser();
-  const user = userData.user;
+  let user = null;
+  if (sessionClient) {
+    const { data: userData } = await sessionClient.auth.getUser();
+    user = userData.user;
+  }
 
   const select = PUBLIC_LISTING_COLUMNS.join(",");
-  const { data: listing } = await supabase.from("listings").select(select).eq("id", listingId).maybeSingle();
+  const reader = admin || supabase;
+  if (!reader) return new NextResponse("Not found", { status: 404 });
+  const { data: listing } = await reader.from("listings").select(select).eq("id", listingId).maybeSingle();
   if (!listing) return new NextResponse("Not found", { status: 404 });
 
   const status = String((listing as { status?: string }).status || "");
   const publicOk = status === "active" || status === "sold";
   let isOwner = false;
-  if (user) {
-    const owned = await supabase.from("listings").select("id").eq("id", listingId).eq("seller_id", user.id).maybeSingle();
+  if (user && sessionClient) {
+    const owned = await sessionClient.from("listings").select("id").eq("id", listingId).eq("seller_id", user.id).maybeSingle();
     isOwner = Boolean(owned.data);
   }
   if (!publicOk && !isOwner) return new NextResponse("Not found", { status: 404 });
   if (!signed && !isOwner) return new NextResponse("Not found", { status: 404 });
 
   const paths = storagePathsFromStored((listing as { image_url?: string }).image_url);
-  const admin = createAdminSupabase();
-  const images = await (admin || supabase)
-    .from("listing_images")
-    .select("storage_path, public_url")
-    .eq("listing_id", listingId);
+  const images = await reader.from("listing_images").select("storage_path, public_url").eq("listing_id", listingId);
   if (images.data) {
     for (const row of images.data) {
       paths.push(...storagePathsFromStored(row.storage_path), ...storagePathsFromStored(row.public_url));
@@ -60,7 +71,8 @@ export async function GET(
     .find((p) => p && p.listingId === listingId.toLowerCase() && p.filename.toLowerCase() === wanted);
   if (!match) return new NextResponse("Not found", { status: 404 });
 
-  const image = readCachedImage(match.path) || (await downloadListingImage(match.path, [admin, supabase]));
+  const image =
+    readCachedImage(match.path) || (await downloadListingImage(match.path, [admin, sessionClient, supabase]));
   if (!image) return new NextResponse("Not found", { status: 404 });
 
   return new NextResponse(new Uint8Array(image.bytes), {

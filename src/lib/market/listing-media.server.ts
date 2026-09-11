@@ -5,6 +5,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
+import { readServerEnv } from "@/lib/supabase/server-env";
 import { LISTING_IMAGES_BUCKET, filenameFromStoragePath, parseListingStoragePath } from "./media-path";
 
 const TTL_SECONDS = 60 * 60;
@@ -29,10 +30,7 @@ function cacheDir() {
 }
 
 function getSecret() {
-  const env =
-    process.env.LISTING_MEDIA_SECRET?.trim() ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-    process.env.SUPABASE_SECRET_KEY?.trim();
+  const env = readServerEnv("LISTING_MEDIA_SECRET", "SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEY");
   if (env) return env;
   const file = join(dataDir(), "listing-media-secret");
   try {
