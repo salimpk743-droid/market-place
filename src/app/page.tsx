@@ -15,7 +15,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { ListingGrid, SectionHead } from "@/components/ui";
-import { ACCESSORY_SLUGS, BRANDS, CATEGORIES, categoryPath, popularCities } from "@/lib/market/catalog";
+import { ACCESSORY_SLUGS, BRANDS, CATEGORIES, CITY_COUNT, categoryPath, popularCities } from "@/lib/market/catalog";
 import { countBy, featuredListings, recentListings } from "@/lib/market/listings";
 import { BRAND, absoluteUrl } from "@/lib/market/site";
 
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   description:
     "Search used iPhone, Samsung, AirPods, chargers, power banks, covers and more by city across Pakistan.",
   alternates: { canonical: absoluteUrl("/") },
+  openGraph: { url: absoluteUrl("/") },
 };
 
 const CATEGORY_ICON: Record<string, typeof Smartphone> = {
@@ -50,7 +51,7 @@ export default async function HomePage() {
     <main id="main" className="flex-grow">
       <section className="border-b border-line bg-brand-ink text-white">
         <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
-          <p className="section-kicker text-white/60">Phones & accessories · 214 locations</p>
+          <p className="section-kicker text-white/60">Phones & accessories · {CITY_COUNT} locations</p>
           <h1 className="mt-2 max-w-2xl text-[1.65rem] font-semibold tracking-tight sm:text-4xl">
             Buy and sell phones and mobile accessories across Pakistan
           </h1>

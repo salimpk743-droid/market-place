@@ -86,7 +86,7 @@ export async function GET(
     status: 200,
     headers: {
       "Content-Type": image.contentType,
-      "Cache-Control": publicOk ? "public, max-age=300, stale-while-revalidate=3600" : "private, no-store",
+      "Cache-Control": publicOk ? "public, max-age=86400, stale-while-revalidate=604800" : "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },
   });

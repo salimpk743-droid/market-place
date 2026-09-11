@@ -170,7 +170,10 @@ export default async function ListingPage({ params }: Props) {
             "@type": "Product",
             name: title,
             description: listing.description || title,
-            image: gallery[0]?.url || undefined,
+            image: gallery
+              .map((img) => img.url)
+              .filter((url): url is string => Boolean(url))
+              .map((url) => absoluteUrl(url)),
             brand: { "@type": "Brand", name: listing.brand },
             category: cat.name,
             offers: {

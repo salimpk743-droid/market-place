@@ -8,7 +8,7 @@ import { createAdminSupabase } from "@/lib/supabase/admin";
 import { readServerEnv } from "@/lib/supabase/server-env";
 import { LISTING_IMAGES_BUCKET, filenameFromStoragePath, parseListingStoragePath } from "./media-path";
 
-const TTL_SECONDS = 60 * 60;
+const TTL_SECONDS = 60 * 60 * 24 * 7;
 const MAX_CACHE_BYTES = 5 * 1024 * 1024;
 
 function dataDir() {
