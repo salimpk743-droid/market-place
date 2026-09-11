@@ -6,6 +6,7 @@ import { OwnerTools } from "@/components/OwnerTools";
 import { cityLabel, getCategory, ptaMeta } from "@/lib/market/catalog";
 import { formatPkr, listingPath, listingTitle } from "@/lib/market/format";
 import { myListings } from "@/lib/market/listings";
+import { ListingPhoto } from "@/components/ListingPhoto";
 import { Page, PageTitle, StatusBadge } from "@/components/ui";
 
 export const metadata: Metadata = { title: "My ads", robots: { index: false, follow: false } };
@@ -25,16 +26,12 @@ export default async function MyAdsPage() {
         <div className="space-y-3">
           {items.map((l) => (
             <article key={l.id} className="card flex flex-col gap-4 p-4 sm:flex-row sm:items-start">
-              <Link href={listingPath(l)} className="shrink-0 sm:w-36">
-                {l.image_url ? (
-                  <img
-                    src={l.image_url}
-                    alt={listingTitle(l)}
-                    className={`h-28 w-full rounded-md object-cover sm:h-24 ${l.status === "sold" ? "opacity-50" : ""}`}
-                  />
-                ) : (
-                  <div className="grid h-24 place-items-center rounded-md bg-page text-xs text-muted">No photo</div>
-                )}
+              <Link href={listingPath(l)} className="block shrink-0 overflow-hidden rounded-md sm:w-36">
+                <ListingPhoto
+                  src={l.image_url}
+                  alt={listingTitle(l)}
+                  className={l.status === "sold" ? "opacity-50" : ""}
+                />
               </Link>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">

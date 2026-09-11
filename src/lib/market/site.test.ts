@@ -6,8 +6,9 @@ describe("branding and redirects", () => {
   it("uses Mobile Market and the support mailbox", () => {
     assert.equal(BRAND, "Mobile Market");
     assert.equal(SUPPORT_EMAIL, "help@mobilemarket.pk");
-    assert.equal(DEFAULT_SITE_URL, "https://market-place-six-chi.vercel.app");
-    assert.doesNotMatch(DEFAULT_SITE_URL, /mobilemarket\.pk/);
+    assert.equal(DEFAULT_SITE_URL, "https://mobilemarket.pk");
+    assert.match(DEFAULT_SITE_URL, /^https:\/\/mobilemarket\.pk$/);
+    assert.doesNotMatch(DEFAULT_SITE_URL, /vercel\.app/);
   });
 
   it("rejects open redirects", () => {

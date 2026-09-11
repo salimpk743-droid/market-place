@@ -124,11 +124,28 @@ export async function downloadListingImage(
   for (const client of clients) {
     if (!client) continue;
     const { data, error } = await client.storage.from(LISTING_IMAGES_BUCKET).download(parsed.path);
-    if (error || !data) continue;
-    const buf = Buffer.from(await data.arrayBuffer());
-    const type = data.type || "image/jpeg";
-    writeCachedImage(parsed.path, buf, type);
-    return { bytes: buf, contentType: type };
+    if (!error && data) {
+      const buf = Buffer.from(await data.arrayBuffer());
+      const type = data.type || "image/jpeg";
+      writeCachedImage(parsed.path, buf, type);
+      return { bytes: buf, contentType: type };
+    }
+    const signed = await client.storage.from(LISTING_IMAGES_BUCKET).createSignedUrl(parsed.path, 60);
+    if (signed.data?.signedUrl) {
+      try {
+        const res = await fetch(signed.data.signedUrl);
+        if (res.ok) {
+          const buf = Buffer.from(await res.arrayBuffer());
+          if (buf.length) {
+            const type = res.headers.get("content-type") || "image/jpeg";
+            writeCachedImage(parsed.path, buf, type);
+            return { bytes: buf, contentType: type };
+          }
+        }
+      } catch {
+        // try next client
+      }
+    }
   }
   return null;
 }

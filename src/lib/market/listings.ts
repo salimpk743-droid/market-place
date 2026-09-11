@@ -195,7 +195,7 @@ export async function getListingImages(listingId: string): Promise<ListingImage[
   let { data, error } = await supabase.from("listings").select("id, image_url, status").eq("id", listingId).maybeSingle();
   if (error || !data) return [];
   const paths = storagePathsFromStored((data as { image_url?: string }).image_url);
-  const extra = await supabase
+  const extra = await (createAdminSupabase() || supabase)
     .from("listing_images")
     .select("id, storage_path, public_url, sort_order")
     .eq("listing_id", listingId)

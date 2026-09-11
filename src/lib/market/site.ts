@@ -1,6 +1,6 @@
 export const BRAND = "Mobile Market";
 export const SUPPORT_EMAIL = "help@mobilemarket.pk";
-export const DEFAULT_SITE_URL = "https://market-place-six-chi.vercel.app";
+export const DEFAULT_SITE_URL = "https://mobilemarket.pk";
 export const PAGE_SIZE = 24;
 
 export function getSiteUrl() {

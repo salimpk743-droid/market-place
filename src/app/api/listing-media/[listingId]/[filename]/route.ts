@@ -44,19 +44,23 @@ export async function GET(
   if (!signed && !isOwner) return new NextResponse("Not found", { status: 404 });
 
   const paths = storagePathsFromStored((listing as { image_url?: string }).image_url);
-  const images = await supabase.from("listing_images").select("storage_path, public_url").eq("listing_id", listingId);
+  const admin = createAdminSupabase();
+  const images = await (admin || supabase)
+    .from("listing_images")
+    .select("storage_path, public_url")
+    .eq("listing_id", listingId);
   if (images.data) {
     for (const row of images.data) {
       paths.push(...storagePathsFromStored(row.storage_path), ...storagePathsFromStored(row.public_url));
     }
   }
+  const wanted = file.toLowerCase();
   const match = paths
     .map(parseListingStoragePath)
-    .find((p) => p && p.listingId === listingId.toLowerCase() && p.filename.toLowerCase() === file.toLowerCase());
+    .find((p) => p && p.listingId === listingId.toLowerCase() && p.filename.toLowerCase() === wanted);
   if (!match) return new NextResponse("Not found", { status: 404 });
 
-  const image =
-    readCachedImage(match.path) || (await downloadListingImage(match.path, [createAdminSupabase(), supabase]));
+  const image = readCachedImage(match.path) || (await downloadListingImage(match.path, [admin, supabase]));
   if (!image) return new NextResponse("Not found", { status: 404 });
 
   return new NextResponse(new Uint8Array(image.bytes), {

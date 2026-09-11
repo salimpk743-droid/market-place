@@ -13,7 +13,7 @@ This repository is the website. The Android app is a Trusted Web Activity wrappi
 - `localStorage` is **not** the database. It may only hold harmless UI preferences.
 - Seller contact numbers are **not** in public listing HTML, public selects, or the sitemap.
 - Bundled seed/demo ads are **not** shown, counted, or put in Product schema.
-- Canonical origin is configurable (`NEXT_PUBLIC_SITE_URL`). Default is the current Vercel host `https://market-place-six-chi.vercel.app`. Do **not** assume `mobilemarket.pk` is live until that domain is connected.
+- Canonical origin is configurable (`NEXT_PUBLIC_SITE_URL`). Production is `https://mobilemarket.pk`.
 
 ## Environment (publishable only)
 
@@ -22,7 +22,7 @@ Set these in the host (Vercel project env). Never put the database password or s
 ```
 NEXT_PUBLIC_SUPABASE_URL=https://YOUR-PROJECT.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_PUBLISHABLE_ANON_KEY
-NEXT_PUBLIC_SITE_URL=https://market-place-six-chi.vercel.app
+NEXT_PUBLIC_SITE_URL=https://mobilemarket.pk
 ```
 
 See `.env.example`. Do not commit a real `.env`.
