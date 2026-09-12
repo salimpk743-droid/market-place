@@ -6,6 +6,7 @@ import {
   parseListingStoragePath,
   serializeStoragePaths,
   storagePathsFromStored,
+  withMediaWidth,
 } from "./media-path.ts";
 
 const seller = "11111111-1111-4111-8111-111111111111";
@@ -41,5 +42,13 @@ describe("listing storage paths", () => {
     assert.equal(extractStoragePath("/api/listing-media/x/y.jpg"), null);
     assert.deepEqual(storagePathsFromStored(""), []);
     assert.deepEqual(storagePathsFromStored(null), []);
+  });
+
+  it("appends card width without changing HMAC params", () => {
+    const signed = `/api/listing-media/${listing}/abc.jpg?exp=1&sig=abc`;
+    assert.equal(withMediaWidth(signed, 800), `${signed}&w=800`);
+    assert.equal(withMediaWidth(signed, 800)?.includes("sig=abc"), true);
+    assert.equal(withMediaWidth("/cover.jpg", 800), "/cover.jpg");
+    assert.equal(withMediaWidth(undefined, 800), undefined);
   });
 });

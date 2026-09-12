@@ -46,8 +46,8 @@ function getSecret() {
   }
 }
 
-function cacheKey(path: string) {
-  return createHash("sha256").update(path).digest("hex");
+function cacheKey(path: string, variant = "") {
+  return createHash("sha256").update(variant ? `${path}::${variant}` : path).digest("hex");
 }
 
 type CachedImage = { bytes: Buffer; contentType: string };
@@ -109,6 +109,71 @@ export function writeCachedImage(path: string, bytes: Buffer, contentType: strin
   } catch {
     // Memory cache is enough for this process.
   }
+}
+
+export function parseRequestedMediaWidth(raw: string | null): 400 | 800 | null {
+  if (raw === "400") return 400;
+  if (raw === "800") return 800;
+  return null;
+}
+
+function readCachedVariant(path: string, w: 400 | 800): CachedImage | null {
+  const parsed = parseListingStoragePath(path);
+  if (!parsed) return null;
+  const key = cacheKey(parsed.path, `w${w}`);
+  const mem = memory.get(key);
+  if (mem) return mem;
+  try {
+    const base = join(cacheDir(), key);
+    const bytes = readFileSync(base);
+    const cached = { bytes, contentType: "image/jpeg" };
+    memory.set(key, cached);
+    return cached;
+  } catch {
+    return null;
+  }
+}
+
+function writeCachedVariant(path: string, w: 400 | 800, bytes: Buffer) {
+  const parsed = parseListingStoragePath(path);
+  if (!parsed || !bytes.length || bytes.length > MAX_CACHE_BYTES) return;
+  const key = cacheKey(parsed.path, `w${w}`);
+  const cached = { bytes, contentType: "image/jpeg" as const };
+  memory.set(key, cached);
+  try {
+    const base = join(cacheDir(), key);
+    writeFileSync(base, bytes);
+    writeFileSync(`${base}.type`, "image/jpeg");
+  } catch {
+    // Memory cache is enough for this process.
+  }
+}
+
+export async function jpegFitLongEdge(bytes: Buffer, w: 400 | 800): Promise<CachedImage | null> {
+  try {
+    const sharp = (await import("sharp")).default;
+    const image = sharp(bytes, { failOn: "none" }).rotate();
+    const meta = await image.metadata();
+    const long = Math.max(meta.width || 0, meta.height || 0);
+    if (!long || long <= w) return null;
+    const out = await image
+      .resize({ width: w, height: w, fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality: 78 })
+      .toBuffer();
+    if (!out.length) return null;
+    return { bytes: out, contentType: "image/jpeg" };
+  } catch {
+    return null;
+  }
+}
+
+export async function cardSizedImage(path: string, original: CachedImage, w: 400 | 800): Promise<CachedImage> {
+  const cached = readCachedVariant(path, w);
+  if (cached) return cached;
+  const resized = await jpegFitLongEdge(original.bytes, w);
+  if (!resized) return original;
+  writeCachedVariant(path, w, resized.bytes);
+  return resized;
 }
 
 export async function downloadListingImage(

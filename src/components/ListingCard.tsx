@@ -2,6 +2,7 @@ import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { cityLabel } from "@/lib/market/catalog";
 import { formatPkr, listingPath, listingTitle, timeAgo } from "@/lib/market/format";
+import { withMediaWidth } from "@/lib/market/media-path";
 import type { PublicListing } from "@/lib/market/types";
 import { StatusBadge } from "@/components/ui";
 import { ListingPhoto } from "@/components/ListingPhoto";
@@ -16,7 +17,7 @@ export function ListingCard({ listing }: { listing: PublicListing }) {
       className="group block overflow-hidden rounded-lg border border-line bg-surface shadow-[var(--shadow-card)] transition-[box-shadow] duration-150 hover:shadow-[var(--shadow-card-hover)]"
     >
       <div className="relative">
-        <ListingPhoto src={listing.image_url} alt={alt} className={sold ? "opacity-50" : ""} />
+        <ListingPhoto src={withMediaWidth(listing.image_url, 800)} alt={alt} className={sold ? "opacity-50" : ""} />
         <div className="absolute left-2.5 top-2.5">
           <StatusBadge pta={listing.pta_status} sold={sold} featured={listing.featured} category={listing.category} />
         </div>

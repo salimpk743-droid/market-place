@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getSupabasePublicConfig } from "@/lib/supabase/env";
-import { downloadListingImage, readCachedImage, verifyMediaSig } from "@/lib/market/listing-media.server";
+import { downloadListingImage, readCachedImage, verifyMediaSig, parseRequestedMediaWidth, cardSizedImage } from "@/lib/market/listing-media.server";
 import { storagePathsFromStored, parseListingStoragePath } from "@/lib/market/media-path";
 import { PUBLIC_LISTING_COLUMNS } from "@/lib/market/types";
 
@@ -82,10 +82,13 @@ export async function GET(
     readCachedImage(match.path) || (await downloadListingImage(match.path, [admin, sessionClient, supabase]));
   if (!image) return notFound("download");
 
-  return new NextResponse(new Uint8Array(image.bytes), {
+  const width = parseRequestedMediaWidth(url.searchParams.get("w"));
+  const output = width ? await cardSizedImage(match.path, image, width) : image;
+
+  return new NextResponse(new Uint8Array(output.bytes), {
     status: 200,
     headers: {
-      "Content-Type": image.contentType,
+      "Content-Type": output.contentType.startsWith("image/") ? output.contentType : "image/jpeg",
       "Cache-Control": publicOk ? "public, max-age=86400, stale-while-revalidate=604800" : "private, no-store",
       "X-Content-Type-Options": "nosniff",
     },
