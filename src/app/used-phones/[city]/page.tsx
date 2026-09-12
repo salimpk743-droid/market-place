@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
@@ -14,10 +15,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { city } = await params;
   const c = getCity(city);
   if (!c) return { title: "City not found", robots: { index: false, follow: true } };
-  const result = await searchListings({ city: c.slug });
+  const result = await searchListings({ city: c.slug, category: "phone" });
   return {
     title: `Used phones in ${c.name}`,
-    description: `Used mobile phones for sale in ${c.name}. Search by brand, PTA status and area on Mobile Market.`,
+    description: `Browse used phones for sale in ${c.name}, Pakistan on Mobile Market. See live listings from sellers in ${c.name} by brand, PTA status and area.`,
     alternates: { canonical: absoluteUrl(`/used-phones/${c.slug}`) },
     robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
@@ -27,13 +28,22 @@ export default async function CityPage({ params }: Props) {
   const { city } = await params;
   const c = getCity(city);
   if (!c) notFound();
-  const result = await searchListings({ city: c.slug });
+  const result = await searchListings({ city: c.slug, category: "phone" });
   return (
     <Page>
       <PageTitle
         kicker="City"
         title={`Used phones in ${c.name}`}
-        description={`Classifieds posted by sellers in ${c.name}. Meet in a public place, inspect the device, and verify IMEI and PTA status yourself.`}
+        description={
+          <>
+            Classifieds posted by sellers in {c.name}. Meet in a public place, inspect the device, and verify IMEI and PTA
+            status yourself. Browse{" "}
+            <Link href="/phones" className="link">
+              all used phones
+            </Link>
+            .
+          </>
+        }
       />
       {result.rows.length ? (
         <ListingGrid>
