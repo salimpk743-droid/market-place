@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
@@ -17,7 +18,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const result = await searchListings({ brand: b.name, category: "phone" });
   return {
     title: `Used ${b.name} phones in Pakistan`,
-    description: `Browse used ${b.name} phones for sale on Mobile Market. Filter by city, PTA status and storage.`,
+    description:
+      b.slug === "apple"
+        ? "Browse used Apple phones for sale in Pakistan on Mobile Market. See live listings by city, PTA status and storage."
+        : `Browse used ${b.name} phones for sale on Mobile Market. Filter by city, PTA status and storage.`,
     alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
     robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
@@ -28,12 +32,28 @@ export default async function BrandPage({ params }: Props) {
   const b = getPhoneBrandBySlug(brand);
   if (!b) notFound();
   const result = await searchListings({ brand: b.name, category: "phone" });
+  const apple = b.slug === "apple";
   return (
     <Page>
       <PageTitle
         kicker="Brand"
-        title={`Used ${b.name} phones`}
-        description={`Live classifieds for ${b.name} posted by sellers. PTA status and condition are declared by the seller — confirm independently before you pay.`}
+        title={apple ? "Used Apple phones in Pakistan" : `Used ${b.name} phones`}
+        description={
+          <>
+            Live classifieds for {b.name} posted by sellers. PTA status and condition are declared by the seller — confirm
+            independently before you pay.
+            {apple ? (
+              <>
+                {" "}
+                Browse{" "}
+                <Link href="/phones" className="link">
+                  all used phones
+                </Link>
+                .
+              </>
+            ) : null}
+          </>
+        }
       />
       {result.rows.length ? (
         <ListingGrid>
