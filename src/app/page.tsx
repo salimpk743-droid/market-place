@@ -63,9 +63,8 @@ export default async function HomePage() {
             and related accessories. Buyers and sellers deal directly. We do not inspect, certify or guarantee items.
           </p>
           <p className="mt-3 max-w-2xl text-sm text-white/75 sm:text-base">
-            Mobile Market is a classifieds marketplace for used phones and mobile accessories in Pakistan. Buy or sell
-            phones, chargers, power banks, AirPods, covers and other mobile accessories directly with buyers and
-            sellers.
+            Search listings by brand, city, PTA status, storage and other details. Buyers can contact sellers directly,
+            while sellers can list their phones and accessories for local buyers across Pakistan.
           </p>
           <div className="mt-6">
             <SearchForm />
