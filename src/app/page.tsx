@@ -22,7 +22,7 @@ import { BRAND, absoluteUrl } from "@/lib/market/site";
 export const metadata: Metadata = {
   title: { absolute: "Mobile Market — Buy & Sell Phones & Accessories in Pakistan" },
   description:
-    "Search used iPhone, Samsung, AirPods, chargers, power banks, covers and more by city across Pakistan.",
+    "Find used phones and mobile accessories in Pakistan. Search iPhone, Samsung, AirPods, chargers, power banks and covers by city.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: {
     url: absoluteUrl("/"),
@@ -56,11 +56,16 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
           <p className="section-kicker text-white/60">Phones & accessories · {CITY_COUNT} locations</p>
           <h1 className="mt-2 max-w-2xl text-[1.65rem] font-semibold tracking-tight sm:text-4xl">
-            Buy and sell phones and mobile accessories across Pakistan
+            Buy and sell used phones and mobile accessories across Pakistan
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-white/75 sm:text-base">
             {BRAND} is a classifieds marketplace for mobiles only — used phones, AirPods, chargers, power banks, covers
             and related accessories. Buyers and sellers deal directly. We do not inspect, certify or guarantee items.
+          </p>
+          <p className="mt-3 max-w-2xl text-sm text-white/75 sm:text-base">
+            Mobile Market is a classifieds marketplace for used phones and mobile accessories in Pakistan. Buy or sell
+            phones, chargers, power banks, AirPods, covers and other mobile accessories directly with buyers and
+            sellers.
           </p>
           <div className="mt-6">
             <SearchForm />
