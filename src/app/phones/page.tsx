@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CatalogResults } from "@/components/CatalogResults";
-import { searchListings } from "@/lib/market/listings";
-import { cityLabel, ptaMeta } from "@/lib/market/catalog";
+import { BRANDS, cityLabel, getCity, ptaMeta } from "@/lib/market/catalog";
+import { countBy, searchListings } from "@/lib/market/listings";
 import { absoluteUrl, BRAND } from "@/lib/market/site";
 import type { ListingFilters } from "@/lib/market/types";
 
@@ -24,7 +25,17 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 
 export default async function PhonesPage({ searchParams }: Props) {
   const f = await searchParams;
-  const result = await searchListings({ ...f, category: "phone" });
+  const [result, brandCounts, cityCounts] = await Promise.all([
+    searchListings({ ...f, category: "phone" }),
+    countBy("brand", "phone"),
+    countBy("city_slug", "phone"),
+  ]);
+  const liveBrands = BRANDS.filter((brand) => (brandCounts[brand.name] || 0) > 0);
+  const liveCities = Object.keys(cityCounts)
+    .filter((slug) => (cityCounts[slug] || 0) > 0)
+    .map((slug) => getCity(slug))
+    .filter((city): city is NonNullable<typeof city> => Boolean(city))
+    .sort((a, b) => a.name.localeCompare(b.name));
   const bits = [
     f.brand,
     f.storage ? `${f.storage} GB` : "",
@@ -41,6 +52,43 @@ export default async function PhonesPage({ searchParams }: Props) {
       title={bits.length ? bits.join(" · ") : "Used phones for sale"}
       emptyTitle="No phones match those filters"
       emptyBody="Try another brand, city or PTA status. Only real seller ads are shown — there are no demo listings in this catalog."
+      intro={
+        <>
+          <p className="mb-4 max-w-3xl text-sm leading-relaxed text-ink-soft">
+            Browse used phones for sale across Pakistan. Compare listings by brand, PTA status, city and storage, then
+            contact sellers directly. Check the phone and confirm its condition and PTA status before paying.
+          </p>
+          {liveBrands.length || liveCities.length ? (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {liveBrands.map((brand) => (
+                <Link
+                  key={brand.slug}
+                  href={`/phones/${brand.slug}`}
+                  className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
+                >
+                  {brand.name}
+                </Link>
+              ))}
+              {liveCities.map((city) => (
+                <Link
+                  key={city.slug}
+                  href={`/used-phones/${city.slug}`}
+                  className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
+                >
+                  {city.name}
+                </Link>
+              ))}
+            </div>
+          ) : null}
+          <p className="mb-6 text-sm text-muted">
+            PTA status on listings is declared by the seller.{" "}
+            <Link href="/guides/pta-status" className="link">
+              Read the PTA status guide
+            </Link>{" "}
+            before you buy.
+          </p>
+        </>
+      }
     />
   );
 }

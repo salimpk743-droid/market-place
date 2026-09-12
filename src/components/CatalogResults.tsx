@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { FilterForm } from "@/components/FilterForm";
 import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
@@ -23,6 +24,7 @@ export function CatalogResults({
   description,
   emptyTitle,
   emptyBody,
+  intro,
 }: {
   result: Result;
   filters: ListingFilters;
@@ -33,6 +35,7 @@ export function CatalogResults({
   description?: string;
   emptyTitle: string;
   emptyBody: string;
+  intro?: ReactNode;
 }) {
   const q = new URLSearchParams();
   Object.entries(filters).forEach(([k, v]) => {
@@ -47,6 +50,7 @@ export function CatalogResults({
         title={title}
         description={description || `${result.total} listing${result.total === 1 ? "" : "s"} match your filters`}
       />
+      {intro}
       <FilterForm filters={filters} action={action} lockedCategory={lockedCategory} />
       {result.rows.length ? (
         <ListingGrid>

@@ -284,10 +284,15 @@ export async function featuredListings(limit = 6) {
   return withSignedCovers(asListings(data));
 }
 
-export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category") {
+export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category", category?: string) {
   const supabase = await createServerSupabase();
   if (!supabase) return {} as Record<string, number>;
-  const { data, error } = await supabase.from("listings").select(column).eq("status", "active");
+  let query = supabase.from("listings").select(column).eq("status", "active");
+  if (category && column !== "category") {
+    const values = categoryFilterValues(category);
+    query = values.length > 1 ? query.in("category", values) : query.eq("category", values[0]);
+  }
+  const { data, error } = await query;
   if (error) return {} as Record<string, number>;
   const counts: Record<string, number> = {};
   (data || []).forEach((row) => {
