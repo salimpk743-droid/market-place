@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
+import { AuthHeader } from "@/components/AuthHeader";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SkipLink } from "@/components/SkipLink";
@@ -8,7 +10,6 @@ import { PreviewHostBridge } from "@/components/preview-bridge";
 import { ConfigBanner } from "@/components/ConfigBanner";
 import { JsonLd } from "@/components/JsonLd";
 import { BRAND, SUPPORT_EMAIL, getSiteUrl } from "@/lib/market/site";
-import { getCurrentUser } from "@/lib/market/listings";
 import { getSupabasePublicConfig } from "@/lib/supabase/env";
 
 const plex = IBM_Plex_Sans({
@@ -39,7 +40,6 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { user } = await getCurrentUser();
   const { configured } = getSupabasePublicConfig();
   return (
     <html lang="en">
@@ -52,7 +52,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className={`${plex.className} flex min-h-screen flex-col bg-page text-ink antialiased`}>
         <PreviewHostBridge />
         <SkipLink />
-        <Header email={user?.email} />
+        <Suspense fallback={<Header />}>
+          <AuthHeader />
+        </Suspense>
         <ConfigBanner configured={configured} />
         {children}
         <Footer />
