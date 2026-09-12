@@ -29,9 +29,13 @@ export default async function AccessoriesPage({ searchParams }: { searchParams: 
     <Page>
       <PageTitle
         kicker="Accessories"
-        title="Mobile accessories"
+        title="Used mobile accessories for sale"
         description="Power banks, chargers, AirPods, headphones, covers, screen protectors, smartwatches and other phone-related items. Laptops and unrelated goods are not listed here."
       />
+      <p className="mb-4 max-w-3xl text-sm leading-relaxed text-ink-soft">
+        Browse used mobile accessories for sale in Pakistan, including power banks, chargers, AirPods, headphones, covers
+        and more. Check the item and confirm its condition before paying.
+      </p>
       <div className="mb-5 flex flex-wrap gap-2">
         {cats.map((c) => (
           <Link
@@ -43,6 +47,13 @@ export default async function AccessoriesPage({ searchParams }: { searchParams: 
           </Link>
         ))}
       </div>
+      <p className="mb-6 text-sm text-muted">
+        Meet in public and inspect the item before you pay. Read{" "}
+        <Link href="/guides/common-scams" className="link">
+          common marketplace scams
+        </Link>{" "}
+        before contacting a seller.
+      </p>
       <FilterForm filters={{ ...f, category }} action="/accessories" lockedCategory="accessories" />
       {result.rows.length ? (
         <ListingGrid>
