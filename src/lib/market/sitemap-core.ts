@@ -4,6 +4,7 @@ export const SITEMAP_CORE_PATHS = [
   "/accessories",
   "/guides",
   "/guides/inspect-used-phone",
+  "/guides/buy-used-phone",
   "/guides/pta-status",
   "/guides/battery-health",
   "/guides/common-scams",

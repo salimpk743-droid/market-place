@@ -10,6 +10,7 @@ describe("sitemap core paths", () => {
       "/accessories",
       "/guides",
       "/guides/inspect-used-phone",
+      "/guides/buy-used-phone",
       "/guides/pta-status",
       "/guides/battery-health",
       "/guides/common-scams",
