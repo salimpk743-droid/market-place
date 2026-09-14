@@ -29,20 +29,41 @@ export default async function CityPage({ params }: Props) {
   const c = getCity(city);
   if (!c) notFound();
   const result = await searchListings({ city: c.slug, category: "phone" });
+  const islamabad = c.slug === "islamabad";
   return (
     <Page>
       <PageTitle
         kicker="City"
         title={`Used phones in ${c.name}`}
         description={
-          <>
-            Classifieds posted by sellers in {c.name}. Meet in a public place, inspect the device, and verify IMEI and PTA
-            status yourself. Browse{" "}
-            <Link href="/phones" className="link">
-              all used phones
-            </Link>
-            .
-          </>
+          islamabad ? (
+            <>
+              Browse used phones for sale in Islamabad on Mobile Market. Compare live listings by brand, model, storage,
+              PTA status and condition. Meet in a public place, inspect the phone, and verify the IMEI and PTA status
+              before paying.{" "}
+              <Link href="/guides/pta-status" className="link">
+                How to check PTA status
+              </Link>
+              .{" "}
+              <Link href="/guides/buy-used-phone" className="link">
+                How to check a used phone before buying
+              </Link>
+              . Browse{" "}
+              <Link href="/phones" className="link">
+                all used phones
+              </Link>
+              .
+            </>
+          ) : (
+            <>
+              Classifieds posted by sellers in {c.name}. Meet in a public place, inspect the device, and verify IMEI and PTA
+              status yourself. Browse{" "}
+              <Link href="/phones" className="link">
+                all used phones
+              </Link>
+              .
+            </>
+          )
         }
       />
       {result.rows.length ? (
