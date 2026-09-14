@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { SkipLink } from "@/components/SkipLink";
 import { PreviewHostBridge } from "@/components/preview-bridge";
 import { ConfigBanner } from "@/components/ConfigBanner";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { JsonLd } from "@/components/JsonLd";
 import { BRAND, SUPPORT_EMAIL, getSiteUrl } from "@/lib/market/site";
 import { getSupabasePublicConfig } from "@/lib/supabase/env";
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
       </head>
       <body className={`${plex.className} flex min-h-screen flex-col bg-page text-ink antialiased`}>
+        <GoogleAnalytics />
         <PreviewHostBridge />
         <SkipLink />
         <Suspense fallback={<Header />}>
