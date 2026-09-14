@@ -9,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 const GUIDES = [
+  { href: "/guides/buy-used-phone", title: "How to Check a Used Phone Before Buying in Pakistan", body: "A practical checklist for inspecting a used phone, checking IMEI and PTA status, testing key features, and staying safe before paying." },
   { href: "/guides/inspect-used-phone", title: "Inspect a used phone before you pay", body: "Screen, cameras, IMEI, ports, and a meeting checklist." },
   { href: "/guides/pta-status", title: "PTA approved, Non-PTA, CPID and JV", body: "What sellers mean by these labels, and what you should still check." },
   { href: "/guides/battery-health", title: "Battery health on used phones", body: "What the percentage means and how people fake it." },
