@@ -1,5 +1,6 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { stripPrivateFields } from "@/lib/market/public-fields";
+import { categoryFilterValues } from "@/lib/market/catalog";
 import { PUBLIC_LISTING_COLUMNS, type PublicListing } from "@/lib/market/types";
 import { mediaUrlForPath } from "@/lib/market/listing-media.server";
 import { storagePathsFromStored } from "@/lib/market/media-path";
@@ -29,7 +30,7 @@ export async function searchPhoneSeoListings({
     .from("listings")
     .select(SELECT, { count: "exact" })
     .eq("status", "active")
-    .eq("category", "phone")
+    .in("category", categoryFilterValues("phone"))
     .order("created_at", { ascending: false })
     .limit(limit);
 
