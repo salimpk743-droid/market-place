@@ -19,7 +19,12 @@ function isMissingCategoryColumn(message?: string) {
 
 function asRows(data: unknown): PublicListing[] {
   if (!Array.isArray(data)) return [];
-  return data.map((row) => withSignedCover(stripPrivateFields(row && typeof row === "object" ? row : {})));
+  return data.map((row) => {
+    const record = row && typeof row === "object" && !Array.isArray(row)
+      ? (row as Record<string, unknown>)
+      : {};
+    return withSignedCover(stripPrivateFields(record));
+  });
 }
 
 export async function searchPhoneSeoListings({
