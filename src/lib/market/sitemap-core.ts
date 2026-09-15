@@ -15,4 +15,4 @@ export const SITEMAP_CORE_PATHS = [
   "/seller-terms",
   "/rules",
   "/prohibited",
-] as const;
+];
