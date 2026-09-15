@@ -9,7 +9,9 @@ type Props = { searchParams: Promise<ListingFilters> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const f = await searchParams;
-  const filtered = Boolean(f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition || f.category);
+  const filtered = Boolean(
+    f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition || f.category || f.minPrice || f.maxPrice || f.page,
+  );
   const cat = f.category ? getCategory(f.category).name : "phones and accessories";
   return {
     title: filtered ? "Filtered listings" : "Browse phones and accessories",

@@ -11,7 +11,9 @@ import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<ListingFilters> }): Promise<Metadata> {
   const f = await searchParams;
-  const filtered = Boolean(f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition);
+  const filtered = Boolean(
+    f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition || f.minPrice || f.maxPrice || f.page,
+  );
   return {
     title: "Mobile accessories for sale",
     description: "Buy and sell power banks, chargers, AirPods, headphones, covers and other mobile accessories in Pakistan.",

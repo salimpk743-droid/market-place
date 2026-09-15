@@ -10,7 +10,9 @@ type Props = { searchParams: Promise<ListingFilters> };
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const f = await searchParams;
-  const filtered = Boolean(f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition);
+  const filtered = Boolean(
+    f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition || f.minPrice || f.maxPrice || f.page,
+  );
   return {
     title: filtered ? "Filtered used phones" : "Used phones for sale",
     description: "Browse used mobile phones for sale across Pakistan. Filter by brand, PTA status, city and storage.",
