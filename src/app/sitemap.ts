@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ACCESSORY_SLUGS, BRANDS, canonicalCategory, getCity } from "@/lib/market/catalog";
+import { ACCESSORY_SLUGS, BRANDS, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
 import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
@@ -43,7 +43,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const brand = BRANDS.find((item) => item.name.toLowerCase() === listing.brand.toLowerCase());
     if (!brand || !getCity(listing.city_slug)) continue;
     catalogPaths.add(`/used-phones/${listing.city_slug}/${brand.slug}`);
-    if (listing.model) catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
+    if (listing.model && (MODELS_BY_BRAND[brand.slug] || []).some((model) => slugify(model) === slugify(listing.model))) {
+      catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
+    }
   }
 
   const listingEntries = recent.rows.map((listing) => ({
