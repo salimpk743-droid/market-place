@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
-import { getCity, getPhoneBrandBySlug, BRANDS } from "@/lib/market/catalog";
+import { getCity, BRANDS } from "@/lib/market/catalog";
 import { searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
@@ -41,17 +41,12 @@ export default async function CityPage({ params }: Props) {
         title={`Used phones in ${c.name}`}
         description={
           islamabad ? (
-            <>
-              Browse used phones for sale in Islamabad on Mobile Market. Compare live listings by brand, model, storage,
-              PTA status and condition. Meet in a public place, inspect the phone, and verify the IMEI and PTA status
-              before paying. <Link href="/guides/pta-status" className="link">How to check PTA status</Link>. <Link href="/guides/buy-used-phone" className="link">How to check a used phone before buying</Link>. Browse <Link href="/phones" className="link">all used phones</Link>.
-            </>
+            <>Browse used phones for sale in Islamabad on Mobile Market. Compare live listings by brand, model, storage, PTA status and condition. Meet in a public place, inspect the phone, and verify the IMEI and PTA status before paying. <Link href="/guides/pta-status" className="link">How to check PTA status</Link>. <Link href="/guides/buy-used-phone" className="link">How to check a used phone before buying</Link>. Browse <Link href="/phones" className="link">all used phones</Link>.</>
           ) : (
             <>Classifieds posted by sellers in {c.name}. Meet in a public place, inspect the device, and verify IMEI and PTA status yourself. Browse <Link href="/phones" className="link">all used phones</Link>.</>
           )
         }
       />
-
       {liveBrands.length ? (
         <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
           <h2 className="text-base font-semibold">Popular phone brands in {c.name}</h2>
@@ -60,7 +55,6 @@ export default async function CityPage({ params }: Props) {
           </div>
         </section>
       ) : null}
-
       {result.rows.length ? <ListingGrid>{result.rows.map((l) => <ListingCard key={l.id} listing={l} />)}</ListingGrid> : <EmptyState title={`No live ads in ${c.name} yet`} body="City pages are only filled by real seller listings." actionHref="/sell" actionLabel="Sell your phone" />}
       <JsonLd data={{
         "@context": "https://schema.org",
