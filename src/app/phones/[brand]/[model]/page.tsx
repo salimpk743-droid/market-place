@@ -16,7 +16,8 @@ function slugify(value: string) {
 }
 
 function getModel(brandSlug: string, modelSlug: string) {
-  const models = MODELS_BY_BRAND[brandSlug] || [];
+  const brand = getPhoneBrandBySlug(brandSlug);
+  const models = brand ? MODELS_BY_BRAND[brand.name] || [] : [];
   return models.find((model) => slugify(model) === modelSlug.toLowerCase());
 }
 
