@@ -20,9 +20,9 @@ import { countBy, featuredListings, recentListings } from "@/lib/market/listings
 import { BRAND, absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
-  title: { absolute: "Mobile Market — Buy & Sell Phones & Accessories in Pakistan" },
+  title: { absolute: "Mobile Market — Used Mobile Phones & Accessories in Pakistan" },
   description:
-    "Find used phones and mobile accessories in Pakistan. Search iPhone, Samsung, AirPods, chargers, power banks and covers by city.",
+    "Buy and sell used mobile phones and accessories in Pakistan. Browse iPhone, Samsung and other phones by city, PTA status, storage and price.",
   alternates: { canonical: absoluteUrl("/") },
   openGraph: {
     url: absoluteUrl("/"),
@@ -42,6 +42,21 @@ const CATEGORY_ICON: Record<string, typeof Smartphone> = {
   "other-accessory": Speaker,
 };
 
+const POPULAR_SEARCHES = [
+  ["iPhone 18 Price in Pakistan", "/iphone-18-price-in-pakistan"],
+  ["iPhone 18 Pro Price in Pakistan", "/iphone-18-pro-price-in-pakistan"],
+  ["iPhone 18 Pro Max Price in Pakistan", "/iphone-18-pro-max-price-in-pakistan"],
+  ["iPhone 17 Pro Max Price in Pakistan", "/phones/apple"],
+  ["Samsung Galaxy S26 Ultra Price", "/phones/samsung"],
+  ["Used iPhone Price in Pakistan", "/phones/apple"],
+  ["PTA Approved iPhones", "/pta-approved-phones"],
+  ["Non-PTA iPhones", "/non-pta-phones"],
+  ["Used Mobile Phones in Lahore", "/used-phones/lahore"],
+  ["Used Mobile Phones in Karachi", "/used-phones/karachi"],
+  ["Used Mobile Phones in Islamabad", "/used-phones/islamabad"],
+  ["Used Mobile Phones in Rawalpindi", "/used-phones/rawalpindi"],
+] as const;
+
 export default async function HomePage() {
   const [featured, recent, brandCounts, cityCounts] = await Promise.all([
     featuredListings(6),
@@ -56,7 +71,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
           <p className="section-kicker text-white/60">Phones & accessories · {CITY_COUNT} locations</p>
           <h1 className="mt-2 max-w-2xl text-[1.65rem] font-semibold tracking-tight sm:text-4xl">
-            Buy and sell used phones and mobile accessories across Pakistan
+            Buy and sell used mobile phones and accessories across Pakistan
           </h1>
           <p className="mt-3 max-w-2xl text-sm text-white/75 sm:text-base">
             {BRAND} is a classifieds marketplace for mobiles only — used phones, AirPods, chargers, power banks, covers
@@ -131,6 +146,20 @@ export default async function HomePage() {
           )}
         </section>
 
+        <section id="popular-searches" className="card p-6 sm:p-8">
+          <SectionHead
+            title="Popular mobile prices & searches in Pakistan"
+            description="Explore current phone prices, PTA information and used-phone listings on Mobile Market."
+          />
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {POPULAR_SEARCHES.map(([label, href]) => (
+              <Link key={href + label} href={href} className="rounded-md border border-line px-3 py-3 text-sm font-medium text-brand hover:border-brand/30 hover:bg-surface">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <section id="brands">
           <SectionHead title="Browse phones by brand" description="Open a brand to filter by storage, PTA status and city." href="/phones" />
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
@@ -175,24 +204,6 @@ export default async function HomePage() {
               {ACCESSORY_SLUGS.length} accessory categories, from power banks to covers. Phones stay on Used Phones.
             </p>
           </Link>
-        </section>
-
-        <section id="how-it-works" className="card p-6 sm:p-8">
-          <h2 className="text-lg sm:text-xl">How Mobile Market works</h2>
-          <ol className="mt-4 grid gap-4 text-sm text-ink-soft sm:grid-cols-3">
-            <li>
-              <p className="font-semibold text-ink">1. Search</p>
-              <p className="mt-1">Filter by category, brand, city and price. Listings are posted by independent sellers.</p>
-            </li>
-            <li>
-              <p className="font-semibold text-ink">2. Inspect</p>
-              <p className="mt-1">Meet in public. For phones, check IMEI and PTA before you pay. For accessories, check original vs copy.</p>
-            </li>
-            <li>
-              <p className="font-semibold text-ink">3. Deal directly</p>
-              <p className="mt-1">We do not take payment or hold stock. The sale is between buyer and seller.</p>
-            </li>
-          </ol>
         </section>
 
         <section className="border-t border-line pt-8">
