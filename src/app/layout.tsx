@@ -49,6 +49,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8924686927214586"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className={`${plex.className} flex min-h-screen flex-col bg-page text-ink antialiased`}>
         <GoogleAnalytics />
