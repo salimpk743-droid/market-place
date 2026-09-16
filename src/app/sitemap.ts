@@ -12,10 +12,10 @@ function slugify(value: string) {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
   const [brandCounts, cityCounts, categoryCounts, ptaCounts, recent] = await Promise.all([
-    countBy("brand"),
-    countBy("city_slug"),
+    countBy("brand", "phone"),
+    countBy("city_slug", "phone"),
     countBy("category"),
-    countBy("pta_status"),
+    countBy("pta_status", "phone"),
     recentListings(500),
   ]);
 
@@ -42,6 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   for (const listing of recent.rows) {
     const brand = BRANDS.find((item) => item.name.toLowerCase() === listing.brand.toLowerCase());
     if (!brand || !getCity(listing.city_slug)) continue;
+    if (listing.category && canonicalCategory(listing.category) !== "phone") continue;
     catalogPaths.add(`/used-phones/${listing.city_slug}/${brand.slug}`);
     if (listing.model && (MODELS_BY_BRAND[brand.slug] || []).some((model) => slugify(model) === slugify(listing.model))) {
       catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
