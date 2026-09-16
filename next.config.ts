@@ -51,6 +51,8 @@ const nextConfig: NextConfig = {
         destination: "https://mobilemarket.pk/:path*",
         permanent: true,
       },
+      // Legacy home URL discovered by Google. Keep the canonical homepage at `/`.
+      { source: "/home", destination: "/", permanent: true },
       { source: "/accessories/power-banks", destination: "/accessories/power-bank", permanent: true },
       { source: "/accessories/chargers", destination: "/accessories/charger-cable", permanent: true },
       { source: "/accessories/covers", destination: "/accessories/cover-case", permanent: true },
