@@ -39,7 +39,7 @@ class TwaLauncherActivity : LauncherActivity() {
     }
 
     companion object {
-        const val HOST = "market-place-six-chi.vercel.app"
+        const val HOST = "mobilemarket.pk"
 
         fun hasNetwork(context: Context): Boolean {
             val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
