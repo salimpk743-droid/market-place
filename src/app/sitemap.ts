@@ -22,7 +22,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const catalogPaths = new Set<string>();
 
   for (const brand of BRANDS) {
-    if ((brandCounts[brand.name] || 0) > 0) catalogPaths.add(`/phones/${brand.slug}`);
+    catalogPaths.add(`/phones/${brand.slug}`);
+    for (const model of MODELS_BY_BRAND[brand.name] || []) catalogPaths.add(`/phones/${brand.slug}/${slugify(model)}`);
   }
 
   for (const slug of Object.keys(cityCounts)) {
@@ -44,7 +45,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (!brand || !getCity(listing.city_slug)) continue;
     if (listing.category && canonicalCategory(listing.category) !== "phone") continue;
     catalogPaths.add(`/used-phones/${listing.city_slug}/${brand.slug}`);
-    if (listing.model && (MODELS_BY_BRAND[brand.slug] || []).some((model) => slugify(model) === slugify(listing.model))) {
+    if (listing.model && (MODELS_BY_BRAND[brand.name] || []).some((model) => slugify(model) === slugify(listing.model))) {
       catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
     }
   }
