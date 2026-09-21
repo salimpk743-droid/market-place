@@ -20,7 +20,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${b.name} Mobile Prices in Pakistan — Used, PTA & Non-PTA`,
     description: `Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`,
     alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
@@ -29,24 +28,16 @@ export default async function BrandPage({ params }: Props) {
   const b = getPhoneBrandBySlug(brand);
   if (!b) notFound();
   const result = await searchListings({ brand: b.name, category: "phone" });
-  const apple = b.slug === "apple";
   const catalogModels = MODELS_BY_BRAND[b.name] || [];
-  const models = Array.from(new Set(result.rows.map((listing) => listing.model).filter(Boolean))).slice(0, 12);
   const cities = Array.from(new Set(result.rows.map((listing) => listing.city_slug).filter(Boolean))).slice(0, 10);
   return (
     <Page>
       <PageTitle
-        kicker="Brand"
-        title={apple ? "Used Apple phones in Pakistan" : `Used ${b.name} phones`}
-        description={
-          <>
-            Live classifieds for {b.name} posted by sellers. PTA status and condition are declared by the seller — confirm
-            independently before you pay.
-            {apple ? <> Browse <Link href="/phones" className="link">all used phones</Link>.</> : null}
-          </>
-        }
+        kicker="Mobile price database · Pakistan"
+        title={`${b.name} Mobile Prices in Pakistan`}
+        description={`Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`}
       />
-      {models.length || cities.length ? (
+      {catalogModels.length || cities.length ? (
         <section className="mb-7 grid gap-5 rounded-lg border border-line bg-surface p-4 sm:p-5 md:grid-cols-2">
           <div>
             <h2 className="text-base font-semibold">Phone models & prices</h2>
