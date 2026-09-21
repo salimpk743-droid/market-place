@@ -29,7 +29,7 @@ export default function MobilePricesPakistanPage() {
       <PageTitle
         kicker="Pakistan mobile market"
         title="Mobile Prices in Pakistan"
-        description="Use Mobile Market as a starting point for checking phone models, used-market asking prices, PTA and non-PTA considerations, and live seller listings."
+        description="Check mobile phone models and Pakistan market pricing, understand used-phone, PTA and non-PTA considerations, and continue to live seller listings."
       />
       <div className="space-y-8">
         <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
