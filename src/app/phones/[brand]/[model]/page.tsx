@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
-import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { getPhoneBrandBySlug, MODELS_BY_BRAND, PTA, STORAGE_OPTIONS, RAM_OPTIONS } from "@/lib/market/catalog";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
@@ -32,7 +31,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Used ${b.name} ${modelName} Price in Pakistan`,
     description: `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
   };
 }
 
