@@ -60,8 +60,9 @@ export default function PrivacyPage() {
       <h2>Cookies and similar storage</h2>
       <p>
         We use cookies or local storage for signed-in sessions. Harmless UI preferences may use local storage. We do not
-        use local storage as the marketplace database. If advertising is later enabled, that partner may use cookies;
-        we will update this policy before that happens. AdSense is not active on this site at the date above.
+        use local storage as the marketplace database. Google AdSense is connected to this site for site review, but ads
+        are not currently being served. If advertising is enabled, advertising partners may use cookies or similar
+        technologies as described in their policies; we will update this policy when advertising goes live.
       </p>
       <h2>Third parties</h2>
       <ul className="list-disc space-y-1 pl-6">
