@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Used phones in ${c.name}`,
     description: `Browse used phones for sale in ${c.name}, Pakistan on Mobile Market. See live listings from sellers in ${c.name} by brand, PTA status and area.`,
     alternates: { canonical: absoluteUrl(`/used-phones/${c.slug}`) },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
   };
 }
 
