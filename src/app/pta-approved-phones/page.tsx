@@ -12,7 +12,7 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "PTA approved used phones",
     description: "Used phones whose sellers declared PTA approved status. Confirm on official PTA/DIRBS tools yourself.",
     alternates: { canonical: absoluteUrl("/pta-approved-phones") },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
   };
 }
 
