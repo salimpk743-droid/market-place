@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Used ${b.name} phones in ${c.name}`,
     description: `Browse used ${b.name} phones for sale in ${c.name}, Pakistan. Compare live seller listings, prices, storage and PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
   };
 }
 
