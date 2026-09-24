@@ -62,7 +62,7 @@ export default async function CityBrandPage({ params }: Props) {
       {result.rows.length ? (
         <ListingGrid>{result.rows.map((listing) => <ListingCard key={listing.id} listing={listing} />)}</ListingGrid>
       ) : (
-        <EmptyState title={`No live ${b.name} ads in ${c.name} yet`} body="This landing page is only indexable when real seller inventory exists." actionHref="/sell" actionLabel="Sell your phone" />
+        <EmptyState title={`No live ${b.name} ads in ${c.name} yet`} body="No live seller ads are available right now. Check back when sellers add inventory." actionHref="/sell" actionLabel="Sell your phone" />
       )}
 
       <div className="mt-8 flex flex-wrap gap-3 text-sm">
