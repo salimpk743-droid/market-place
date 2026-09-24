@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ACCESSORY_SLUGS, BRANDS, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
+import { ACCESSORY_SLUGS, BRANDS, CITIES, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
 import { recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
@@ -23,6 +23,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Keep public catalog URLs stable in the sitemap even when inventory is temporarily empty.
   // This prevents the sitemap from changing shape with database availability.
   for (const slug of ACCESSORY_SLUGS) catalogPaths.add(`/accessories/${slug}`);
+
+  // Every canonical city landing page is a public SEO route, even when that city has no live inventory yet.
+  for (const city of CITIES) catalogPaths.add(`/used-phones/${city.slug}`);
   catalogPaths.add("/pta-approved-phones");
   catalogPaths.add("/non-pta-phones");
 
