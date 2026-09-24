@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ACCESSORY_SLUGS, BRANDS, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
-import { countBy, recentListings } from "@/lib/market/listings";
+import { recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
 import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
@@ -11,10 +11,7 @@ function slugify(value: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
-  const [cityCounts, recent] = await Promise.all([
-    countBy("city_slug", "phone"),
-    recentListings(500),
-  ]);
+  const recent = await recentListings(500);
 
   const catalogPaths = new Set<string>();
 
@@ -23,21 +20,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     for (const model of MODELS_BY_BRAND[brand.name] || []) catalogPaths.add(`/phones/${brand.slug}/${slugify(model)}`);
   }
 
-  // Public landing pages remain indexable even when they currently have no inventory.
-  // This gives Google a stable URL graph and lets new inventory appear without waiting for a
-  // future sitemap shape change. Empty pages are still useful navigation destinations.
-  for (const city of Object.values(cityCounts)) {
-    void city;
-  }
-  const catalogCities = new Set(
-    Object.keys(cityCounts).filter((slug) => Boolean(getCity(slug))),
-  );
-  for (const path of SITEMAP_CORE_PATHS) void path;
-
-  // Keep the catalog URLs aligned with their public route definitions.
-  for (const brand of BRANDS) {
-    catalogCities.forEach((slug) => catalogPaths.add(`/used-phones/${slug}`));
-  }
+  // Keep public catalog URLs stable in the sitemap even when inventory is temporarily empty.
+  // This prevents the sitemap from changing shape with database availability.
   for (const slug of ACCESSORY_SLUGS) catalogPaths.add(`/accessories/${slug}`);
   catalogPaths.add("/pta-approved-phones");
   catalogPaths.add("/non-pta-phones");
