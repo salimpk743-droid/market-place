@@ -24,7 +24,7 @@ export async function generateMetadata({ params, searchParams }: Props): Promise
     title: `${cat.name} for sale in Pakistan`,
     description: `Buy and sell ${cat.name.toLowerCase()} on Mobile Market. ${cat.blurb}.`,
     alternates: { canonical: absoluteUrl(`/accessories/${cat.slug}`) },
-    robots: !filtered && result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+    robots: filtered ? { index: false, follow: true } : { index: true, follow: true },
   };
 }
 
