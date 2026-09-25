@@ -15,9 +15,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brand } = await params;
   const b = getPhoneBrandBySlug(brand);
   if (!b) return { title: "Brand not found", robots: { index: false, follow: true } };
-  const result = await searchListings({ brand: b.name, category: "phone" });
   return {
-    title: `${b.name} Mobile Prices in Pakistan — Used, PTA & Non-PTA`,
+    title: `${b.name} Mobile Prices in Pakistan — Used Phones, PTA & Non-PTA`,
     description: `Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`,
     alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
     robots: { index: true, follow: true },
@@ -39,9 +38,9 @@ export default async function BrandPage({ params }: Props) {
         description={`Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`}
       />
       {catalogModels.length || cities.length ? (
-        <section className="mb-7 grid gap-5 rounded-lg border border-line bg-surface p-4 sm:p-5 md:grid-cols-2">
+        <section aria-label={`${b.name} phone search links`} className="mb-7 grid gap-5 rounded-lg border border-line bg-surface p-4 sm:p-5 md:grid-cols-2">
           <div>
-            <h2 className="text-base font-semibold">Phone models & prices</h2>
+            <h2 className="text-base font-semibold">{b.name} Phone Models & Prices</h2>
             <p className="mt-1 text-sm text-muted">Browse every {b.name} model in the Mobile Market catalog. Live seller prices appear on each model page when inventory exists.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               {catalogModels.map((model) => {
@@ -52,7 +51,7 @@ export default async function BrandPage({ params }: Props) {
           </div>
           {cities.length ? (
             <div>
-              <h2 className="text-base font-semibold">{b.name} phones by city</h2>
+              <h2 className="text-base font-semibold">Used {b.name} Phones by City</h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {cities.map((city) => <Link key={city} href={`/used-phones/${city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">{city.replace(/-/g, " ")}</Link>)}
               </div>
@@ -60,7 +59,7 @@ export default async function BrandPage({ params }: Props) {
           ) : null}
         </section>
       ) : null}
-      {result.rows.length ? (
+      <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">\n        <h2 className="text-base font-semibold">Buying used {b.name} phones in Pakistan</h2>\n        <p className="mt-2 text-sm leading-relaxed text-muted">Compare current seller asking prices for {b.name} phones by model, storage, condition and seller-declared PTA status. Prices are marketplace asking prices, not official manufacturer prices.</p>\n        <div className="mt-3 flex flex-wrap gap-3 text-sm"><Link href="/phones" className="link">All used phones</Link><Link href="/mobile-prices-in-pakistan" className="link">Mobile prices in Pakistan</Link><Link href="/guides/pta-status" className="link">PTA status guide</Link></div>\n      </section>\n      {result.rows.length ? (
         <ListingGrid>{result.rows.map((l) => <ListingCard key={l.id} listing={l} />)}</ListingGrid>
       ) : (
         <EmptyState title={`No live ${b.name} ads yet`} body="When a seller posts a real listing, it will show up here." actionHref="/sell" actionLabel="Sell your phone" />
