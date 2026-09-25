@@ -26,8 +26,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Every canonical city landing page is a public SEO route, even when that city has no live inventory yet.
   for (const city of CITIES) catalogPaths.add(`/used-phones/${city.slug}`);
-  catalogPaths.add("/pta-approved-phones");
-  catalogPaths.add("/non-pta-phones");
 
   for (const listing of recent.rows) {
     const brand = BRANDS.find((item) => item.name.toLowerCase() === listing.brand.toLowerCase());
