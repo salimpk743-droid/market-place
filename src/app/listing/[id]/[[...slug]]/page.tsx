@@ -34,19 +34,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = listingTitle(listing);
   const cat = getCategory(listing.category);
   const pta = ptaMeta(listing.pta_status);
+  const location = cityLabel(listing.city_slug, listing.area);
   const ptaBit = pta ? ` Seller-declared ${pta.label}.` : "";
-  const desc = `${title} (${cat.name}) in ${cityLabel(listing.city_slug, listing.area)} — ${formatPkr(listing.price_pkr)}.${ptaBit}`;
+  const metaTitle = isPhoneCategory(listing.category)
+    ? `${title} — Used Phone in ${location}`
+    : `${title} — ${cat.name} in ${location}`;
+  const desc = `${title} used listing in ${location} for ${formatPkr(listing.price_pkr)}. Compare seller-declared condition,${pta ? ` ${pta.label},` : ""} storage and other details before buying.`;
   const index = listing.status === "active";
   const image = listing.image_url
     ? { url: absoluteUrl(listing.image_url), alt: title }
     : { url: "/og.jpg", width: 1200, height: 630, alt: title };
   return {
-    title,
+    title: metaTitle,
     description: desc,
     alternates: { canonical: absoluteUrl(listingPath(listing)) },
     robots: index ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
-      title,
+      title: metaTitle,
       description: desc,
       url: absoluteUrl(listingPath(listing)),
       type: "website",
