@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { JsonLd } from "@/components/JsonLd";
-import { getPhoneBrandBySlug, MODELS_BY_BRAND, PTA, STORAGE_OPTIONS, RAM_OPTIONS } from "@/lib/market/catalog";
+import { getPhoneBrandBySlug, MODELS_BY_BRAND } from "@/lib/market/catalog";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const canonical = `/phones/${b.slug}/${slugify(modelName)}`;
   return {
     title: `Used ${b.name} ${modelName} Price in Pakistan`,
-    description: `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
+    description: `Check ${b.name} ${modelName} used phone prices in Pakistan, live seller listings, storage options, condition and seller-declared PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
     robots: { index: true, follow: true },
   };
@@ -52,7 +52,7 @@ export default async function ModelPage({ params }: Props) {
         title={`${b.name} ${modelName} Price in Pakistan`}
         description={`Market information for ${b.name} ${modelName}: current seller asking prices, available configurations, PTA status and live listings.`}
       />
-      <section className="mb-7 grid gap-4 md:grid-cols-3">
+      <section aria-label={`${b.name} ${modelName} marketplace summary`} className="mb-7 grid gap-4 md:grid-cols-3">
         <div className="rounded-lg border border-line bg-surface p-5"><p className="section-kicker">Current asking price</p><p className="mt-1 text-xl font-semibold text-ink">{result.total ? `Rs ${Math.min(...result.rows.map((x) => x.price_pkr)).toLocaleString("en-PK")} – Rs ${Math.max(...result.rows.map((x) => x.price_pkr)).toLocaleString("en-PK")}` : "No live price yet"}</p><p className="mt-1 text-xs text-muted">{result.total ? `Based on ${result.total} active seller listing${result.total === 1 ? "" : "s"}` : "We do not invent a price without live marketplace data."}</p></div>
         <div className="rounded-lg border border-line bg-surface p-5"><p className="section-kicker">Marketplace configurations</p><p className="mt-1 text-lg font-semibold text-ink">{Array.from(new Set(result.rows.map((x) => x.storage_gb).filter(Boolean))).join(" / ") || "Not listed"} GB</p><p className="mt-1 text-xs text-muted">RAM: {Array.from(new Set(result.rows.map((x) => x.ram_gb).filter(Boolean))).join(" / ") || "Not currently declared"} GB</p></div>
         <div className="rounded-lg border border-line bg-surface p-5"><p className="section-kicker">PTA status</p><p className="mt-1 text-lg font-semibold text-ink">{Array.from(new Set(result.rows.map((x) => x.pta_status).filter(Boolean))).join(", ") || "No seller status yet"}</p><p className="mt-1 text-xs text-muted">Seller-declared status should be independently verified.</p></div>
@@ -62,8 +62,8 @@ export default async function ModelPage({ params }: Props) {
         <div className="rounded-lg border border-line p-5"><h2 className="text-lg font-semibold text-ink">Pakistan buying information</h2><ul className="mt-3 space-y-2 text-sm leading-6 text-muted"><li><strong className="text-ink">PTA:</strong> verify the device IMEI and seller-declared status.</li><li><strong className="text-ink">Condition:</strong> inspect display, cameras, charging, speakers and biometrics.</li><li><strong className="text-ink">Battery:</strong> check battery health and charging before purchase.</li><li><strong className="text-ink">Configuration:</strong> confirm exact storage and RAM.</li></ul><div className="mt-3 flex flex-wrap gap-3 text-sm"><Link href="/guides/pta-status" className="link">PTA guide</Link><Link href="/guides/inspect-used-phone" className="link">Inspection guide</Link></div></div>
       </section>
       <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
-        <h2 className="text-base font-semibold">About this model</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink-soft">Prices on this page are seller asking prices from current marketplace listings, not an official manufacturer price. Actual value depends on storage, condition, battery health, PTA status and accessories.</p>
+        <h2 className="text-base font-semibold">Used {b.name} {modelName} in Pakistan</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink-soft">Prices on this page are seller asking prices from current marketplace listings, not an official manufacturer price. Actual value depends on storage, condition, battery health, PTA status and accessories. Browse live {b.name} {modelName} listings by city and compare the details sellers provide before contacting them.</p>
         {cities.length ? (
           <div className="mt-4 flex flex-wrap gap-2">
             {cities.map((city) => <Link key={city} href={`/used-phones/${city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">{modelName} in {city.replace(/-/g, " ")}</Link>)}
@@ -71,7 +71,7 @@ export default async function ModelPage({ params }: Props) {
         ) : null}
       </section>
       <ListingGrid>{result.rows.map((listing) => <ListingCard key={listing.id} listing={listing} />)}</ListingGrid>
-      <div className="mt-8 flex flex-wrap gap-3 text-sm">
+      <section className="mt-8 rounded-lg border border-line bg-surface p-4 sm:p-5">\n        <h2 className="text-base font-semibold">More {b.name} phone searches</h2>\n        <div className="mt-3 flex flex-wrap gap-3 text-sm"><Link href={`/phones/${b.slug}`} className="link">All {b.name} phones</Link><Link href="/phones" className="link">Used phones in Pakistan</Link><Link href="/mobile-prices-in-pakistan" className="link">Mobile prices in Pakistan</Link><Link href="/guides/buy-used-phone" className="link">Used phone buying guide</Link></div>\n      </section>\n      <div className="mt-8 flex flex-wrap gap-3 text-sm">
         <Link href={`/phones/${b.slug}`} className="link">All {b.name} phones</Link>
         <Link href="/phones" className="link">All used phones</Link>
         <Link href="/guides/buy-used-phone" className="link">How to buy a used phone</Link>

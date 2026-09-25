@@ -14,11 +14,15 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     f.q || f.brand || f.city || f.pta || f.storage || f.area || f.condition || f.minPrice || f.maxPrice || f.page,
   );
   return {
-    title: filtered ? "Filtered used phones" : "Used phones for sale",
-    description: "Browse used mobile phones for sale across Pakistan. Filter by brand, PTA status, city and storage.",
+    title: filtered ? "Used Mobile Phones in Pakistan" : "Used Mobile Phones in Pakistan — Buy & Sell Used Phones",
+    description:
+      "Browse used mobile phones for sale across Pakistan. Compare iPhone, Samsung, Vivo, Oppo, Infinix, Tecno and Xiaomi listings by price, city, storage, condition and seller-declared PTA status.",
     alternates: { canonical: absoluteUrl("/phones") },
     openGraph: {
       url: absoluteUrl("/phones"),
+      title: "Used Mobile Phones in Pakistan — Buy & Sell Used Phones",
+      description:
+        "Browse used mobile phones for sale across Pakistan. Compare brands, models, prices, cities, storage and seller-declared PTA status.",
       images: [{ url: "/og.jpg", width: 1200, height: 630, alt: BRAND }],
     },
     robots: filtered ? { index: false, follow: true } : { index: true, follow: true },
@@ -51,37 +55,105 @@ export default async function PhonesPage({ searchParams }: Props) {
       action="/phones"
       lockedCategory="phone"
       kicker="Marketplace"
-      title={bits.length ? bits.join(" · ") : "Used phones for sale"}
-      emptyTitle="No phones match those filters"
+      title={bits.length ? bits.join(" · ") : "Used Mobile Phones in Pakistan"}
+      emptyTitle="No used phones match those filters"
       emptyBody="Try another brand, city or PTA status. Only real seller ads are shown — there are no demo listings in this catalog."
       intro={
         <>
           <p className="mb-4 max-w-3xl text-sm leading-relaxed text-ink-soft">
-            Browse used phones for sale across Pakistan. Compare listings by brand, PTA status, city and storage, then
-            contact sellers directly. Check the phone and confirm its condition and PTA status before paying.
+            Browse used mobile phones for sale across Pakistan. Compare real seller listings by brand, model, price,
+            PTA status, city, storage and condition, then contact sellers directly. Popular searches include used
+            iPhone, Samsung, Vivo, Oppo, Infinix, Tecno and Xiaomi phones in Pakistan. Always inspect the phone and
+            independently confirm its condition and PTA status before paying.
           </p>
-          {liveBrands.length || liveCities.length ? (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {liveBrands.map((brand) => (
-                <Link
-                  key={brand.slug}
-                  href={`/phones/${brand.slug}`}
-                  className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
-                >
-                  {brand.name}
-                </Link>
-              ))}
-              {liveCities.map((city) => (
-                <Link
-                  key={city.slug}
-                  href={`/used-phones/${city.slug}`}
-                  className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
-                >
-                  {city.name}
-                </Link>
-              ))}
-            </div>
+
+          {liveBrands.length ? (
+            <section aria-labelledby="popular-phone-brands" className="mb-5">
+              <h2 id="popular-phone-brands" className="mb-3 text-base font-semibold">
+                Used Mobile Phones by Brand
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {liveBrands.map((brand) => (
+                  <Link
+                    key={brand.slug}
+                    href={`/phones/${brand.slug}`}
+                    className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
+                  >
+                    {brand.name} Mobile Phones
+                  </Link>
+                ))}
+              </div>
+            </section>
           ) : null}
+
+          {liveCities.length ? (
+            <section aria-labelledby="popular-phone-cities" className="mb-5">
+              <h2 id="popular-phone-cities" className="mb-3 text-base font-semibold">
+                Used Mobile Phones by City
+              </h2>
+              <div className="flex flex-wrap gap-2">
+                {liveCities.map((city) => (
+                  <Link
+                    key={city.slug}
+                    href={`/used-phones/${city.slug}`}
+                    className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40"
+                  >
+                    Used Phones in {city.name}
+                  </Link>
+                ))}
+              </div>
+            </section>
+          ) : null}
+
+          <section aria-labelledby="phone-searches" className="mb-5 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-lg border border-line bg-surface p-4">
+              <h2 id="phone-searches" className="text-sm font-semibold">
+                Mobile Prices & Model Searches
+              </h2>
+              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+                <Link href="/mobile-prices-in-pakistan" className="link">
+                  Mobile Prices in Pakistan
+                </Link>
+                <Link href="/phones/apple" className="link">
+                  iPhone Prices in Pakistan
+                </Link>
+                <Link href="/phones/samsung" className="link">
+                  Samsung Mobile Prices
+                </Link>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-line bg-surface p-4">
+              <h2 className="text-sm font-semibold">PTA Mobile Phones</h2>
+              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+                <Link href="/pta-approved-phones" className="link">
+                  PTA Approved Phones
+                </Link>
+                <Link href="/non-pta-phones" className="link">
+                  Non-PTA Phones
+                </Link>
+                <Link href="/guides/pta-status" className="link">
+                  PTA Status Guide
+                </Link>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-line bg-surface p-4">
+              <h2 className="text-sm font-semibold">Buy by Budget</h2>
+              <p className="mt-2 text-sm text-muted">
+                Use the filters above to find phones in your price range, then compare actual seller listings.
+              </p>
+              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-2 text-sm">
+                <Link href="/mobile-prices-in-pakistan" className="link">
+                  Compare Mobile Prices
+                </Link>
+                <Link href="/guides/buy-used-phone" className="link">
+                  Used Phone Buying Guide
+                </Link>
+              </div>
+            </div>
+          </section>
+
           <p className="mb-6 text-sm text-muted">
             PTA status on listings is declared by the seller.{" "}
             <Link href="/guides/pta-status" className="link">
