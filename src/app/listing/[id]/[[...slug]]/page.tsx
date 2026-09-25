@@ -35,7 +35,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const cat = getCategory(listing.category);
   const pta = ptaMeta(listing.pta_status);
   const location = cityLabel(listing.city_slug, listing.area);
-  const ptaBit = pta ? ` Seller-declared ${pta.label}.` : "";
   const metaTitle = isPhoneCategory(listing.category)
     ? `${title} — Used Phone in ${location}`
     : `${title} — ${cat.name} in ${location}`;
