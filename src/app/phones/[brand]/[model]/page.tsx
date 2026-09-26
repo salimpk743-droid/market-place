@@ -63,10 +63,10 @@ export default async function ModelPage({ params }: Props) {
       </section>
       <section className="mb-7 grid gap-6 lg:grid-cols-2">
         <div className="rounded-lg border border-line bg-surface p-5">
-          <h2 className="text-base font-semibold">About the b.name modelName price in Pakistan</h2>
+          <h2 className="text-base font-semibold">About the {b.name} {modelName} price in Pakistan</h2>
           <p className="mt-2 text-sm leading-relaxed text-ink-soft">
             The prices shown here are current seller asking prices on Mobile Market, not an official retail price.
-            Used b.name modelName prices can vary with storage, condition, battery health, PTA status, warranty and accessories.
+            Used {b.name} {modelName} prices can vary with storage, condition, battery health, PTA status, warranty and accessories.
             Compare the exact device and verify its IMEI before paying.
           </p>
           <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
@@ -75,7 +75,7 @@ export default async function ModelPage({ params }: Props) {
           </div>
         </div>
         <div className="rounded-lg border border-line p-5">
-          <h2 className="text-base font-semibold">Buying a used b.name modelName</h2>
+          <h2 className="text-base font-semibold">Buying a used {b.name} {modelName}</h2>
           <ol className="mt-3 list-decimal space-y-2 pl-5 text-sm leading-6 text-muted">
             <li>Check the IMEI on the actual phone.</li><li>Verify PTA/DIRBS status independently.</li><li>Confirm storage, condition and battery information.</li><li>Test display, cameras, charging, audio and network.</li><li>Inspect the exact device before payment.</li>
           </ol>
@@ -86,14 +86,14 @@ export default async function ModelPage({ params }: Props) {
         </div>
       </section>
       <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
-        <h2 className="text-base font-semibold">b.name modelName listings by city</h2>
+        <h2 className="text-base font-semibold">{b.name} {modelName} listings by city</h2>
         <p className="mt-2 text-sm text-muted">Where current listings are available. City pages contain the broader brand inventory.</p>
         {cities.length ? <div className="mt-4 flex flex-wrap gap-2">{cities.map((city) => <Link key={city} href={`/used-phones/${city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">{modelName} in {city.replace(/-/g, " ")}</Link>)}</div> : <p className="mt-3 text-sm text-muted">No city-level inventory is currently available.</p>}
       </section>
       <ListingGrid>{result.rows.map((listing) => <ListingCard key={listing.id} listing={listing} />)}</ListingGrid>
       <section className="mt-8 border-t border-line pt-7">
-        <h2 className="text-lg font-semibold">Related b.name models</h2>
-        <p className="mt-1 text-sm text-muted">Compare nearby models in the same b.name catalog.</p>
+        <h2 className="text-lg font-semibold">Related {b.name} models</h2>
+        <p className="mt-1 text-sm text-muted">Compare nearby models in the same {b.name} catalog.</p>
         <div className="mt-3 flex flex-wrap gap-2">
           {(MODELS_BY_BRAND[b.name] || []).filter((m) => m !== modelName).slice(0, 8).map((m) => <Link key={m} href={`/phones/${b.slug}/${slugify(m)}`} className="rounded-md border border-line px-3 py-2 text-sm font-medium hover:border-brand/40">{m}</Link>)}
         </div>
@@ -106,9 +106,9 @@ export default async function ModelPage({ params }: Props) {
       <section className="mt-8 border-t border-line pt-7">
         <h2 className="text-lg font-semibold">Frequently asked questions</h2>
         <div className="mt-4 space-y-4 text-sm leading-6">
-          <div><h3 className="font-semibold text-ink">What is the b.name modelName used price in Pakistan?</h3><p className="text-muted">Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.</p></div>
-          <div><h3 className="font-semibold text-ink">Is the b.name modelName PTA approved?</h3><p className="text-muted">PTA status can differ by handset and IMEI. Treat a listing's PTA label as seller-provided information and verify the actual IMEI before buying.</p></div>
-          <div><h3 className="font-semibold text-ink">What should I check before buying a used b.name modelName?</h3><p className="text-muted">Check the IMEI, PTA/DIRBS status, storage, physical condition, display, cameras, charging, audio, battery information and mobile-network function before payment.</p></div>
+          <div><h3 className="font-semibold text-ink">What is the {b.name} {modelName} used price in Pakistan?</h3><p className="text-muted">Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.</p></div>
+          <div><h3 className="font-semibold text-ink">Is the {b.name} {modelName} PTA approved?</h3><p className="text-muted">PTA status can differ by handset and IMEI. Treat a listing's PTA label as seller-provided information and verify the actual IMEI before buying.</p></div>
+          <div><h3 className="font-semibold text-ink">What should I check before buying a used {b.name} {modelName}?</h3><p className="text-muted">Check the IMEI, PTA/DIRBS status, storage, physical condition, display, cameras, charging, audio, battery information and mobile-network function before payment.</p></div>
         </div>
       </section>
       <JsonLd data={{
