@@ -74,6 +74,17 @@ export default function MobilePricesPakistanPage() {
           </div>
         </section>
 
+        <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
+          <h2 className="text-lg font-semibold text-ink">Used phone prices by budget</h2>
+          <p className="mt-1 text-sm text-muted">Compare current seller asking prices at common Pakistan mobile budgets.</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <Link className="link" href="/used-mobile-phones/under-20000">Used phones under Rs 20,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-30000">Used phones under Rs 30,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-50000">Used phones under Rs 50,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-100000">Used phones under Rs 100,000</Link>
+          </div>
+        </section>
+
         <section className="border-t border-line pt-7">
           <h2 className="text-lg font-semibold text-ink">PTA, buying and used-phone guides</h2>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
