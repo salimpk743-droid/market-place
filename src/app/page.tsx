@@ -61,8 +61,8 @@ export default async function HomePage() {
   const [featured, recent, brandCounts, cityCounts, activeModels] = await Promise.all([
     featuredListings(6),
     recentListings(12),
-    countBy("brand"),
-    countBy("city_slug"),
+    countBy("brand", "phone"),
+    countBy("city_slug", "phone"),
     activePhoneModels(8, 2),
   ]);
 
@@ -221,7 +221,7 @@ export default async function HomePage() {
         </section>
 
         <section id="cities">
-          <SectionHead title="Browse by city" description="Districts, tehsils and major towns across every province, AJK and GB." href="/browse" linkLabel="All locations" />
+          <SectionHead title="Browse by city" description="Cities with live used-phone inventory, across every province, AJK and GB." href="/browse" linkLabel="All locations" />
           <ul className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3 md:grid-cols-4">
             {popularCities().map((c) => (
               <li key={c.slug}>
