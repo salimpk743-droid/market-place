@@ -5,7 +5,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { getPhoneBrandBySlug } from "@/lib/market/catalog";
-import { searchListings } from "@/lib/market/listings";
+import { activePhoneModels, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
@@ -32,8 +32,11 @@ export default async function BrandPage({ params }: Props) {
   const b = getPhoneBrandBySlug(brand);
   if (!b) notFound();
 
-  const result = await searchListings({ brand: b.name, category: "phone" });
-  const activeModels = Array.from(new Set(result.rows.map((listing) => listing.model).filter(Boolean))).slice(0, 24);
+  const [result, rankedModels] = await Promise.all([
+    searchListings({ brand: b.name, category: "phone" }),
+    activePhoneModels(50, 2),
+  ]);
+  const activeModels = rankedModels.filter((item) => item.brand === b.name).slice(0, 24);
   const cities = Array.from(new Set(result.rows.map((listing) => listing.city_slug).filter(Boolean))).slice(0, 10);
 
   return (
