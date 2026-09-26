@@ -146,6 +146,27 @@ export default async function HomePage() {
           )}
         </section>
 
+        <section id="used-phone-hubs">
+          <SectionHead
+            title="Used phone price & budget hubs"
+            description="Start with the type of phone you want, then compare real seller listings by budget, brand and city."
+            href="/used-mobile-phones"
+            linkLabel="All used phones"
+          />
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              ["Used phones under Rs 20,000", "/used-mobile-phones/under-20000"],
+              ["Used phones under Rs 30,000", "/used-mobile-phones/under-30000"],
+              ["Used phones under Rs 50,000", "/used-mobile-phones/under-50000"],
+              ["Used phones under Rs 100,000", "/used-mobile-phones/under-100000"],
+            ].map(([label, href]) => (
+              <Link key={href} href={href} className="rounded-md border border-line px-3 py-3 text-sm font-medium text-brand hover:border-brand/30 hover:bg-surface">
+                {label}
+              </Link>
+            ))}
+          </div>
+        </section>
+
         <section id="popular-searches" className="card p-6 sm:p-8">
           <SectionHead
             title="Popular mobile prices & searches in Pakistan"
