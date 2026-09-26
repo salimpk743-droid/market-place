@@ -39,7 +39,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `Used ${b.name} ${modelName} Price in Pakistan`,
     description: `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
-    robots: result.total > 0 ? { index: true, follow: true } : { index: false, follow: true },
+    robots: { index: true, follow: true },
   };
 }
 
