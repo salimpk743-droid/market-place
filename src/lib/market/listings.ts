@@ -318,6 +318,41 @@ export async function activePhoneModels(limit = 12, minimumListings = 2) {
     .slice(0, limit);
 }
 
+export async function activePhoneModelsByCity(city: string, brand: string, limit = 12, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const catalogBrand = getBrandByName(brand);
+  if (!catalogBrand) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .eq("city_slug", city)
+    .eq("brand", catalogBrand.name)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const validModels = new Set(modelsForBrand(catalogBrand.name));
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!model || !validModels.has(model)) continue;
+    const key = model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
 export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category", category?: string) {
   const supabase = await createServerSupabase();
   if (!supabase) return {} as Record<string, number>;
