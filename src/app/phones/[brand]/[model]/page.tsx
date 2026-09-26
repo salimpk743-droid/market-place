@@ -33,7 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const b = getPhoneBrandBySlug(brand);
   const modelName = b ? getModel(b.slug, model) : undefined;
   if (!b || !modelName) return { title: "Model not found", robots: { index: false, follow: true } };
-  const result = await searchPhoneSeoListings({ brand: b.name, model: modelName });
   const canonical = `/phones/${b.slug}/${slugify(modelName)}`;
   return {
     title: `Used ${b.name} ${modelName} Price in Pakistan`,
@@ -197,7 +196,7 @@ export default async function ModelPage({ params }: Props) {
               { "@type": "ListItem", position: 3, name: `Used ${b.name} ${modelName}`, item: absoluteUrl(canonical) },
             ],
           },
-          {
+          ...(result.total ? [          {
             "@type": "Product",
             "@id": absoluteUrl(canonical) + "#product",
             name: `Used ${b.name} ${modelName}`,
@@ -212,6 +211,7 @@ export default async function ModelPage({ params }: Props) {
               url: absoluteUrl(canonical),
             } : undefined,
           },
+] : []),
           {
             "@type": "FAQPage",
             mainEntity: faqItems.map((item) => ({
