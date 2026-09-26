@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ACCESSORY_SLUGS, BRANDS, CITIES, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
-import { recentListings } from "@/lib/market/listings";
+import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
 import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
@@ -11,7 +11,7 @@ function slugify(value: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
-  const recent = await recentListings(500);
+  const [recent, cityCounts] = await Promise.all([recentListings(500), countBy("city_slug", "phone")]);
 
   const catalogPaths = new Set<string>();
 
