@@ -4,7 +4,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 import { EmptyState } from "@/components/EmptyState";
 import { BRANDS, popularCities } from "@/lib/market/catalog";
-import { activePhoneModels, searchListings } from "@/lib/market/listings";
+import { activePhoneCities, activePhoneModels, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ const BUDGETS = [
 ] as const;
 
 export default async function UsedMobilePhonesHub() {
-  const [result, activeModels] = await Promise.all([searchListings({ category: "phone" }), activePhoneModels(12, 2)]);
+  const [result, activeModels, activeCities] = await Promise.all([\n    searchListings({ category: "phone" }),\n    activePhoneModels(12, 2),\n    activePhoneCities(24, 1),\n  ]);
   return (
     <Page>
       <PageTitle
@@ -70,7 +70,7 @@ export default async function UsedMobilePhonesHub() {
       <section className="mb-8">
         <h2 className="text-lg font-semibold">Used phones by city</h2>
         <div className="mt-3 flex flex-wrap gap-2">
-          {popularCities().slice(0, 24).map((c) => (
+          {activeCities.map((item) => (
             <Link key={c.slug} href={"/used-phones/" + c.slug} className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40">
               Used phones in {c.name}
             </Link>
