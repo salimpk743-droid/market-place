@@ -4,7 +4,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 import { EmptyState } from "@/components/EmptyState";
 import { BRANDS, popularCities } from "@/lib/market/catalog";
-import { searchListings } from "@/lib/market/listings";
+import { activePhoneModels, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ const BUDGETS = [
 ] as const;
 
 export default async function UsedMobilePhonesHub() {
-  const result = await searchListings({ category: "phone" });
+  const [result, activeModels] = await Promise.all([searchListings({ category: "phone" }), activePhoneModels(12, 2)]);
   return (
     <Page>
       <PageTitle
@@ -38,6 +38,25 @@ export default async function UsedMobilePhonesHub() {
           </Link>
         ))}
       </section>
+      {activeModels.length ? (
+        <section className="mb-8 rounded-lg border border-line bg-surface p-4 sm:p-5">
+          <h2 className="text-lg font-semibold">Popular used phone models</h2>
+          <p className="mt-1 text-sm text-muted">Models with at least two active seller listings, so these pages have real marketplace depth behind them.</p>
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {activeModels.map((item) => {
+              const brandSlug = BRANDS.find((brand) => brand.name === item.brand)?.slug;
+              if (!brandSlug) return null;
+              const modelSlug = item.model.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+              return (
+                <Link key={`${item.brand}-${item.model}`} href={`/phones/${brandSlug}/${modelSlug}`} className="rounded-md border border-line bg-white px-4 py-3 hover:border-brand/30">
+                  <span className="font-medium text-ink">{item.brand} {item.model}</span>
+                  <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
       <section className="mb-8">
         <h2 className="text-lg font-semibold">Used phones by brand</h2>
         <div className="mt-3 flex flex-wrap gap-2">
