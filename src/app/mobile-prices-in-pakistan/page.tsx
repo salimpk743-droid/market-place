@@ -79,18 +79,24 @@ export default async function MobilePricesPakistanPage() {
               })}
             </div>
           ) : null}
-          <h3 className="mt-6 text-base font-semibold text-ink">Browse the broader model catalog</h3>
-          <p className="mt-1 text-sm text-muted">These pages connect model information with real marketplace inventory when sellers have listed the device.</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {BRANDS.flatMap((brand) =>
-              (MODELS_BY_BRAND[brand.name] || []).slice(0, 4).map((model) => (
-                <Link key={`${brand.slug}-${slugify(model)}`} href={`/phones/${brand.slug}/${slugify(model)}`} className="rounded-md border border-line px-4 py-3 text-sm hover:border-brand/30 hover:bg-surface">
-                  <span className="font-medium text-ink">{brand.name} {model}</span>
-                  <span className="mt-1 block text-xs text-muted">Price, PTA status & live listings</span>
-                </Link>
-              )),
-            )}
-          </div>
+          <h3 className="mt-6 text-base font-semibold text-ink">Model pages with live inventory</h3>
+          <p className="mt-1 text-sm text-muted">Model links are kept inventory-backed so the strongest crawl paths point to pages with current marketplace depth.</p>
+          {activeModels.length ? (
+            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {activeModels.slice(0, 12).map((item) => {
+                const brand = BRANDS.find((b) => b.name === item.brand);
+                if (!brand) return null;
+                return (
+                  <Link key={"live-" + item.brand + "-" + item.model} href={"/phones/" + brand.slug + "/" + slugify(item.model)} className="rounded-md border border-line px-4 py-3 text-sm hover:border-brand/30 hover:bg-surface">
+                    <span className="font-medium text-ink">{item.brand} {item.model}</span>
+                    <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-muted">No model pages currently have enough active inventory for a prioritized internal link.</p>
+          )}
         </section>
 
         <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
