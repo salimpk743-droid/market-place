@@ -284,6 +284,37 @@ export async function featuredListings(limit = 6) {
   return withSignedCovers(asListings(data));
 }
 
+export type ActivePhoneModel = { brand: string; model: string; count: number };
+
+export async function activePhoneModels(limit = 12, minimumListings = 2) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const brand = String((row as { brand?: string }).brand || "").trim();
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!brand || !model) continue;
+    const key = brand.toLowerCase() + "\0" + model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
 export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category", category?: string) {
   const supabase = await createServerSupabase();
   if (!supabase) return {} as Record<string, number>;
