@@ -83,7 +83,7 @@ export default async function BrandPage({ params }: Props) {
           <h2 className="text-base font-semibold">{b.name} phones by city</h2>
           <div className="mt-3 flex flex-wrap gap-2">
             {cities.map((city) => (
-              <Link key={city} href={`/used-phones/${city.city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
+              <Link key={city.city} href={`/used-phones/${city.city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
                 {city.city.replace(/-/g, " ")} <span className="ml-1 text-xs text-muted">({city.count})</span>
               </Link>
             ))}
