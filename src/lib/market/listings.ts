@@ -1,7 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { PAGE_SIZE } from "./site";
 import { stripPrivateFields } from "./public-fields";
-import { ACCESSORY_SLUGS, inferCategory, canonicalCategory, categoryFilterValues, PHONE_CATEGORY } from "./catalog";
+import { ACCESSORY_SLUGS, inferCategory, canonicalCategory, categoryFilterValues, PHONE_CATEGORY, getBrandByName, modelsForBrand } from "./catalog";
 import { OWNER_LISTING_COLUMNS, PUBLIC_LISTING_COLUMNS, type ListingFilters, type ListingImage, type PublicListing } from "./types";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { downloadListingImage, mediaUrlsForPaths, mediaUrlForPath, readCachedImage } from "./listing-media.server";
@@ -303,7 +303,9 @@ export async function activePhoneModels(limit = 12, minimumListings = 2) {
     const brand = String((row as { brand?: string }).brand || "").trim();
     const model = String((row as { model?: string }).model || "").trim();
     if (!brand || !model) continue;
-    const key = brand.toLowerCase() + "\0" + model.toLowerCase();
+    const catalogBrand = getBrandByName(brand);
+    if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) continue;
+    const key = catalogBrand.name.toLowerCase() + "\0" + model.toLowerCase();
     const current = counts.get(key);
     if (current) current.count += 1;
     else counts.set(key, { brand, model, count: 1 });
