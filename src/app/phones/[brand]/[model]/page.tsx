@@ -148,7 +148,7 @@ export default async function ModelPage({ params }: Props) {
         ) : (
           <p className="mt-3 text-sm text-muted">No other {b.name} model currently has enough active inventory for a prioritized related-model link.</p>
         )}
-      </section>n>
+      </section>
 
       <div className="mt-8 flex flex-wrap gap-3 text-sm"><Link href={`/phones/${b.slug}`} className="link">All {b.name} phones</Link><Link href="/phones" className="link">All used phones</Link><Link href="/guides/buy-used-phone" className="link">How to buy a used phone</Link></div>
 
