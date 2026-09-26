@@ -318,6 +318,39 @@ export async function activePhoneModels(limit = 12, minimumListings = 2) {
     .slice(0, limit);
 }
 
+export async function activePhoneModelsByMaxPrice(maxPrice: number, limit = 12, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .lte("price_pkr", maxPrice)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const brand = String((row as { brand?: string }).brand || "").trim();
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!brand || !model) continue;
+    const catalogBrand = getBrandByName(brand);
+    if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) continue;
+    const key = catalogBrand.name.toLowerCase() + "\0" + model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
 export type ActivePhoneBrand = { brand: string; count: number };
 
 export async function activePhoneBrandsByCity(city: string, limit = 8, minimumListings = 1) {
