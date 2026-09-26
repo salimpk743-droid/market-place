@@ -53,9 +53,9 @@ export default async function BrandPage({ params }: Props) {
           <p className="mt-1 text-sm text-muted">Model pages below are linked from current marketplace inventory, so visitors can move from the brand hub into live model-specific price and buying information.</p>
           {activeModels.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
-              {activeModels.map((model) => (
-                <Link key={model} href={`/phones/${b.slug}/${slugify(model)}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
-                  {model}
+              {activeModels.map((item) => (
+                <Link key={item.model} href={`/phones/${b.slug}/${slugify(item.model)}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
+                  {item.model}
                 </Link>
               ))}
             </div>
