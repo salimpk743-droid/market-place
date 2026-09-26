@@ -1,7 +1,7 @@
 import { createServerSupabase } from "@/lib/supabase/server";
 import { PAGE_SIZE } from "./site";
 import { stripPrivateFields } from "./public-fields";
-import { ACCESSORY_SLUGS, inferCategory, canonicalCategory, categoryFilterValues, PHONE_CATEGORY } from "./catalog";
+import { ACCESSORY_SLUGS, inferCategory, canonicalCategory, categoryFilterValues, PHONE_CATEGORY, getBrandByName, modelsForBrand } from "./catalog";
 import { OWNER_LISTING_COLUMNS, PUBLIC_LISTING_COLUMNS, type ListingFilters, type ListingImage, type PublicListing } from "./types";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { downloadListingImage, mediaUrlsForPaths, mediaUrlForPath, readCachedImage } from "./listing-media.server";
@@ -282,6 +282,307 @@ export async function featuredListings(limit = 6) {
     data = retry.data;
   }
   return withSignedCovers(asListings(data));
+}
+
+export type ActivePhoneModel = { brand: string; model: string; count: number };
+
+export async function activePhoneModels(limit = 12, minimumListings = 2) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const brand = String((row as { brand?: string }).brand || "").trim();
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!brand || !model) continue;
+    const catalogBrand = getBrandByName(brand);
+    if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) continue;
+    const key = catalogBrand.name.toLowerCase() + "\0" + model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
+export async function activePhoneModelsByMaxPrice(maxPrice: number, limit = 12, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .lte("price_pkr", maxPrice)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const brand = String((row as { brand?: string }).brand || "").trim();
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!brand || !model) continue;
+    const catalogBrand = getBrandByName(brand);
+    if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) continue;
+    const key = catalogBrand.name.toLowerCase() + "\0" + model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
+export type ActivePhoneBrand = { brand: string; count: number };
+
+export async function activePhoneBrandsByCity(city: string, limit = 8, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneBrand[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand")
+    .eq("status", "active")
+    .eq("city_slug", city)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneBrand[];
+
+  const counts = new Map<string, ActivePhoneBrand>();
+  for (const row of data || []) {
+    const rawBrand = String((row as { brand?: string }).brand || "").trim();
+    if (!rawBrand) continue;
+    const catalogBrand = getBrandByName(rawBrand);
+    if (!catalogBrand) continue;
+    const key = catalogBrand.name.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand))
+    .slice(0, limit);
+}
+export type ActivePhoneCity = { city: string; count: number };
+
+export type ActivePhonePtaBrand = { brand: string; count: number };
+
+export async function activePhoneBrandsByPta(status: string, limit = 10, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhonePtaBrand[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand")
+    .eq("status", "active")
+    .eq("pta_status", status)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhonePtaBrand[];
+
+  const counts = new Map<string, ActivePhonePtaBrand>();
+  for (const row of data || []) {
+    const rawBrand = String((row as { brand?: string }).brand || "").trim();
+    if (!rawBrand) continue;
+    const catalogBrand = getBrandByName(rawBrand);
+    if (!catalogBrand) continue;
+    const key = catalogBrand.name.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand))
+    .slice(0, limit);
+}
+
+export async function activePhoneModelsByPta(status: string, limit = 12, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .eq("pta_status", status)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const brand = String((row as { brand?: string }).brand || "").trim();
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!brand || !model) continue;
+    const catalogBrand = getBrandByName(brand);
+    if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) continue;
+    const key = catalogBrand.name.toLowerCase() + "\0" + model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.brand.localeCompare(b.brand) || a.model.localeCompare(b.model))
+    .slice(0, limit);
+}
+
+export async function activePhoneCitiesByPta(status: string, limit = 10, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneCity[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("city_slug")
+    .eq("status", "active")
+    .eq("pta_status", status)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneCity[];
+
+  const counts = new Map<string, ActivePhoneCity>();
+  for (const row of data || []) {
+    const city = String((row as { city_slug?: string }).city_slug || "").trim();
+    if (!city) continue;
+    const key = city.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { city, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.city.localeCompare(b.city))
+    .slice(0, limit);
+}
+
+export async function activePhoneCitiesByBrand(brand: string, limit = 10, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneCity[];
+
+  const catalogBrand = getBrandByName(brand);
+  if (!catalogBrand) return [] as ActivePhoneCity[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("city_slug")
+    .eq("status", "active")
+    .eq("brand", catalogBrand.name)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneCity[];
+
+  const counts = new Map<string, ActivePhoneCity>();
+  for (const row of data || []) {
+    const city = String((row as { city_slug?: string }).city_slug || "").trim();
+    if (!city) continue;
+    const key = city.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { city, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.city.localeCompare(b.city))
+    .slice(0, limit);
+}
+
+export async function activePhoneCitiesByModel(brand: string, model: string, limit = 10, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneCity[];
+
+  const catalogBrand = getBrandByName(brand);
+  if (!catalogBrand || !modelsForBrand(catalogBrand.name).includes(model)) return [] as ActivePhoneCity[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("city_slug")
+    .eq("status", "active")
+    .eq("brand", catalogBrand.name)
+    .eq("model", model)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneCity[];
+
+  const counts = new Map<string, ActivePhoneCity>();
+  for (const row of data || []) {
+    const city = String((row as { city_slug?: string }).city_slug || "").trim();
+    if (!city) continue;
+    const key = city.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { city, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.city.localeCompare(b.city))
+    .slice(0, limit);
+}
+
+export async function activePhoneModelsByCity(city: string, brand: string, limit = 12, minimumListings = 1) {
+  const supabase = await createServerSupabase();
+  if (!supabase) return [] as ActivePhoneModel[];
+
+  const catalogBrand = getBrandByName(brand);
+  if (!catalogBrand) return [] as ActivePhoneModel[];
+
+  const { data, error } = await supabase
+    .from("listings")
+    .select("brand,model")
+    .eq("status", "active")
+    .eq("city_slug", city)
+    .eq("brand", catalogBrand.name)
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
+    .limit(5000);
+
+  if (error) return [] as ActivePhoneModel[];
+
+  const validModels = new Set(modelsForBrand(catalogBrand.name));
+  const counts = new Map<string, ActivePhoneModel>();
+  for (const row of data || []) {
+    const model = String((row as { model?: string }).model || "").trim();
+    if (!model || !validModels.has(model)) continue;
+    const key = model.toLowerCase();
+    const current = counts.get(key);
+    if (current) current.count += 1;
+    else counts.set(key, { brand: catalogBrand.name, model, count: 1 });
+  }
+
+  return Array.from(counts.values())
+    .filter((item) => item.count >= minimumListings)
+    .sort((a, b) => b.count - a.count || a.model.localeCompare(b.model))
+    .slice(0, limit);
 }
 
 export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category", category?: string) {

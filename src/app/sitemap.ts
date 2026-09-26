@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { ACCESSORY_SLUGS, BRANDS, CITIES, MODELS_BY_BRAND, canonicalCategory, getCity } from "@/lib/market/catalog";
-import { recentListings } from "@/lib/market/listings";
+import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
 import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
@@ -11,21 +11,21 @@ function slugify(value: string) {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl();
-  const recent = await recentListings(500);
+  const [recent, cityCounts] = await Promise.all([recentListings(500), countBy("city_slug", "phone")]);
 
   const catalogPaths = new Set<string>();
 
   for (const brand of BRANDS) {
     catalogPaths.add(`/phones/${brand.slug}`);
-    for (const model of MODELS_BY_BRAND[brand.name] || []) catalogPaths.add(`/phones/${brand.slug}/${slugify(model)}`);
   }
 
-  // Keep public catalog URLs stable in the sitemap even when inventory is temporarily empty.
-  // This prevents the sitemap from changing shape with database availability.
   for (const slug of ACCESSORY_SLUGS) catalogPaths.add(`/accessories/${slug}`);
 
-  // Every canonical city landing page is a public SEO route, even when that city has no live inventory yet.
-  for (const city of CITIES) catalogPaths.add(`/used-phones/${city.slug}`);
+  // Only expose city landing pages in the sitemap when they have live phone inventory.
+  for (const city of CITIES) {
+    if ((cityCounts[city.slug] || 0) > 0) catalogPaths.add(`/used-phones/${city.slug}`);
+  }
+
   catalogPaths.add("/pta-approved-phones");
   catalogPaths.add("/non-pta-phones");
 
@@ -33,7 +33,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const brand = BRANDS.find((item) => item.name.toLowerCase() === listing.brand.toLowerCase());
     if (!brand || !getCity(listing.city_slug)) continue;
     if (listing.category && canonicalCategory(listing.category) !== "phone") continue;
+
     catalogPaths.add(`/used-phones/${listing.city_slug}/${brand.slug}`);
+
+    // Model URLs are indexable only when live inventory exists. Keep them out of
+    // the sitemap when they are merely catalog definitions with no listings.
     if (listing.model && (MODELS_BY_BRAND[brand.name] || []).some((model) => slugify(model) === slugify(listing.model))) {
       catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
     }

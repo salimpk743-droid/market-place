@@ -3,6 +3,7 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { BRANDS, MODELS_BY_BRAND } from "@/lib/market/catalog";
 import { absoluteUrl } from "@/lib/market/site";
+import { activePhoneModels } from "@/lib/market/listings";
 import { Page, PageTitle } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -23,7 +24,8 @@ function slugify(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-export default function MobilePricesPakistanPage() {
+export default async function MobilePricesPakistanPage() {
+  const activeModels = await activePhoneModels(12, 2);
   return (
     <Page>
       <PageTitle
@@ -61,16 +63,50 @@ export default function MobilePricesPakistanPage() {
 
         <section>
           <h2 className="text-xl font-semibold text-ink">Popular model price pages</h2>
-          <p className="mt-1 text-sm text-muted">These pages connect model information with real marketplace inventory when sellers have listed the device.</p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {BRANDS.flatMap((brand) =>
-              (MODELS_BY_BRAND[brand.name] || []).slice(0, 4).map((model) => (
-                <Link key={`${brand.slug}-${slugify(model)}`} href={`/phones/${brand.slug}/${slugify(model)}`} className="rounded-md border border-line px-4 py-3 text-sm hover:border-brand/30 hover:bg-surface">
-                  <span className="font-medium text-ink">{brand.name} {model}</span>
-                  <span className="mt-1 block text-xs text-muted">Price, PTA status & live listings</span>
-                </Link>
-              )),
-            )}
+          <p className="mt-1 text-sm text-muted">Prioritized from active marketplace inventory rather than a fixed catalog list.</p>
+          {activeModels.length ? (
+            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {activeModels.map((item) => {
+                const brand = BRANDS.find((b) => b.name === item.brand);
+                if (!brand) return null;
+                const modelSlug = slugify(item.model);
+                return (
+                  <Link key={`${item.brand}-${item.model}`} href={`/phones/${brand.slug}/${modelSlug}`} className="rounded-md border border-line px-4 py-3 text-sm hover:border-brand/30 hover:bg-surface">
+                    <span className="font-medium text-ink">{item.brand} {item.model}</span>
+                    <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : null}
+          <h3 className="mt-6 text-base font-semibold text-ink">Model pages with live inventory</h3>
+          <p className="mt-1 text-sm text-muted">Model links are kept inventory-backed so the strongest crawl paths point to pages with current marketplace depth.</p>
+          {activeModels.length ? (
+            <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {activeModels.slice(0, 12).map((item) => {
+                const brand = BRANDS.find((b) => b.name === item.brand);
+                if (!brand) return null;
+                return (
+                  <Link key={"live-" + item.brand + "-" + item.model} href={"/phones/" + brand.slug + "/" + slugify(item.model)} className="rounded-md border border-line px-4 py-3 text-sm hover:border-brand/30 hover:bg-surface">
+                    <span className="font-medium text-ink">{item.brand} {item.model}</span>
+                    <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+                  </Link>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-muted">No model pages currently have enough active inventory for a prioritized internal link.</p>
+          )}
+        </section>
+
+        <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
+          <h2 className="text-lg font-semibold text-ink">Used phone prices by budget</h2>
+          <p className="mt-1 text-sm text-muted">Compare current seller asking prices at common Pakistan mobile budgets.</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            <Link className="link" href="/used-mobile-phones/under-20000">Used phones under Rs 20,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-30000">Used phones under Rs 30,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-50000">Used phones under Rs 50,000</Link>
+            <Link className="link" href="/used-mobile-phones/under-100000">Used phones under Rs 100,000</Link>
           </div>
         </section>
 
