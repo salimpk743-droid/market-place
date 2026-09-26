@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { JsonLd } from "@/components/JsonLd";
 import { getPhoneBrandBySlug, MODELS_BY_BRAND, cityName } from "@/lib/market/catalog";
-import { activePhoneModels } from "@/lib/market/listings";
+import { activePhoneCitiesByModel, activePhoneModels } from "@/lib/market/listings";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
@@ -49,14 +49,15 @@ export default async function ModelPage({ params }: Props) {
   const modelName = b ? getModel(b.slug, model) : undefined;
   if (!b || !modelName) notFound();
 
-  const [result, activeModels] = await Promise.all([
+  const [result, activeModels, activeCities] = await Promise.all([
     searchPhoneSeoListings({ brand: b.name, model: modelName }),
     activePhoneModels(50, 2),
+    activePhoneCitiesByModel(b.name, modelName, 10, 1),
   ]);
   const relatedModels = activeModels
     .filter((item) => item.brand === b.name && item.model !== modelName)
     .slice(0, 8);
-  const cities = Array.from(new Set(result.rows.map((listing) => listing.city_slug).filter(Boolean))).slice(0, 10);
+  const cities = activeCities.map((item) => item.city);
   const storageOptions = Array.from(new Set(result.rows.map((listing) => listing.storage_gb).filter((value): value is number => typeof value === "number"))).sort((a, z) => a - z);
   const ramOptions = Array.from(new Set(result.rows.map((listing) => listing.ram_gb).filter((value): value is number => typeof value === "number"))).sort((a, z) => a - z);
   const ptaStatuses = Array.from(new Set(result.rows.map((listing) => listing.pta_status).filter(Boolean)));
@@ -96,7 +97,7 @@ export default async function ModelPage({ params }: Props) {
       <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
         <h2 className="text-base font-semibold">{b.name} {modelName} availability in Pakistan</h2>
         <p className="mt-2 text-sm text-muted">{cities.length ? `Current listings are represented in ${cityLabels.join(", ")}. City availability changes as sellers add or remove inventory.` : "No city-level inventory is currently available."}</p>
-        {cities.length ? <div className="mt-4 flex flex-wrap gap-2">{cities.map((city) => <Link key={city} href={`/used-phones/${city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">{modelName} in {cityName(city)}</Link>)}</div> : null}
+        {activeCities.length ? <div className="mt-4 flex flex-wrap gap-2">{activeCities.map((item) => <Link key={item.city} href={`/used-phones/${item.city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">{modelName} in {cityName(item.city)} <span className="ml-1 text-xs text-muted">({item.count})</span></Link>)}</div> : null}
       </section>
 
       <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
