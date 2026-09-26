@@ -5,7 +5,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { getPhoneBrandBySlug } from "@/lib/market/catalog";
-import { activePhoneModels, searchListings } from "@/lib/market/listings";
+import { activePhoneCitiesByBrand, activePhoneModels, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
@@ -32,12 +32,13 @@ export default async function BrandPage({ params }: Props) {
   const b = getPhoneBrandBySlug(brand);
   if (!b) notFound();
 
-  const [result, rankedModels] = await Promise.all([
+  const [result, rankedModels, rankedCities] = await Promise.all([
     searchListings({ brand: b.name, category: "phone" }),
     activePhoneModels(50, 2),
+    activePhoneCitiesByBrand(b.name, 10, 1),
   ]);
   const activeModels = rankedModels.filter((item) => item.brand === b.name).slice(0, 24);
-  const cities = Array.from(new Set(result.rows.map((listing) => listing.city_slug).filter(Boolean))).slice(0, 10);
+  const cities = rankedCities;
 
   return (
     <Page>
@@ -83,7 +84,7 @@ export default async function BrandPage({ params }: Props) {
           <div className="mt-3 flex flex-wrap gap-2">
             {cities.map((city) => (
               <Link key={city} href={`/used-phones/${city}/${b.slug}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
-                {city.replace(/-/g, " ")}
+                {city.city.replace(/-/g, " ")} <span className="ml-1 text-xs text-muted">({city.count})</span>
               </Link>
             ))}
           </div>
