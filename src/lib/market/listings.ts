@@ -294,6 +294,7 @@ export async function activePhoneModels(limit = 12, minimumListings = 2) {
     .from("listings")
     .select("brand,model")
     .eq("status", "active")
+    .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
 
   if (error) return [] as ActivePhoneModel[];
