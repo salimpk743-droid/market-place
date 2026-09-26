@@ -16,7 +16,7 @@ import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
 import { ListingGrid, SectionHead } from "@/components/ui";
 import { ACCESSORY_SLUGS, BRANDS, CATEGORIES, CITY_COUNT, categoryPath, popularCities } from "@/lib/market/catalog";
-import { countBy, featuredListings, recentListings } from "@/lib/market/listings";
+import { activePhoneModels, countBy, featuredListings, recentListings } from "@/lib/market/listings";
 import { BRAND, absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
@@ -58,11 +58,12 @@ const POPULAR_SEARCHES = [
 ] as const;
 
 export default async function HomePage() {
-  const [featured, recent, brandCounts, cityCounts] = await Promise.all([
+  const [featured, recent, brandCounts, cityCounts, activeModels] = await Promise.all([
     featuredListings(6),
     recentListings(12),
     countBy("brand"),
     countBy("city_slug"),
+    activePhoneModels(8, 2),
   ]);
 
   return (
@@ -166,6 +167,30 @@ export default async function HomePage() {
             ))}
           </div>
         </section>
+
+        {activeModels.length ? (
+          <section id="active-models">
+            <SectionHead
+              title="Models with active marketplace inventory"
+              description="These model pages are prioritized from current seller inventory, keeping the strongest internal links tied to real listings."
+              href="/used-mobile-phones"
+              linkLabel="All used phones"
+            />
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+              {activeModels.map((item) => {
+                const brand = BRANDS.find((b) => b.name === item.brand);
+                if (!brand) return null;
+                const modelSlug = item.model.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+                return (
+                  <Link key={`${item.brand}-${item.model}`} href={`/phones/${brand.slug}/${modelSlug}`} className="rounded-md border border-line px-3 py-3 hover:border-brand/30 hover:bg-surface">
+                    <span className="text-sm font-semibold text-ink">{item.brand} {item.model}</span>
+                    <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        ) : null}
 
         <section id="popular-searches" className="card p-6 sm:p-8">
           <SectionHead
