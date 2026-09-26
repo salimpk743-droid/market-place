@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { JsonLd } from "@/components/JsonLd";
 import { getPhoneBrandBySlug, MODELS_BY_BRAND, cityName } from "@/lib/market/catalog";
+import { activePhoneModels } from "@/lib/market/listings";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
@@ -48,7 +49,13 @@ export default async function ModelPage({ params }: Props) {
   const modelName = b ? getModel(b.slug, model) : undefined;
   if (!b || !modelName) notFound();
 
-  const result = await searchPhoneSeoListings({ brand: b.name, model: modelName });
+  const [result, activeModels] = await Promise.all([
+    searchPhoneSeoListings({ brand: b.name, model: modelName }),
+    activePhoneModels(50, 2),
+  ]);
+  const relatedModels = activeModels
+    .filter((item) => item.brand === b.name && item.model !== modelName)
+    .slice(0, 8);
   const cities = Array.from(new Set(result.rows.map((listing) => listing.city_slug).filter(Boolean))).slice(0, 10);
   const storageOptions = Array.from(new Set(result.rows.map((listing) => listing.storage_gb).filter((value): value is number => typeof value === "number"))).sort((a, z) => a - z);
   const ramOptions = Array.from(new Set(result.rows.map((listing) => listing.ram_gb).filter((value): value is number => typeof value === "number"))).sort((a, z) => a - z);
@@ -128,9 +135,20 @@ export default async function ModelPage({ params }: Props) {
 
       <section className="mt-8 border-t border-line pt-7">
         <h2 className="text-lg font-semibold">Related {b.name} models</h2>
-        <p className="mt-1 text-sm text-muted">Compare nearby models in the same {b.name} catalog.</p>
-        <div className="mt-3 flex flex-wrap gap-2">{(MODELS_BY_BRAND[b.name] || []).filter((m) => m !== modelName).slice(0, 8).map((m) => <Link key={m} href={`/phones/${b.slug}/${slugify(m)}`} className="rounded-md border border-line px-3 py-2 text-sm font-medium hover:border-brand/40">{m}</Link>)}</div>
-      </section>
+        <p className="mt-1 text-sm text-muted">Related links are prioritized by active seller inventory, keeping the strongest model-to-model connections tied to real marketplace depth.</p>
+        {relatedModels.length ? (
+          <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+            {relatedModels.map((item) => (
+              <Link key={item.model} href={`/phones/${b.slug}/${slugify(item.model)}`} className="rounded-md border border-line px-3 py-3 hover:border-brand/40 hover:bg-surface">
+                <span className="text-sm font-medium text-ink">{item.model}</span>
+                <span className="mt-1 block text-xs text-muted">{item.count} active seller listings</span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted">No other {b.name} model currently has enough active inventory for a prioritized related-model link.</p>
+        )}
+      </section>n>
 
       <div className="mt-8 flex flex-wrap gap-3 text-sm"><Link href={`/phones/${b.slug}`} className="link">All {b.name} phones</Link><Link href="/phones" className="link">All used phones</Link><Link href="/guides/buy-used-phone" className="link">How to buy a used phone</Link></div>
 
