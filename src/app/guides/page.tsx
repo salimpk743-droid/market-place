@@ -23,9 +23,15 @@ export default function GuidesPage() {
       <p className="section-kicker">Advice</p>
       <h1 className="mt-1 text-2xl sm:text-3xl">Guides</h1>
       <p className="mt-2 text-sm text-muted">
-        Written for people actually buying and selling used phones in Pakistan. These pages are advice, not a government
-        certificate.
+        Written for people actually buying and selling used phones in Pakistan. These pages cover price research, PTA/IMEI
+        checks, inspection, battery health and marketplace safety. They are advice, not a government certificate.
       </p>
+      <div className="mt-5 flex flex-wrap gap-2 text-sm">
+        <Link href="/used-mobile-phones" className="link">Used phones in Pakistan</Link>
+        <Link href="/mobile-prices-in-pakistan" className="link">Mobile prices in Pakistan</Link>
+        <Link href="/pta-approved-phones" className="link">PTA approved phones</Link>
+        <Link href="/non-pta-phones" className="link">Non-PTA phones</Link>
+      </div>
       <ul className="mt-8 space-y-3">
         {GUIDES.map((g) => (
           <li key={g.href}>
