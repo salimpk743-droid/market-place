@@ -22,7 +22,11 @@ const BUDGETS = [
 ] as const;
 
 export default async function UsedMobilePhonesHub() {
-  const [result, activeModels, activeCities] = await Promise.all([\n    searchListings({ category: "phone" }),\n    activePhoneModels(12, 2),\n    countBy("city_slug", "phone"),\n  ]);
+  const [result, activeModels, activeCities] = await Promise.all([
+    searchListings({ category: "phone" }),
+    activePhoneModels(12, 2),
+    countBy("city_slug", "phone"),
+  ]);
   return (
     <Page>
       <PageTitle
@@ -71,8 +75,8 @@ export default async function UsedMobilePhonesHub() {
         <h2 className="text-lg font-semibold">Used phones by city</h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {Object.entries(activeCities).filter(([, count]) => count > 0).sort((a, b) => b[1] - a[1]).slice(0, 24).map(([city, count]) => (
-            <Link key={c.slug} href={"/used-phones/" + c.slug} className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40">
-              Used phones in {c.name}
+            <Link key={city} href={"/used-phones/" + city} className="rounded-md border border-line bg-surface px-3 py-2 text-sm font-medium hover:border-brand/40">
+              Used phones in {city.replace(/-/g, " ")} <span className="text-xs text-muted">({count})</span>
             </Link>
           ))}
         </div>
