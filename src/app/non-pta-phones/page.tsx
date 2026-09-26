@@ -3,6 +3,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { activePhoneBrandsByPta, activePhoneCitiesByPta, activePhoneModelsByPta, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
+import { brandSlug } from "@/lib/market/catalog";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 import Link from "next/link";
 
@@ -47,7 +48,7 @@ export default async function NonPtaPage() {
             <h2 className="text-base font-semibold">Brands with live inventory</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {brands.map((item) => (
-                <Link key={item.brand} href={`/phones/${item.brand.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
+                <Link key={item.brand} href={`/phones/${brandSlug(item.brand)}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
                   {item.brand} <span className="text-xs text-muted">({item.count})</span>
                 </Link>
               ))}
@@ -57,7 +58,7 @@ export default async function NonPtaPage() {
             <h2 className="text-base font-semibold">Models with live inventory</h2>
             <div className="mt-3 flex flex-wrap gap-2">
               {models.map((item) => (
-                <Link key={`${item.brand}-${item.model}`} href={`/phones/${item.brand.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/${item.model.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
+                <Link key={`${item.brand}-${item.model}`} href={`/phones/${brandSlug(item.brand)}/${item.model.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
                   {item.brand} {item.model} <span className="text-xs text-muted">({item.count})</span>
                 </Link>
               ))}
