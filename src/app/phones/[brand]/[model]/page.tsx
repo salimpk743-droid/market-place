@@ -68,6 +68,28 @@ export default async function ModelPage({ params }: Props) {
   const cityLabels = cities.map((city) => cityName(city));
   const canonical = `/phones/${b.slug}/${slugify(modelName)}`;
   const minPrice = result.total ? Math.min(...result.rows.map((x) => x.price_pkr)) : null;
+  const faqItems = [
+    {
+      question: `What is the ${b.name} ${modelName} used price in Pakistan?`,
+      answer: "Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.",
+    },
+    {
+      question: `Which ${b.name} ${modelName} storage options are available?`,
+      answer: storageOptions.length ? `Current listings declare ${storageOptions.map((value) => `${value}GB`).join(", ")}. Availability can change with new seller inventory.` : "Storage is not currently declared in live listings.",
+    },
+    {
+      question: `What battery health is reported for used ${b.name} ${modelName} phones?`,
+      answer: batteryMin !== null ? `Current listings report battery health from ${batteryMin}% to ${batteryMax}%. Battery health is seller-provided and should be checked on the device.` : "Battery health is not currently declared in live listings.",
+    },
+    {
+      question: `Is the ${b.name} ${modelName} PTA approved?`,
+      answer: `PTA status can differ by handset and IMEI. Current seller labels include ${ptaStatuses.length ? ptaStatuses.map(ptaLabel).join(", ") : "no declared status"}. Verify the actual IMEI before buying.`,
+    },
+    {
+      question: `Where can I find a used ${b.name} ${modelName} in Pakistan?`,
+      answer: cities.length ? `Current listings are available in ${cityLabels.join(", ")}. Use the city links above to browse broader local inventory.` : "No city-level inventory is currently available.",
+    },
+  ];
 
   return (
     <Page>
@@ -166,11 +188,38 @@ export default async function ModelPage({ params }: Props) {
 
       <JsonLd data={{
         "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
-          { "@type": "ListItem", position: 2, name: `Used ${b.name} phones`, item: absoluteUrl(`/phones/${b.slug}`) },
-          { "@type": "ListItem", position: 3, name: `Used ${b.name} ${modelName}`, item: absoluteUrl(canonical) },
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+              { "@type": "ListItem", position: 2, name: `Used ${b.name} phones`, item: absoluteUrl(`/phones/${b.slug}`) },
+              { "@type": "ListItem", position: 3, name: `Used ${b.name} ${modelName}`, item: absoluteUrl(canonical) },
+            ],
+          },
+          {
+            "@type": "Product",
+            "@id": absoluteUrl(canonical) + "#product",
+            name: `Used ${b.name} ${modelName}`,
+            brand: { "@type": "Brand", name: b.name },
+            category: "Used mobile phone",
+            offers: result.total ? {
+              "@type": "AggregateOffer",
+              priceCurrency: "PKR",
+              lowPrice: Math.min(...result.rows.map((x) => x.price_pkr)),
+              highPrice: Math.max(...result.rows.map((x) => x.price_pkr)),
+              offerCount: result.total,
+              url: absoluteUrl(canonical),
+            } : undefined,
+          },
+          {
+            "@type": "FAQPage",
+            mainEntity: faqItems.map((item) => ({
+              "@type": "Question",
+              name: item.question,
+              acceptedAnswer: { "@type": "Answer", text: item.answer },
+            })),
+          },
         ],
       }} />
     </Page>
