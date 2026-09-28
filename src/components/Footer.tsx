@@ -39,6 +39,7 @@ const COLUMNS = [
       { href: "/seller-terms", label: "Seller Terms" },
       { href: "/prohibited", label: "Prohibited items" },
       { href: "/delete-account", label: "Account Deletion" },
+      { href: "/return-policy", label: "Return & Refund Policy" },
     ],
   },
 ];
