@@ -55,6 +55,11 @@ const POPULAR_SEARCHES = [
   ["Used Mobile Phones in Karachi", "/used-phones/karachi"],
   ["Used Mobile Phones in Islamabad", "/used-phones/islamabad"],
   ["Used Mobile Phones in Rawalpindi", "/used-phones/rawalpindi"],
+  ["Best mobile market in Karachi", "/guides/best-mobile-market-in-karachi"],
+  ["Best mobile market in Lahore", "/guides/best-mobile-market-in-lahore"],
+  ["Best mobile market in Islamabad", "/guides/best-mobile-market-in-islamabad"],
+  ["Best mobile market in Rawalpindi", "/guides/best-mobile-market-in-rawalpindi"],
+  ["Authorized Apple dealers in Pakistan", "/guides/authorized-mobile-dealers-in-pakistan"],
 ] as const;
 
 export default async function HomePage() {
