@@ -192,7 +192,7 @@ export async function getOwnListingContact(id: string) {
 export async function getListingImages(listingId: string): Promise<ListingImage[]> {
   const supabase = await createServerSupabase();
   if (!supabase) return [];
-  let { data, error } = await supabase.from("listings").select("id, image_url, status").eq("id", listingId).maybeSingle();
+  const { data, error } = await supabase.from("listings").select("id, image_url, status").eq("id", listingId).maybeSingle();
   if (error || !data) return [];
   const paths = storagePathsFromStored((data as { image_url?: string }).image_url);
   const extra = await (createAdminSupabase() || supabase)
