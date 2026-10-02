@@ -24,7 +24,7 @@ export const placeGuides: PlaceGuide[] = [
     title: "What are the best mobile markets in Pakistan?",
     description:
       "Best mobile market in Karachi, Lahore, Islamabad and Rawalpindi: Saddar, Hafeez Centre, Blue Area and Singapore Plaza, plus shop names you can actually find.",
-    updated,
+    updated: "2 October 2026",
     intro:
       "People searching for the best mobile market in Pakistan are usually deciding which building to walk, not which blog award to trust. There is no official ranking. Karachi uses Saddar. Lahore uses Hafeez Centre. Islamabad is spread across Blue Area, G-9 and F-7. Rawalpindi uses Saddar, and Singapore Plaza is the building shoppers name. A famous market is not a warranty.",
     sections: [
@@ -57,7 +57,7 @@ export const placeGuides: PlaceGuide[] = [
       {
         question: "Where can I see shop names for my city?",
         answer:
-          "Open the Karachi, Lahore, Islamabad or Rawalpindi page. Each one lists shops that publish an address, and says who published it.",
+          "Open the Karachi, Lahore, Islamabad, Rawalpindi, Multan, Faisalabad, Peshawar or Hyderabad page. Each one lists shops that publish an address, and says who published it.",
       },
       {
         question: "Are mobile market shops authorized brand dealers?",
@@ -70,6 +70,10 @@ export const placeGuides: PlaceGuide[] = [
       { href: "/guides/best-mobile-market-in-lahore", label: "Best mobile market in Lahore" },
       { href: "/guides/best-mobile-market-in-islamabad", label: "Best mobile market in Islamabad" },
       { href: "/guides/best-mobile-market-in-rawalpindi", label: "Best mobile market in Rawalpindi" },
+      { href: "/guides/best-mobile-market-in-multan", label: "Best mobile market in Multan" },
+      { href: "/guides/best-mobile-market-in-faisalabad", label: "Best mobile market in Faisalabad" },
+      { href: "/guides/best-mobile-market-in-peshawar", label: "Best mobile market in Peshawar" },
+      { href: "/guides/best-mobile-market-in-hyderabad", label: "Best mobile market in Hyderabad" },
       { href: "/guides/authorized-mobile-dealers-in-pakistan", label: "Authorized Apple and Samsung dealers" },
     ],
     sources: [
@@ -362,6 +366,257 @@ export const placeGuides: PlaceGuide[] = [
     sources: [
       { href: "https://singaporeplaza.pk/", label: "Singapore Plaza" },
       { href: "https://www.samsung.com/pk/trade-in/", label: "Samsung Pakistan trade-in counters" },
+    ],
+  },
+  {
+    slug: "best-mobile-market-in-multan",
+    title: "What is the best mobile market in Multan?",
+    description:
+      "Mobile market in Multan: Mall Plaza and Hussain Agahi, plus Multan counters a phone distributor publishes by name. Checked 2 October 2026.",
+    updated: "2 October 2026",
+    intro:
+      "Multan buyers usually split between two places: Mall Plaza, where a national distributor lists named counters, and the Hussain Agahi market in the city centre for the wider bazaar. Neither is an official ranking, and a busy plaza is not proof that a set is PTA approved.",
+    sections: [
+      {
+        heading: "Where are the mobile shops in Multan?",
+        paragraphs: [
+          "Mall Plaza is the building where a national distributor lists most of its Multan retail partners (below). Hussain Agahi is a large market in the centre of Multan; a Graana city guide (25 June 2024) describes mobile phone, electronics and repair shops inside it alongside general shopping. Khan Plaza is a third address on the same distributor list.",
+        ],
+      },
+      {
+        heading: "Which Multan shops publish a name?",
+        paragraphs: [
+          "Airlink Communication's where-to-buy page (checked 2 October 2026) lists these Multan retail partners for the brands it distributes, including Xiaomi, Tecno, Samsung and itel. It is a distributor's list, not a quality ranking, and a shop can leave it.",
+        ],
+        bullets: [
+          "Al Habib Mobile, Mall Plaza",
+          "Makkah Communication, Mall Plaza",
+          "Cellular World, Khan Plaza",
+        ],
+      },
+      {
+        heading: "What should I check before paying in Multan?",
+        paragraphs: [
+          "Decide the model, storage and PTA status first, then ask at least two counters for that exact set. A much lower quote is often a non-PTA phone, a shop-only warranty or an opened box. Ask for a bill with the shop name, the IMEI and a phone number, and send the IMEI to 8484 before you hand over cash.",
+        ],
+        bullets: [
+          "Match the IMEI on the phone (*#06#), the box and the bill.",
+          "Ask whether the warranty is the brand's own or only the shop's.",
+          "Do not leave an advance with a counter you have not dealt with.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the best mobile market in Multan?",
+        answer:
+          "There is no official ranking. Mall Plaza is where a national distributor lists named Multan partners; Hussain Agahi is the larger general bazaar in the city centre. Compare more than one counter.",
+      },
+      {
+        question: "Which shops in Mall Plaza Multan are on a distributor's list?",
+        answer:
+          "Airlink's where-to-buy page names Al Habib Mobile and Makkah Communication in Mall Plaza, and Cellular World in Khan Plaza. Many other counters trade in the same buildings.",
+      },
+      {
+        question: "Can I buy a used phone in Multan on Mobile Market?",
+        answer: "Yes. Browse used phones in Multan from real seller listings and meet in a public place to inspect the phone before you pay.",
+      },
+    ],
+    related: [
+      { href: "/used-phones/multan", label: "Used phones in Multan" },
+      { href: "/guides/best-mobile-markets-in-pakistan", label: "Mobile markets by city" },
+      { href: "/guides/authorized-mobile-dealers-in-pakistan", label: "Authorized dealers" },
+      { href: "/guides/pta-status", label: "How to check PTA status" },
+    ],
+    sources: [
+      { href: "https://www.airlinkcommunication.com/where-to-buy/", label: "Airlink Communication, where to buy (Multan partners), checked 2 October 2026" },
+      { href: "https://www.graana.com/blog/hussain-agahi-market-your-complete-shopping-guide-in-multan/", label: "Graana: Hussain Agahi Market shopping guide, 25 June 2024" },
+    ],
+  },
+  {
+    slug: "best-mobile-market-in-faisalabad",
+    title: "What is the best mobile market in Faisalabad?",
+    description:
+      "Mobile market in Faisalabad: Katchery Bazaar by the Clock Tower and D Ground, with counters a phone distributor names. Checked 2 October 2026.",
+    updated: "2 October 2026",
+    intro:
+      "In Faisalabad the phone counters a national distributor names sit in two places: Katchery Bazaar by the Clock Tower, and D Ground. A distributor's partner list puts named shops in both. That tells you where to find a shutter, not who is honest.",
+    sections: [
+      {
+        heading: "Where is the mobile market in Faisalabad?",
+        paragraphs: [
+          "Katchery Bazaar is next to the Clock Tower (Ghanta Ghar). The Express Tribune reported on 6 July 2026 that traders were complaining about delays in the Katchery Bazaar beautification project, which was meant to make the bazaar pedestrian-friendly, more than two years after work began. Expect construction and traffic around the Clock Tower.",
+          "D Ground is the second cluster on the distributor's list.",
+        ],
+      },
+      {
+        heading: "Which Faisalabad shops publish a name?",
+        paragraphs: [
+          "Airlink Communication's where-to-buy page (checked 2 October 2026) lists these Faisalabad retail partners for the brands it distributes. It is not a ranking, and a shop can leave the list.",
+        ],
+        bullets: [
+          "Mobile & Mobile, Main Katchery Bazaar",
+          "U2 Mobile, Main Katchery Bazaar",
+          "United Mobile, D Ground",
+          "Voice Link, D Ground",
+        ],
+      },
+      {
+        heading: "What should I check before paying in Faisalabad?",
+        paragraphs: [
+          "Ask two counters for the same model, storage and PTA status. Get a bill with the shop name, the IMEI and a phone number, and send that IMEI to 8484 while you are at the counter. A box-pack price far below others usually means non-PTA stock or a shop-only warranty.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the best mobile market in Faisalabad?",
+        answer:
+          "There is no official ranking. Katchery Bazaar at the Clock Tower and D Ground are the two clusters where a national distributor lists named Faisalabad partners.",
+      },
+      {
+        question: "Is Katchery Bazaar open during the beautification work?",
+        answer:
+          "Shops have stayed open, but the Express Tribune reported in July 2026 that the project was still incomplete. Allow extra time for traffic around the Clock Tower.",
+      },
+      {
+        question: "Can I buy a used phone in Faisalabad on Mobile Market?",
+        answer: "Yes. Browse used phones in Faisalabad from real seller listings and inspect the phone in person before you pay.",
+      },
+    ],
+    related: [
+      { href: "/used-phones/faisalabad", label: "Used phones in Faisalabad" },
+      { href: "/guides/best-mobile-markets-in-pakistan", label: "Mobile markets by city" },
+      { href: "/guides/authorized-mobile-dealers-in-pakistan", label: "Authorized dealers" },
+      { href: "/guides/pta-status", label: "How to check PTA status" },
+    ],
+    sources: [
+      { href: "https://www.airlinkcommunication.com/where-to-buy/", label: "Airlink Communication, where to buy (Faisalabad partners), checked 2 October 2026" },
+      { href: "https://tribune.com.pk/story/2616705/katchery-bazaar-project-under-fire", label: "The Express Tribune: Katchery Bazaar project under fire, 6 July 2026" },
+    ],
+  },
+  {
+    slug: "best-mobile-market-in-peshawar",
+    title: "What is the best mobile market in Peshawar?",
+    description:
+      "Mobile market in Peshawar: Bilour Plaza and Saddar's Karzai Plaza, with the counters a phone distributor lists by name. Checked 2 October 2026.",
+    updated: "2 October 2026",
+    intro:
+      "The two buildings a national phone distributor names for its Peshawar retail partners are Bilour Plaza and Karzai Plaza in Saddar. Treat the list as a set of addresses you can find again, not as a guarantee about any phone in the building.",
+    sections: [
+      {
+        heading: "Where is the mobile market in Peshawar?",
+        paragraphs: [
+          "Airlink's partner list places Karzai Plaza in Saddar, and names Bilour Plaza as the second building. Confirm the exact building and floor with the shop by phone before you travel.",
+        ],
+      },
+      {
+        heading: "Which Peshawar shops publish a name?",
+        paragraphs: [
+          "Airlink Communication's where-to-buy page (checked 2 October 2026) lists these Peshawar retail partners for the brands it distributes. It is not a ranking, and a shop can leave the list.",
+        ],
+        bullets: [
+          "Cell Choice, Bilour Plaza",
+          "Discount House, Bilour Plaza",
+          "Malik Communication, Bilour Plaza",
+          "Blue Bells Communication, Saddar, Karzai Plaza",
+          "Blue Bells Electronics, Saddar, Karzai Plaza",
+          "Quick Link Communication, Saddar, Karzai Plaza",
+        ],
+      },
+      {
+        heading: "What should I check before paying in Peshawar?",
+        paragraphs: [
+          "Compare the same model, storage and PTA status at two counters. Ask for a bill with the shop name, the IMEI and a phone number, and send the IMEI to 8484 before you pay. If a quote is far below others, ask directly whether the phone is PTA approved and whose warranty it carries.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the best mobile market in Peshawar?",
+        answer:
+          "There is no official ranking. Bilour Plaza and Karzai Plaza are the two buildings where a national distributor lists named Peshawar partners.",
+      },
+      {
+        question: "Which shops in Bilour Plaza are on a distributor's list?",
+        answer:
+          "Airlink's where-to-buy page names Cell Choice, Discount House and Malik Communication in Bilour Plaza. Other counters in the plaza are not on that list.",
+      },
+      {
+        question: "Can I buy a used phone in Peshawar on Mobile Market?",
+        answer: "Yes. Browse used phones in Peshawar from real seller listings and inspect the phone in person before you pay.",
+      },
+    ],
+    related: [
+      { href: "/used-phones/peshawar", label: "Used phones in Peshawar" },
+      { href: "/guides/best-mobile-markets-in-pakistan", label: "Mobile markets by city" },
+      { href: "/guides/authorized-mobile-dealers-in-pakistan", label: "Authorized dealers" },
+      { href: "/guides/pta-status", label: "How to check PTA status" },
+    ],
+    sources: [
+      { href: "https://www.airlinkcommunication.com/where-to-buy/", label: "Airlink Communication, where to buy (Peshawar partners), checked 2 October 2026" },
+    ],
+  },
+  {
+    slug: "best-mobile-market-in-hyderabad",
+    title: "What is the best mobile market in Hyderabad?",
+    description:
+      "Mobile market in Hyderabad, Sindh: the Chandni mobile market in Saddar, named counters, Airlink's Samsung store, and what the March 2025 Customs raid means for buyers.",
+    updated: "2 October 2026",
+    intro:
+      "Dawn calls the plaza in Saddar that stands on the old Chandni Cinema plot Hyderabad's largest mobile market. Most buyers start there. If you want a branded store with a published address instead, Airlink runs a Samsung store in Saddar Cantt.",
+    sections: [
+      {
+        heading: "Where is the mobile market in Hyderabad?",
+        paragraphs: [
+          "The Chandni mobile market is a plaza on the plot that once housed Chandni Cinema, within Cantonment Board Hyderabad limits in Saddar, near the Cantonment Shopping Centre road (Dawn, 8 March 2025).",
+        ],
+      },
+      {
+        heading: "Which Hyderabad shops publish a name?",
+        paragraphs: [
+          "Airlink Communication's where-to-buy page (checked 2 October 2026) lists these Hyderabad retail partners in the Chandni mobile market. Airlink's own stores page lists a Samsung store in Saddar Cantt.",
+        ],
+        bullets: [
+          "Sakrani Mobile, Chandni Mobile Market (listed by Airlink as \"Sakrani Monbile\")",
+          "Zebra Store, Chandni Mobile Market",
+          "Samsung Experience Store (Airlink), shop 1, near Bank Alfalah, Saddar Cantt",
+        ],
+      },
+      {
+        heading: "What does the 2025 Customs raid mean for buyers?",
+        paragraphs: [
+          "On 6 March 2025, Customs officials with Rangers raided the market. Customs said it detained 137 smuggled, non-PTA-approved phones, including iPhones, Google Pixel and OnePlus models, worth about Rs 40 million. Traders protested and disputed how the raid was carried out (Dawn, 8 March 2025).",
+          "For a buyer, the lesson is the same as in every market: ask whether the phone is PTA approved, check the IMEI by SMS to 8484 before you pay, and get a bill with the shop name and IMEI. A non-PTA phone can be seized or stop working on Pakistani networks.",
+        ],
+      },
+    ],
+    faqs: [
+      {
+        question: "What is the biggest mobile market in Hyderabad?",
+        answer:
+          "Dawn describes the Chandni mobile market in Saddar, on the old Chandni Cinema plot, as the city's largest mobile market.",
+      },
+      {
+        question: "Is there an official Samsung store in Hyderabad?",
+        answer:
+          "Airlink, a Samsung distributor, lists a Samsung Experience Store at shop 1 near Bank Alfalah, Saddar Cantt, Hyderabad. Confirm on the day before you travel.",
+      },
+      {
+        question: "Can I buy a used phone in Hyderabad on Mobile Market?",
+        answer: "Yes. Browse used phones in Hyderabad from real seller listings and inspect the phone in person before you pay.",
+      },
+    ],
+    related: [
+      { href: "/used-phones/hyderabad", label: "Used phones in Hyderabad" },
+      { href: "/guides/best-mobile-market-in-karachi", label: "Karachi mobile markets" },
+      { href: "/guides/authorized-mobile-dealers-in-pakistan", label: "Authorized dealers" },
+      { href: "/guides/pta-status", label: "How to check PTA status" },
+    ],
+    sources: [
+      { href: "https://www.dawn.com/news/1896479", label: "Dawn: Customs team raids mobile market, seizes phones worth millions of rupees, 8 March 2025" },
+      { href: "https://www.airlinkcommunication.com/where-to-buy/", label: "Airlink Communication, where to buy (Hyderabad partners), checked 2 October 2026" },
+      { href: "https://www.airlinkcommunication.com/airlink-stores/", label: "Airlink stores (Hyderabad Samsung store), checked 2 October 2026" },
     ],
   },
   {

@@ -7,7 +7,7 @@ import { getPhoneBrandBySlug, MODELS_BY_BRAND, cityName } from "@/lib/market/cat
 import { activePhoneCitiesByModel, activePhoneModels } from "@/lib/market/listings";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
 import { absoluteUrl } from "@/lib/market/site";
-import { formatCheckedDate, getModelPriceData, lowestOfficialPrice } from "@/lib/market/model-prices";
+import { formatCheckedDate, getModelPriceData, lowestOfficialPrice, lowestPtaPrice } from "@/lib/market/model-prices";
 import { ModelPricePanel } from "@/components/ModelPricePanel";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
@@ -39,15 +39,22 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const priceData = getModelPriceData(b.name, modelName);
   // Models with a dedicated price guide keep the "used" title here so the two URLs don't compete.
   const ownsPriceIntent = priceData && !priceData.guidePath;
-  const fromPrice = priceData ? lowestOfficialPrice(priceData) : null;
+  const fromOfficial = priceData ? lowestOfficialPrice(priceData) : null;
+  const fromPta = priceData ? lowestPtaPrice(priceData) : null;
+  const displayName = b.name === "Apple" ? modelName : `${b.name} ${modelName}`;
+  const fromText = fromOfficial
+    ? `from Rs ${fromOfficial.toLocaleString("en-PK")} (official PTA)`
+    : fromPta
+      ? `from Rs ${fromPta.pkr.toLocaleString("en-PK")} (PTA approved, ${fromPta.kind === "official" ? "official" : "retailer"} price)`
+      : null;
   return {
     title: ownsPriceIntent
       ? priceData.variants.some((v) => v.nonPta?.length)
-        ? `${modelName} Price in Pakistan: PTA & Non-PTA`
-        : `${modelName} Price in Pakistan & Specs`
+        ? `${displayName} Price in Pakistan: PTA & Non-PTA`
+        : `${displayName} Price in Pakistan & Specs`
       : `Used ${b.name} ${modelName} Price in Pakistan`,
-    description: ownsPriceIntent && fromPrice
-      ? `${modelName} price in Pakistan from Rs ${fromPrice.toLocaleString("en-PK")} (official PTA). All storage options, verified non-PTA prices, PTA tax, specs and used listings.`
+    description: ownsPriceIntent && fromText
+      ? `${displayName} price in Pakistan ${fromText}, checked ${formatCheckedDate(priceData.lastUpdated)}. Every version with sources, ${priceData.ptaTax ? "PTA tax, " : ""}specs and used listings.`
       : `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
     robots: { index: true, follow: true },

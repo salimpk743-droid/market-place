@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LegalPage } from "@/components/LegalPage";
+import { AuthorBox, SourceList } from "@/components/GuideMeta";
 import { absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function BuyUsedPhoneGuide() {
   return (
-    <LegalPage title="How to Check a Used Phone Before Buying in Pakistan" updated="14 September 2026">
+    <LegalPage title="How to Check a Used Phone Before Buying in Pakistan" updated="2 October 2026">
       <p>
         A used-phone ad is a starting point. Before you pay, inspect and test the handset in front of you and compare it
         with the listing. Photos, PTA labels and condition notes can be incomplete or out of date.
@@ -194,6 +195,14 @@ export default function BuyUsedPhoneGuide() {
         It can be, if you meet in public, inspect the phone, and pay only after the checks above. A marketplace listing
         is not a guarantee. Treat seller claims as claims.
       </p>
+      <h2>Sources</h2>
+      <SourceList
+        sources={[
+          { label: "PTA DIRBS: device verification", href: "https://dirbs.pta.gov.pk/" },
+          { label: "Apple Support: iPhone battery and performance (published 1 June 2026)", href: "https://support.apple.com/en-us/101575" },
+        ]}
+      />
+      <AuthorBox reviewed="2 October 2026" sourcesNote="This checklist is general advice from our editorial team; PTA and battery facts come from the sources above." />
     </LegalPage>
   );
 }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { LegalPage } from "@/components/LegalPage";
+import Link from "next/link";
+import { AuthorBox, SourceList } from "@/components/GuideMeta";
 import { absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
@@ -10,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function InspectGuide() {
   return (
-    <LegalPage title="How to inspect a used phone before you pay" updated="9 September 2026">
+    <LegalPage title="How to inspect a used phone before you pay" updated="2 October 2026">
       <p>
         Do this at the meeting, in your hands, with the phone powered on. A listing photo is not an inspection. Mobile
         Market does not inspect devices for you.
@@ -33,11 +35,36 @@ export default function InspectGuide() {
         <li>Face ID / fingerprint, loudspeaker, earpiece, microphone, Wi-Fi, Bluetooth, charging with your own cable.</li>
         <li>Open the cameras — selfie and rear, including ultrawide if advertised.</li>
       </ul>
+      <h2>PTA status</h2>
+      <p>
+        Send the IMEI you read from the phone by SMS to 8484, or check it on PTA&apos;s DIRBS site, before you pay. A
+        non-PTA phone may not work on Pakistani networks.{" "}
+        <Link className="link" href="/guides/pta-status">
+          How to check PTA status
+        </Link>
+        .
+      </p>
+      <h2>Battery</h2>
+      <p>
+        On an iPhone, open Settings → Battery → Battery Health on the device itself. Read the{" "}
+        <Link className="link" href="/guides/battery-health">
+          battery health guide
+        </Link>{" "}
+        for what the number means and the warning iPhones show for a non-genuine battery.
+      </p>
       <h2>Accounts</h2>
       <p>
         The phone should be signed out of iCloud / Google. An activation lock after you pay is a classic trap. Do not
         accept “I’ll remove it tonight”.
       </p>
+      <h2>Sources</h2>
+      <SourceList
+        sources={[
+          { label: "PTA DIRBS: device verification", href: "https://dirbs.pta.gov.pk/" },
+          { label: "Apple Support: iPhone battery and performance (published 1 June 2026)", href: "https://support.apple.com/en-us/101575" },
+        ]}
+      />
+      <AuthorBox reviewed="2 October 2026" sourcesNote="This checklist is general advice from our editorial team; PTA and battery facts come from the sources above." />
     </LegalPage>
   );
 }
