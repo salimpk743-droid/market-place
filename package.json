@@ -1,6 +1,9 @@
 {
   "name": "app-builder-workspace",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "sideEffects": false,
   "type": "module",
   "overrides": {
