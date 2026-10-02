@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getSupabasePublicConfig } from "@/lib/supabase/env";
-import { downloadListingImage, readCachedImage, verifyMediaSig, parseRequestedMediaWidth, cardSizedImage } from "@/lib/market/listing-media.server";
+import { downloadListingImage, readCachedImage, verifyMediaSig, parseRequestedMediaWidth, parseRequestedMediaFormat, cardSizedImage } from "@/lib/market/listing-media.server";
 import { storagePathsFromStored, parseListingStoragePath } from "@/lib/market/media-path";
 import { PUBLIC_LISTING_COLUMNS } from "@/lib/market/types";
 
@@ -83,7 +83,7 @@ export async function GET(
   if (!image) return notFound("download");
 
   const width = parseRequestedMediaWidth(url.searchParams.get("w"));
-  const output = width ? await cardSizedImage(match.path, image, width) : image;
+  const output = width ? await cardSizedImage(match.path, image, width, parseRequestedMediaFormat(url.searchParams.get("fm"))) : image;
 
   return new NextResponse(new Uint8Array(output.bytes), {
     status: 200,

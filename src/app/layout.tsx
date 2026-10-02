@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Suspense } from "react";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
@@ -50,11 +51,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="manifest" href="/manifest.webmanifest" />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3672700167787763"
-          crossOrigin="anonymous"
-        />
       </head>
       <body className={`${plex.className} flex min-h-screen flex-col bg-page text-ink antialiased`}>
         <GoogleAnalytics />
@@ -66,6 +62,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <ConfigBanner configured={configured} />
         {children}
         <Footer />
+        {/* AdSense loads after the page is idle so it doesn't block first paint/LCP. */}
+        <Script
+          id="adsbygoogle-init"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3672700167787763"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
         <JsonLd
           data={{
             "@context": "https://schema.org",
