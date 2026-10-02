@@ -1,6 +1,7 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import {
+  findDuplicateListing,
   formatPkMobile,
   isAllowedImageFile,
   isValidPkMobile,
@@ -110,5 +111,25 @@ describe("uploads and slugs", () => {
     const name = safeImageFilename("Photo.JPEG");
     assert.match(name, /^[0-9a-f-]{36}\.jpg$/);
     assert.equal(slugify("iPhone 13 Pro / Lahore"), "iphone-13-pro-lahore");
+  });
+});
+
+
+describe("findDuplicateListing", () => {
+  const input = { category: "phone", brand: "Nothing", model: "Phone (1)", storageGb: 128, citySlug: "lahore", area: "Canal Bank", pricePkr: 55000 };
+  const row = { id: "a", category: "phone", brand: "Nothing", model: "Phone (1)", storage_gb: 128, city_slug: "lahore", area: "Canal Bank", price_pkr: 55000, status: "active" };
+
+  it("flags the same phone re-posted in the same area at a similar price", () => {
+    assert.equal(findDuplicateListing(input, [row])?.id, "a");
+    assert.equal(findDuplicateListing({ ...input, pricePkr: 52000 }, [row])?.id, "a");
+    assert.equal(findDuplicateListing({ ...input, model: "phone  (1)" }, [row])?.id, "a");
+  });
+
+  it("allows genuinely different ads", () => {
+    assert.equal(findDuplicateListing({ ...input, storageGb: 256 }, [row]), null);
+    assert.equal(findDuplicateListing({ ...input, citySlug: "karachi" }, [row]), null);
+    assert.equal(findDuplicateListing({ ...input, pricePkr: 40000 }, [row]), null);
+    assert.equal(findDuplicateListing(input, [{ ...row, status: "sold" }]), null);
+    assert.equal(findDuplicateListing(input, [row], "a"), null);
   });
 });

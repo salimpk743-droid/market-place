@@ -184,3 +184,42 @@ export function isAccessorySlug(slug: string) {
 export function categoryLabel(slug: string) {
   return getCategory(slug).name;
 }
+
+/** Fields compared when checking whether a new ad repeats one the seller already has live. */
+export type DuplicateCandidate = {
+  id?: string | number;
+  category?: string | null;
+  brand?: string | null;
+  model?: string | null;
+  storage_gb?: number | null;
+  city_slug?: string | null;
+  area?: string | null;
+  price_pkr?: number | null;
+  status?: string | null;
+};
+
+const norm = (v: unknown) => String(v ?? "").toLowerCase().replace(/\s+/g, " ").trim();
+
+/**
+ * Returns the seller's existing active listing that the new ad duplicates, if any.
+ * Same category, brand, model, storage, city and area counts as a duplicate when the
+ * price is within 10% — re-posting the same phone at almost the same price.
+ */
+export function findDuplicateListing<T extends DuplicateCandidate>(
+  input: Pick<ListingInput, "category" | "brand" | "model" | "storageGb" | "citySlug" | "area" | "pricePkr">,
+  existing: readonly T[],
+  ignoreId?: string | number | null,
+): T | null {
+  for (const row of existing) {
+    if (ignoreId != null && String(row.id) === String(ignoreId)) continue;
+    if (row.status && row.status !== "active") continue;
+    if (canonicalCategory(row.category || PHONE_CATEGORY) !== canonicalCategory(input.category)) continue;
+    if (norm(row.brand) !== norm(input.brand) || norm(row.model) !== norm(input.model)) continue;
+    if ((row.storage_gb ?? null) !== (input.storageGb ?? null)) continue;
+    if (norm(row.city_slug) !== norm(input.citySlug) || norm(row.area) !== norm(input.area)) continue;
+    const price = Number(row.price_pkr) || 0;
+    if (price > 0 && Math.abs(price - input.pricePkr) / price > 0.1) continue;
+    return row;
+  }
+  return null;
+}

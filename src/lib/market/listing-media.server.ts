@@ -7,8 +7,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { readServerEnv } from "@/lib/supabase/server-env";
 import { LISTING_IMAGES_BUCKET, filenameFromStoragePath, parseListingStoragePath } from "./media-path";
+import { isMediaExpiryAcceptable, stableMediaExpiry } from "./media-expiry";
 
-const TTL_SECONDS = 60 * 60 * 24 * 7;
 const MAX_CACHE_BYTES = 5 * 1024 * 1024;
 
 function dataDir() {
@@ -55,7 +55,8 @@ type CachedImage = { bytes: Buffer; contentType: string };
 const memory = new Map<string, CachedImage>();
 
 export function publicMediaUrl(listingId: string, filename: string) {
-  const exp = Math.floor(Date.now() / 1000) + TTL_SECONDS;
+  // Bucketed expiry: the URL for a photo stays identical for weeks, so it can be cached and indexed.
+  const exp = stableMediaExpiry(Math.floor(Date.now() / 1000));
   const sig = signMedia(listingId, filename, exp);
   return `/api/listing-media/${encodeURIComponent(listingId)}/${encodeURIComponent(filename)}?exp=${exp}&sig=${sig}`;
 }
@@ -66,8 +67,7 @@ export function signMedia(listingId: string, filename: string, exp: number) {
 
 export function verifyMediaSig(listingId: string, filename: string, expRaw: string, sig: string) {
   const exp = Number(expRaw);
-  if (!Number.isFinite(exp) || exp < Math.floor(Date.now() / 1000) - 30) return false;
-  if (exp > Math.floor(Date.now() / 1000) + TTL_SECONDS + 60) return false;
+  if (!isMediaExpiryAcceptable(exp, Math.floor(Date.now() / 1000))) return false;
   if (!/^[a-f0-9]{32,128}$/i.test(sig || "")) return false;
   const expected = signMedia(listingId, filename, exp);
   if (expected.length !== sig.length) return false;
