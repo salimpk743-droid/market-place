@@ -7,6 +7,8 @@ import { getPhoneBrandBySlug, MODELS_BY_BRAND, cityName } from "@/lib/market/cat
 import { activePhoneCitiesByModel, activePhoneModels } from "@/lib/market/listings";
 import { searchPhoneSeoListings } from "@/lib/market/seo-facets";
 import { absoluteUrl } from "@/lib/market/site";
+import { formatCheckedDate, getModelPriceData, lowestOfficialPrice } from "@/lib/market/model-prices";
+import { ModelPricePanel } from "@/components/ModelPricePanel";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
 
 type Props = { params: Promise<{ brand: string; model: string }> };
@@ -34,9 +36,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const modelName = b ? getModel(b.slug, model) : undefined;
   if (!b || !modelName) return { title: "Model not found", robots: { index: false, follow: true } };
   const canonical = `/phones/${b.slug}/${slugify(modelName)}`;
+  const priceData = getModelPriceData(b.name, modelName);
+  // Models with a dedicated price guide keep the "used" title here so the two URLs don't compete.
+  const ownsPriceIntent = priceData && !priceData.guidePath;
+  const fromPrice = priceData ? lowestOfficialPrice(priceData) : null;
   return {
-    title: `Used ${b.name} ${modelName} Price in Pakistan`,
-    description: `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
+    title: ownsPriceIntent
+      ? priceData.variants.some((v) => v.nonPta?.length)
+        ? `${modelName} Price in Pakistan: PTA & Non-PTA`
+        : `${modelName} Price in Pakistan & Specs`
+      : `Used ${b.name} ${modelName} Price in Pakistan`,
+    description: ownsPriceIntent && fromPrice
+      ? `${modelName} price in Pakistan from Rs ${fromPrice.toLocaleString("en-PK")} (official PTA). All storage options, verified non-PTA prices, PTA tax, specs and used listings.`
+      : `Browse used ${b.name} ${modelName} phones for sale in Pakistan. Compare live seller prices, storage, condition and PTA status.`,
     alternates: { canonical: absoluteUrl(canonical) },
     robots: { index: true, follow: true },
   };
@@ -67,10 +79,16 @@ export default async function ModelPage({ params }: Props) {
   const cityLabels = cities.map((city) => cityName(city));
   const canonical = `/phones/${b.slug}/${slugify(modelName)}`;
   const minPrice = result.total ? Math.min(...result.rows.map((x) => x.price_pkr)) : null;
+  const priceData = getModelPriceData(b.name, modelName);
+  const usedPriceAnswer = "Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.";
   const faqItems = [
+    ...(priceData ? [{
+      question: `What is the ${modelName} price in Pakistan?`,
+      answer: priceData.summary,
+    }] : []),
     {
       question: `What is the ${b.name} ${modelName} used price in Pakistan?`,
-      answer: "Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.",
+      answer: usedPriceAnswer,
     },
     {
       question: `Which ${b.name} ${modelName} storage options are available?`,
@@ -97,6 +115,15 @@ export default async function ModelPage({ params }: Props) {
         title={`${b.name} ${modelName} Price in Pakistan`}
         description={`Market information for ${b.name} ${modelName}: current seller asking prices, available configurations, PTA status and live listings.`}
       />
+
+      {priceData && !priceData.guidePath ? <ModelPricePanel data={priceData} /> : null}
+      {priceData?.guidePath ? (
+        <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
+          <p className="section-kicker">New {modelName} price · last updated {formatCheckedDate(priceData.lastUpdated)}</p>
+          <p className="mt-1 text-sm leading-relaxed text-ink-soft">{priceData.summary}</p>
+          <Link href={priceData.guidePath} className="link mt-2 inline-block text-sm font-medium">Full {modelName} price table, specs and sources</Link>
+        </section>
+      ) : null}
 
       <section className="mb-7 grid gap-4 md:grid-cols-3">
         <div className="rounded-lg border border-line bg-surface p-5"><p className="section-kicker">Current asking price</p><p className="mt-1 text-xl font-semibold text-ink">{result.total ? `Rs ${Math.min(...result.rows.map((x) => x.price_pkr)).toLocaleString("en-PK")} – Rs ${Math.max(...result.rows.map((x) => x.price_pkr)).toLocaleString("en-PK")}` : "No live price yet"}</p><p className="mt-1 text-xs text-muted">{result.total ? `Based on ${result.total} active seller listing${result.total === 1 ? "" : "s"}` : "We do not invent a price without live marketplace data."}</p></div>
@@ -177,11 +204,7 @@ export default async function ModelPage({ params }: Props) {
       <section className="mt-8 border-t border-line pt-7">
         <h2 className="text-lg font-semibold">Frequently asked questions</h2>
         <div className="mt-4 space-y-4 text-sm leading-6">
-          <div><h3 className="font-semibold text-ink">What is the {b.name} {modelName} used price in Pakistan?</h3><p className="text-muted">Mobile Market shows current seller asking prices when active listings are available. The exact price depends on storage, condition, battery health, PTA status and other device details.</p></div>
-          <div><h3 className="font-semibold text-ink">Which {b.name} {modelName} storage options are available?</h3><p className="text-muted">{storageOptions.length ? `Current listings declare ${storageOptions.map((value) => `${value}GB`).join(", ")}. Availability can change with new seller inventory.` : "Storage is not currently declared in live listings."}</p></div>
-          <div><h3 className="font-semibold text-ink">What battery health is reported for used {b.name} {modelName} phones?</h3><p className="text-muted">{batteryMin !== null ? `Current listings report battery health from ${batteryMin}% to ${batteryMax}%. Battery health is seller-provided and should be checked on the device.` : "Battery health is not currently declared in live listings."}</p></div>
-          <div><h3 className="font-semibold text-ink">Is the {b.name} {modelName} PTA approved?</h3><p className="text-muted">PTA status can differ by handset and IMEI. Current seller labels include {ptaStatuses.length ? ptaStatuses.map(ptaLabel).join(", ") : "no declared status"}. Verify the actual IMEI before buying.</p></div>
-          <div><h3 className="font-semibold text-ink">Where can I find a used {b.name} {modelName} in Pakistan?</h3><p className="text-muted">{cities.length ? `Current listings are available in ${cityLabels.join(", ")}. Use the city links above to browse broader local inventory.` : "No city-level inventory is currently available."}</p></div>
+          {faqItems.map((item) => <div key={item.question}><h3 className="font-semibold text-ink">{item.question}</h3><p className="text-muted">{item.answer}</p></div>)}
         </div>
       </section>
 
