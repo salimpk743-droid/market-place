@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
 import { LegalPage } from "@/components/LegalPage";
+import { AuthorBox } from "@/components/GuideMeta";
 import { placeGuideBySlug, placeGuides } from "@/lib/market/place-guides";
 import { absoluteUrl } from "@/lib/market/site";
 
@@ -92,6 +93,7 @@ export default async function PlaceGuidePage({
             </li>
           ))}
         </ul>
+        <AuthorBox reviewed={guide.updated} sourcesNote="Shop names and addresses are copied from the distributor, brand or news pages listed above; we have not visited every counter." />
       </LegalPage>
     </>
   );

@@ -39,7 +39,7 @@ export function ModelPricePanel({ data, headingLevel = 2 }: { data: ModelPriceDa
         <table className="w-full min-w-[520px] border-collapse text-left text-sm">
           <thead>
             <tr className="border-b border-line text-xs uppercase tracking-wide text-muted">
-              <th scope="col" className="py-2 pr-3">Storage</th>
+              <th scope="col" className="py-2 pr-3">Version</th>
               <th scope="col" className="py-2 pr-3">Official price (PTA approved)</th>
               <th scope="col" className="py-2 pr-3">Retailer price, PTA approved</th>
               <th scope="col" className="py-2 pr-3">Retailer price, non-PTA</th>
@@ -58,7 +58,7 @@ export function ModelPricePanel({ data, headingLevel = 2 }: { data: ModelPriceDa
         </table>
       </div>
       <p className="mt-2 text-xs text-muted">
-        “—” means we could not find a verified, dated price for that version. Official prices come from Apple&apos;s Pakistan distributors or authorised resellers; retailer prices
+        “—” means we could not find a verified, dated price for that version. Official prices come from the brand&apos;s Pakistan website, distributors or authorised resellers; retailer prices
         are what one named shop listed on the date shown, and they change often. These are new-phone prices, not used prices; used listings appear further down this page.
       </p>
 

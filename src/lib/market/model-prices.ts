@@ -19,7 +19,7 @@ export type PricePoint = { pkr: number; source: string; note?: string };
 
 export type VariantPrice = {
   storage: string;
-  /** Official PTA-approved price from Apple's Pakistan distributors / authorised resellers. */
+  /** Official PTA-approved price from the brand's Pakistan website, distributors or authorised resellers. */
   official?: PricePoint[];
   /** PTA-approved retail price at a named online retailer. */
   ptaRetail?: PricePoint[];
@@ -41,6 +41,8 @@ export type ModelPriceData = {
   notes: string[];
   sources: PriceSource[];
 };
+
+import { ANDROID_MODEL_PRICES } from "./model-prices-android";
 
 const CHECKED = "2026-10-02";
 
@@ -336,6 +338,7 @@ export const MODEL_PRICES: ModelPriceData[] = [
     ],
     sources: [S.iselect18, S.mercantile18, S.mega, S.apple18Pro, S.apple18ProSpecs],
   },
+  ...ANDROID_MODEL_PRICES,
 ];
 
 const byKey = new Map(MODEL_PRICES.map((m) => [`${m.brand}|${m.model}`.toLowerCase(), m]));
@@ -352,6 +355,22 @@ export function priceSourceById(data: ModelPriceData, id: string) {
 export function lowestOfficialPrice(data: ModelPriceData) {
   const all = data.variants.flatMap((v) => (v.official || []).map((x) => x.pkr));
   return all.length ? Math.min(...all) : null;
+}
+
+/**
+ * Lowest verified price for a new, PTA-approved unit (official or PTA-approved retail),
+ * used for budget pages. Non-PTA prices are excluded.
+ */
+export function lowestPtaPrice(data: ModelPriceData) {
+  let best: { pkr: number; storage: string; source: string; kind: "official" | "ptaRetail" } | null = null;
+  for (const v of data.variants) {
+    for (const [kind, points] of [["official", v.official], ["ptaRetail", v.ptaRetail]] as const) {
+      for (const pt of points || []) {
+        if (!best || pt.pkr < best.pkr) best = { pkr: pt.pkr, storage: v.storage, source: pt.source, kind };
+      }
+    }
+  }
+  return best;
 }
 
 export function highestOfficialPrice(data: ModelPriceData) {

@@ -5,7 +5,7 @@ import { absoluteUrl } from "@/lib/market/site";
 export const metadata: Metadata = {
   title: "Mobile market and used phone guides",
   description:
-    "Question guides for Pakistan: best mobile markets and shop names in Karachi, Lahore, Islamabad and Rawalpindi, authorized Apple and Samsung dealers, PTA, battery health and scams.",
+    "Pakistan phone guides: mobile markets in Karachi, Lahore, Islamabad, Rawalpindi, Multan, Faisalabad, Peshawar and Hyderabad, best phones by budget, PTA and scams.",
   alternates: { canonical: absoluteUrl("/guides") },
 };
 
@@ -15,6 +15,13 @@ const GUIDES = [
   { href: "/guides/best-mobile-market-in-lahore", title: "What is the best mobile market in Lahore?", body: "Hafeez Centre and Hall Road, with shop numbers from public lists." },
   { href: "/guides/best-mobile-market-in-islamabad", title: "What is the best mobile market in Islamabad?", body: "Blue Area, G-9, Centaurus and F-6, with shop names and shop numbers." },
   { href: "/guides/best-mobile-market-in-rawalpindi", title: "What is the best mobile market in Rawalpindi?", body: "Singapore Plaza and the other Saddar counters Samsung names." },
+  { href: "/guides/best-mobile-market-in-multan", title: "What is the best mobile market in Multan?", body: "Mall Plaza and Hussain Agahi, with Multan counters a distributor names." },
+  { href: "/guides/best-mobile-market-in-faisalabad", title: "What is the best mobile market in Faisalabad?", body: "Katchery Bazaar by the Clock Tower and D Ground, with named counters." },
+  { href: "/guides/best-mobile-market-in-peshawar", title: "What is the best mobile market in Peshawar?", body: "Bilour Plaza and Karzai Plaza, with named counters." },
+  { href: "/guides/best-mobile-market-in-hyderabad", title: "What is the best mobile market in Hyderabad?", body: "The Chandni mobile market in Saddar, a Samsung store, and the 2025 Customs raid." },
+  { href: "/best-mobile-phones/under-30000", title: "Best phones under Rs 30,000", body: "New PTA-approved phones with verified, dated prices." },
+  { href: "/best-mobile-phones/under-50000", title: "Best phones under Rs 50,000", body: "New PTA-approved phones from Rs 30,000 to Rs 50,000." },
+  { href: "/best-mobile-phones/under-100000", title: "Best phones under Rs 100,000", body: "New PTA-approved phones from Rs 50,000 to Rs 100,000." },
   { href: "/guides/authorized-mobile-dealers-in-pakistan", title: "Who are the authorized Apple dealers in Pakistan?", body: "No Apple Store. How to check Apple, Samsung and other brand dealers." },
   { href: "/guides/inspect-used-phone", title: "Inspect a used phone before you pay", body: "Screen, cameras, IMEI, ports, and a meeting checklist." },
   { href: "/guides/pta-status", title: "Non-PTA meaning: PTA approved vs non-PTA", body: "PTA full form, the 60-day rule, JV and CPID, *8484# and how to check an IMEI." },

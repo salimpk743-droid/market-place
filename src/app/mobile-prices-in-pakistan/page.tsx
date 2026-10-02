@@ -100,6 +100,16 @@ export default async function MobilePricesPakistanPage() {
         </section>
 
         <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
+          <h2 className="text-lg font-semibold text-ink">New phones by budget</h2>
+          <p className="mt-1 text-sm text-muted">New, PTA-approved phones with verified, dated prices from official brand sites and named retailers.</p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-3">
+            <Link className="link" href="/best-mobile-phones/under-30000">Best phones under Rs 30,000</Link>
+            <Link className="link" href="/best-mobile-phones/under-50000">Best phones under Rs 50,000</Link>
+            <Link className="link" href="/best-mobile-phones/under-100000">Best phones under Rs 100,000</Link>
+          </div>
+        </section>
+
+        <section className="rounded-lg border border-line bg-surface p-5 sm:p-6">
           <h2 className="text-lg font-semibold text-ink">Used phone prices by budget</h2>
           <p className="mt-1 text-sm text-muted">Compare current seller asking prices at common Pakistan mobile budgets.</p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
