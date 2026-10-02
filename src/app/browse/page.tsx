@@ -17,7 +17,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     title: filtered ? "Filtered listings" : "Browse phones and accessories",
     description: `Browse used ${cat} for sale across Pakistan.`,
     alternates: { canonical: absoluteUrl("/browse") },
-    robots: filtered ? { index: false, follow: true } : { index: true, follow: true },
+    // /browse is the all-items search UI; /phones, /accessories and /used-mobile-phones are the indexable hubs.
+    robots: { index: false, follow: true },
   };
 }
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Seller Terms",
-  description: "Rules for posting and managing ads on Mobile Market.",
+  description: "Rules for sellers on Mobile Market: what you may post, accurate PTA status and prices, photos, duplicate ads, and how ads are edited, sold or removed.",
   alternates: { canonical: absoluteUrl("/seller-terms") },
 };
 

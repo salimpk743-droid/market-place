@@ -4,7 +4,7 @@ import { SUPPORT_EMAIL, absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
   title: "Account deletion",
-  description: "How to delete a Mobile Market account, listings and photos.",
+  description: "How to delete your Mobile Market account, your listings and your photos, what happens to your data afterwards, and how to contact support.",
   alternates: { canonical: absoluteUrl("/delete-account") },
 };
 

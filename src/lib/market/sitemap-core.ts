@@ -25,10 +25,32 @@ export const SITEMAP_CORE_PATHS = [
   "/guides/battery-health",
   "/guides/common-scams",
   "/about",
+  "/contact",
   "/buyer-safety",
   "/privacy",
   "/terms",
   "/seller-terms",
   "/rules",
   "/prohibited",
+  "/return-policy",
 ];
+
+/**
+ * Last real content change for core pages (yyyy-mm-dd). Only pages whose update date
+ * is known are listed; the rest are sent without lastmod rather than a fake date.
+ */
+export const SITEMAP_CORE_LASTMOD: Record<string, string> = {
+  "/guides/pta-status": "2026-10-02",
+  "/guides/pta-tax": "2026-10-02",
+  "/iphone-18-price-in-pakistan": "2026-10-02",
+  "/iphone-18-pro-price-in-pakistan": "2026-10-02",
+  "/iphone-18-pro-max-price-in-pakistan": "2026-10-02",
+  "/guides/best-mobile-markets-in-pakistan": "2026-10-01",
+  "/guides/best-mobile-market-in-karachi": "2026-10-01",
+  "/guides/best-mobile-market-in-lahore": "2026-10-01",
+  "/guides/best-mobile-market-in-islamabad": "2026-10-01",
+  "/guides/best-mobile-market-in-rawalpindi": "2026-10-01",
+  "/guides/authorized-mobile-dealers-in-pakistan": "2026-10-01",
+  "/about": "2026-10-02",
+  "/contact": "2026-10-02",
+};
