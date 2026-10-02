@@ -4,6 +4,7 @@ import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
 import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
+import { MODEL_PRICES } from "@/lib/market/model-prices";
 
 function slugify(value: string) {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -24,6 +25,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Only expose city landing pages in the sitemap when they have live phone inventory.
   for (const city of CITIES) {
     if ((cityCounts[city.slug] || 0) > 0) catalogPaths.add(`/used-phones/${city.slug}`);
+  }
+
+  // Model pages with verified, dated price data have useful content even without listings.
+  for (const item of MODEL_PRICES) {
+    const brand = BRANDS.find((b) => b.name === item.brand);
+    if (brand && (MODELS_BY_BRAND[brand.name] || []).includes(item.model)) catalogPaths.add(`/phones/${brand.slug}/${slugify(item.model)}`);
   }
 
   catalogPaths.add("/pta-approved-phones");
