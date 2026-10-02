@@ -8,7 +8,7 @@ import { ListingGallery } from "@/components/ListingGallery";
 import { JsonLd } from "@/components/JsonLd";
 import { ListingGrid, Page, SectionHead, StatusBadge } from "@/components/ui";
 import { cityLabel, brandSlug, categoryPath, getCategory, isPhoneCategory, ptaMeta } from "@/lib/market/catalog";
-import { formatPkr, listingPath, listingSlug, listingTitle, timeAgo } from "@/lib/market/format";
+import { formatPkr, listingPath, listingSeoTitle, listingSlug, listingTitle, timeAgo } from "@/lib/market/format";
 import { getListingById, getListingImages, getRelatedListings, isOwnListing } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 import { OwnerTools } from "@/components/OwnerTools";
@@ -32,21 +32,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Listing not found", robots: { index: false } };
   }
   const title = listingTitle(listing);
+  const seoTitle = listingSeoTitle(listing);
   const cat = getCategory(listing.category);
   const pta = ptaMeta(listing.pta_status);
   const ptaBit = pta ? ` Seller-declared ${pta.label}.` : "";
-  const desc = `${title} (${cat.name}) in ${cityLabel(listing.city_slug, listing.area)} — ${formatPkr(listing.price_pkr)}.${ptaBit}`;
+  const extras = [
+    listing.condition ? `Condition ${listing.condition}` : null,
+    listing.battery_health ? `battery ${listing.battery_health}%` : null,
+  ].filter(Boolean).join(", ");
+  const desc = `${title} (${cat.name}) for sale in ${cityLabel(listing.city_slug, listing.area)} — ${formatPkr(listing.price_pkr)}.${ptaBit}${extras ? ` ${extras}.` : ""} Contact the seller on Mobile Market.`;
   const index = listing.status === "active";
   const image = listing.image_url
     ? { url: absoluteUrl(listing.image_url), alt: title }
     : { url: "/og.jpg", width: 1200, height: 630, alt: title };
   return {
-    title,
+    title: { absolute: seoTitle },
     description: desc,
     alternates: { canonical: absoluteUrl(listingPath(listing)) },
     robots: index ? { index: true, follow: true } : { index: false, follow: true },
     openGraph: {
-      title,
+      title: seoTitle,
       description: desc,
       url: absoluteUrl(listingPath(listing)),
       type: "website",
@@ -109,7 +114,7 @@ export default async function ListingPage({ params }: Props) {
       "@type": "Offer",
       priceCurrency: "PKR",
       price: listing.price_pkr,
-      availability: "https://schema.org/InStock",
+      availability: sold ? "https://schema.org/SoldOut" : "https://schema.org/InStock",
       url: absoluteUrl(listingPath(listing)),
       itemCondition: "https://schema.org/UsedCondition",
     },

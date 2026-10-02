@@ -1,4 +1,4 @@
-import { ptaMeta } from "./catalog";
+import { cityName, isPhoneCategory, ptaMeta } from "./catalog";
 import type { PublicListing } from "./types";
 
 export function formatPkr(n: number) {
@@ -10,6 +10,26 @@ export function listingTitle(l: Pick<PublicListing, "brand" | "model" | "storage
   const model = l.model || "";
   const name = model.toLowerCase().startsWith(brand.toLowerCase()) ? model : `${brand} ${model}`.trim();
   return l.storage_gb ? `${name} (${l.storage_gb} GB)` : name;
+}
+
+const PTA_TITLE: Record<string, string> = { official: "PTA", "non-pta": "Non-PTA", cpid: "CPID", jv: "JV" };
+
+/**
+ * Search-result title for a listing, e.g.
+ * "Used Apple iPhone 13 Pro Max 256GB, PTA, Islamabad – Rs 120,000".
+ */
+export function listingSeoTitle(
+  l: Pick<PublicListing, "brand" | "model" | "storage_gb" | "price_pkr" | "city_slug" | "pta_status" | "condition" | "category">,
+) {
+  const brand = l.brand || "";
+  const model = l.model || "";
+  const name = model.toLowerCase().startsWith(brand.toLowerCase()) ? model : `${brand} ${model}`.trim();
+  const phone = isPhoneCategory(l.category);
+  const storage = l.storage_gb ? ` ${l.storage_gb >= 1024 && l.storage_gb % 1024 === 0 ? `${l.storage_gb / 1024}TB` : `${l.storage_gb}GB`}` : "";
+  const prefix = phone ? (l.condition === "Box pack" ? "Box-pack " : "Used ") : "";
+  const pta = phone && l.pta_status ? PTA_TITLE[l.pta_status] : undefined;
+  const price = `Rs ${(Number(l.price_pkr) || 0).toLocaleString("en-PK")}`;
+  return `${prefix}${name}${storage}${pta ? `, ${pta}` : ""}, ${cityName(l.city_slug)} – ${price}`;
 }
 
 export function listingSlug(l: Pick<PublicListing, "brand" | "model" | "id" | "city_slug" | "slug">) {

@@ -15,7 +15,7 @@ import {
   isPhoneCategory,
   modelsForCategory,
 } from "@/lib/market/catalog";
-import { MAX_PHOTOS, MIN_PHONE_PRICE, MIN_PRICE, isAllowedImageFile, parseListingForm, safeImageFilename, slugify } from "@/lib/market/validation";
+import { MAX_PHOTOS, MIN_PHONE_PRICE, MIN_PRICE, findDuplicateListing, isAllowedImageFile, parseListingForm, safeImageFilename, slugify } from "@/lib/market/validation";
 import { serializeStoragePaths, storagePathsFromStored } from "@/lib/market/media-path";
 import { createBrowserSupabase } from "@/lib/supabase/client";
 import type { PublicListing } from "@/lib/market/types";
@@ -97,6 +97,7 @@ export function SellForm({ existing, contactPhone = "" }: { existing?: PublicLis
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (busy) return; // ignore double clicks / repeated Enter while a save is running
     setError("");
     const form = new FormData(e.currentTarget);
     const parsed = parseListingForm(form);
@@ -119,6 +120,20 @@ export function SellForm({ existing, contactPhone = "" }: { existing?: PublicLis
     const accessToken = sessionData.session?.access_token;
     setBusy(true);
     try {
+      if (!existing) {
+        // Block re-posting the same phone: the seller's own active ads are checked first.
+        const { data: mine } = await supabase
+          .from("listings")
+          .select("id, category, brand, model, storage_gb, city_slug, area, price_pkr, status")
+          .eq("seller_id", auth.user.id)
+          .eq("status", "active")
+          .limit(200);
+        const dup = findDuplicateListing(parsed.data, mine || []);
+        if (dup) {
+          setError("You already have an active ad for this item in the same area at a similar price. Open My ads and edit that ad instead of posting it again.");
+          return;
+        }
+      }
       const slug = slugify(`${parsed.data.category} ${parsed.data.brand} ${parsed.data.model} ${parsed.data.citySlug}`);
       const payload = {
         category: parsed.data.category,
