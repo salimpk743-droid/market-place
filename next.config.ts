@@ -53,6 +53,9 @@ const nextConfig: NextConfig = {
       },
       // Legacy home URL discovered by Google. Keep the canonical homepage at `/`.
       { source: "/home", destination: "/", permanent: true },
+      // Legacy URLs from the original static site.
+      { source: "/index.html", destination: "/", permanent: true },
+      { source: "/sell.html", destination: "/sell", permanent: true },
       { source: "/accessories/power-banks", destination: "/accessories/power-bank", permanent: true },
       { source: "/accessories/chargers", destination: "/accessories/charger-cable", permanent: true },
       { source: "/accessories/covers", destination: "/accessories/cover-case", permanent: true },

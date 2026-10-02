@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Marketplace Rules",
-  description: "Community rules for Mobile Market buyers and sellers.",
+  description: "Community rules for Mobile Market buyers and sellers: honest ads, real photos and prices, no duplicate or fake listings, and how to report a problem.",
   alternates: { canonical: absoluteUrl("/rules") },
 };
 

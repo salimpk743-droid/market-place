@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Terms of Use",
-  description: "Terms for using the Mobile Market classifieds marketplace.",
+  description: "Terms for using Mobile Market, a used phone and accessory classifieds site in Pakistan: accounts, ads, direct buyer-seller deals and liability.",
   alternates: { canonical: absoluteUrl("/terms") },
 };
 

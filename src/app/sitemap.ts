@@ -3,7 +3,7 @@ import { ACCESSORY_SLUGS, BRANDS, CITIES, MODELS_BY_BRAND, canonicalCategory, ge
 import { countBy, recentListings } from "@/lib/market/listings";
 import { listingPath } from "@/lib/market/format";
 import { getSiteUrl } from "@/lib/market/site";
-import { SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
+import { SITEMAP_CORE_LASTMOD, SITEMAP_CORE_PATHS } from "@/lib/market/sitemap-core";
 import { MODEL_PRICES } from "@/lib/market/model-prices";
 
 function slugify(value: string) {
@@ -15,6 +15,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [recent, cityCounts] = await Promise.all([recentListings(500), countBy("city_slug", "phone")]);
 
   const catalogPaths = new Set<string>();
+  // Newest listing change per catalog page, used as that page's lastmod.
+  const pathLastmod = new Map<string, string>();
+  const touch = (path: string, iso: string | null | undefined) => {
+    if (!iso) return;
+    const prev = pathLastmod.get(path);
+    if (!prev || prev < iso) pathLastmod.set(path, iso);
+  };
 
   for (const brand of BRANDS) {
     catalogPaths.add(`/phones/${brand.slug}`);
@@ -42,11 +49,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     if (listing.category && canonicalCategory(listing.category) !== "phone") continue;
 
     catalogPaths.add(`/used-phones/${listing.city_slug}/${brand.slug}`);
+    const changed = listing.updated_at || listing.created_at;
+    touch(`/used-phones/${listing.city_slug}/${brand.slug}`, changed);
+    touch(`/used-phones/${listing.city_slug}`, changed);
+    touch(`/phones/${brand.slug}`, changed);
 
     // Model URLs are indexable only when live inventory exists. Keep them out of
     // the sitemap when they are merely catalog definitions with no listings.
     if (listing.model && (MODELS_BY_BRAND[brand.name] || []).some((model) => slugify(model) === slugify(listing.model))) {
       catalogPaths.add(`/phones/${brand.slug}/${slugify(listing.model)}`);
+      touch(`/phones/${brand.slug}/${slugify(listing.model)}`, changed);
     }
   }
 
@@ -60,11 +72,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...SITEMAP_CORE_PATHS.map((path) => ({
       url: `${base}${path || "/"}`,
+      ...(SITEMAP_CORE_LASTMOD[path] ? { lastModified: SITEMAP_CORE_LASTMOD[path] } : {}),
       changeFrequency: "weekly" as const,
       priority: path === "" ? 1 : 0.6,
     })),
     ...Array.from(catalogPaths).map((path) => ({
       url: `${base}${path}`,
+      ...(pathLastmod.get(path) ? { lastModified: pathLastmod.get(path) } : {}),
       changeFrequency: "daily" as const,
       priority: path.startsWith("/phones/") && path.split("/").length === 4 ? 0.6 : 0.5,
     })),

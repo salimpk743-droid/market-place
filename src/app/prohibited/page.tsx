@@ -4,7 +4,7 @@ import { absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
   title: "Prohibited listings",
-  description: "What you may not list on Mobile Market.",
+  description: "Items you may not list on Mobile Market, including stolen or blocked phones, fake or replica devices, and anything illegal to sell in Pakistan.",
   alternates: { canonical: absoluteUrl("/prohibited") },
 };
 

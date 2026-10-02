@@ -4,7 +4,7 @@ import { SUPPORT_EMAIL, absoluteUrl } from "@/lib/market/site";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
-  description: "How Mobile Market collects, uses and deletes personal information.",
+  description: "How Mobile Market collects, uses, stores and deletes personal information such as your account, listings, photos and contact number, and your choices.",
   alternates: { canonical: absoluteUrl("/privacy") },
 };
 

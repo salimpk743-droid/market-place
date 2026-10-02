@@ -72,6 +72,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             "@type": "Organization",
             name: BRAND,
             url: getSiteUrl(),
+            logo: `${getSiteUrl()}/icons/icon-512.png`,
             email: SUPPORT_EMAIL,
           }}
         />
