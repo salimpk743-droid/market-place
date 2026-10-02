@@ -90,12 +90,12 @@ export function filenameFromStoragePath(path: string): string | null {
   return parseListingStoragePath(path)?.filename || null;
 }
 
-/** Append a card-size hint. Does not change HMAC. Invalid/duplicate values are ignored. */
+/** Append a card-size hint (resized WebP). Does not change HMAC. Invalid/duplicate values are ignored. */
 export function withMediaWidth(src: string | null | undefined, w: 400 | 800): string | undefined {
   if (!src) return undefined;
   if (!src.includes("/api/listing-media/")) return src;
   if (/[?&]w=\d+/.test(src)) return src;
-  return `${src}${src.includes("?") ? "&" : "?"}w=${w}`;
+  return `${src}${src.includes("?") ? "&" : "?"}w=${w}&fm=webp`;
 }
 
 function uniquePaths(paths: (string | null)[]) {

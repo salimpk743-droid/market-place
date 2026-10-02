@@ -111,22 +111,31 @@ export function writeCachedImage(path: string, bytes: Buffer, contentType: strin
   }
 }
 
+export type MediaFormat = "jpeg" | "webp";
+
+export function parseRequestedMediaFormat(raw: string | null): MediaFormat {
+  return raw === "webp" ? "webp" : "jpeg";
+}
+
+const variantKey = (w: 400 | 800, format: MediaFormat) => (format === "webp" ? `w${w}webp` : `w${w}`);
+const mime = (format: MediaFormat) => (format === "webp" ? "image/webp" : "image/jpeg");
+
 export function parseRequestedMediaWidth(raw: string | null): 400 | 800 | null {
   if (raw === "400") return 400;
   if (raw === "800") return 800;
   return null;
 }
 
-function readCachedVariant(path: string, w: 400 | 800): CachedImage | null {
+function readCachedVariant(path: string, w: 400 | 800, format: MediaFormat): CachedImage | null {
   const parsed = parseListingStoragePath(path);
   if (!parsed) return null;
-  const key = cacheKey(parsed.path, `w${w}`);
+  const key = cacheKey(parsed.path, variantKey(w, format));
   const mem = memory.get(key);
   if (mem) return mem;
   try {
     const base = join(cacheDir(), key);
     const bytes = readFileSync(base);
-    const cached = { bytes, contentType: "image/jpeg" };
+    const cached = { bytes, contentType: mime(format) };
     memory.set(key, cached);
     return cached;
   } catch {
@@ -134,45 +143,44 @@ function readCachedVariant(path: string, w: 400 | 800): CachedImage | null {
   }
 }
 
-function writeCachedVariant(path: string, w: 400 | 800, bytes: Buffer) {
+function writeCachedVariant(path: string, w: 400 | 800, format: MediaFormat, bytes: Buffer) {
   const parsed = parseListingStoragePath(path);
   if (!parsed || !bytes.length || bytes.length > MAX_CACHE_BYTES) return;
-  const key = cacheKey(parsed.path, `w${w}`);
-  const cached = { bytes, contentType: "image/jpeg" as const };
+  const key = cacheKey(parsed.path, variantKey(w, format));
+  const cached = { bytes, contentType: mime(format) };
   memory.set(key, cached);
   try {
     const base = join(cacheDir(), key);
     writeFileSync(base, bytes);
-    writeFileSync(`${base}.type`, "image/jpeg");
+    writeFileSync(`${base}.type`, mime(format));
   } catch {
     // Memory cache is enough for this process.
   }
 }
 
-export async function jpegFitLongEdge(bytes: Buffer, w: 400 | 800): Promise<CachedImage | null> {
+export async function jpegFitLongEdge(bytes: Buffer, w: 400 | 800, format: MediaFormat = "jpeg"): Promise<CachedImage | null> {
   try {
     const sharp = (await import("sharp")).default;
     const image = sharp(bytes, { failOn: "none" }).rotate();
     const meta = await image.metadata();
     const long = Math.max(meta.width || 0, meta.height || 0);
-    if (!long || long <= w) return null;
-    const out = await image
-      .resize({ width: w, height: w, fit: "inside", withoutEnlargement: true })
-      .jpeg({ quality: 78 })
-      .toBuffer();
+    // Small originals are only re-encoded when WebP was asked for (smaller file, same size).
+    if (!long || (long <= w && format === "jpeg")) return null;
+    const resized = image.resize({ width: w, height: w, fit: "inside", withoutEnlargement: true });
+    const out = await (format === "webp" ? resized.webp({ quality: 75 }) : resized.jpeg({ quality: 78 })).toBuffer();
     if (!out.length) return null;
-    return { bytes: out, contentType: "image/jpeg" };
+    return { bytes: out, contentType: mime(format) };
   } catch {
     return null;
   }
 }
 
-export async function cardSizedImage(path: string, original: CachedImage, w: 400 | 800): Promise<CachedImage> {
-  const cached = readCachedVariant(path, w);
+export async function cardSizedImage(path: string, original: CachedImage, w: 400 | 800, format: MediaFormat = "jpeg"): Promise<CachedImage> {
+  const cached = readCachedVariant(path, w, format);
   if (cached) return cached;
-  const resized = await jpegFitLongEdge(original.bytes, w);
+  const resized = await jpegFitLongEdge(original.bytes, w, format);
   if (!resized) return original;
-  writeCachedVariant(path, w, resized.bytes);
+  writeCachedVariant(path, w, format, resized.bytes);
   return resized;
 }
 

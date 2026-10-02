@@ -46,7 +46,7 @@ describe("listing storage paths", () => {
 
   it("appends card width without changing HMAC params", () => {
     const signed = `/api/listing-media/${listing}/abc.jpg?exp=1&sig=abc`;
-    assert.equal(withMediaWidth(signed, 800), `${signed}&w=800`);
+    assert.equal(withMediaWidth(signed, 800), `${signed}&w=800&fm=webp`);
     assert.equal(withMediaWidth(signed, 800)?.includes("sig=abc"), true);
     assert.equal(withMediaWidth("/cover.jpg", 800), "/cover.jpg");
     assert.equal(withMediaWidth(undefined, 800), undefined);
