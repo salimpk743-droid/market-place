@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
+import { REMOVED_LISTING_FILTER, isRemovedListing } from "./listing-blocklist";
 import { PAGE_SIZE } from "./site";
 import { stripPrivateFields } from "./public-fields";
 import { ACCESSORY_SLUGS, inferCategory, canonicalCategory, categoryFilterValues, PHONE_CATEGORY, getBrandByName, modelsForBrand } from "./catalog";
@@ -114,6 +115,7 @@ export async function searchListings(filters: ListingFilters) {
       .from("listings")
       .select(select, { count: "exact" })
       .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
       .order("created_at", { ascending: false })
       .range(from, to);
     return applyListingFilters(base, resolved, allowCategory);
@@ -169,6 +171,7 @@ export async function getOwnedListingById(id: string) {
 }
 
 export async function getListingById(id: string) {
+  if (isRemovedListing(id)) return null;
   const supabase = await createServerSupabase();
   if (!supabase) return null;
   let { data, error } = await supabase.from("listings").select(PUBLIC_SELECT).eq("id", id).maybeSingle();
@@ -190,6 +193,7 @@ export async function getOwnListingContact(id: string) {
 }
 
 export async function getListingImages(listingId: string): Promise<ListingImage[]> {
+  if (isRemovedListing(listingId)) return [];
   const supabase = await createServerSupabase();
   if (!supabase) return [];
   const { data, error } = await supabase.from("listings").select("id, image_url, status").eq("id", listingId).maybeSingle();
@@ -217,6 +221,7 @@ export async function getRelatedListings(listing: Pick<PublicListing, "id" | "br
     .from("listings")
     .select(PUBLIC_SELECT)
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("brand", listing.brand)
     .neq("id", listing.id)
     .order("created_at", { ascending: false })
@@ -228,6 +233,7 @@ export async function getRelatedListings(listing: Pick<PublicListing, "id" | "br
       .from("listings")
       .select(PUBLIC_SELECT_LEGACY)
       .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
       .eq("brand", listing.brand)
       .neq("id", listing.id)
       .order("created_at", { ascending: false })
@@ -244,6 +250,7 @@ export async function recentListings(limit = 12) {
     .from("listings")
     .select(PUBLIC_SELECT)
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .order("created_at", { ascending: false })
     .limit(limit);
   if (error && isMissingCategoryColumn(error.message)) {
@@ -251,6 +258,7 @@ export async function recentListings(limit = 12) {
       .from("listings")
       .select(PUBLIC_SELECT_LEGACY)
       .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
       .order("created_at", { ascending: false })
       .limit(limit);
     data = retry.data;
@@ -268,6 +276,7 @@ export async function featuredListings(limit = 6) {
     .from("listings")
     .select(PUBLIC_SELECT)
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("featured", true)
     .order("created_at", { ascending: false })
     .limit(limit);
@@ -276,6 +285,7 @@ export async function featuredListings(limit = 6) {
       .from("listings")
       .select(PUBLIC_SELECT_LEGACY)
       .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
       .eq("featured", true)
       .order("created_at", { ascending: false })
       .limit(limit);
@@ -294,6 +304,7 @@ export async function activePhoneModels(limit = 12, minimumListings = 2) {
     .from("listings")
     .select("brand,model")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
 
@@ -326,6 +337,7 @@ export async function activePhoneModelsByMaxPrice(maxPrice: number, limit = 12, 
     .from("listings")
     .select("brand,model")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .lte("price_pkr", maxPrice)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -361,6 +373,7 @@ export async function activePhoneBrandsByCity(city: string, limit = 8, minimumLi
     .from("listings")
     .select("brand")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("city_slug", city)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -396,6 +409,7 @@ export async function activePhoneBrandsByPta(status: string, limit = 10, minimum
     .from("listings")
     .select("brand")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("pta_status", status)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -428,6 +442,7 @@ export async function activePhoneModelsByPta(status: string, limit = 12, minimum
     .from("listings")
     .select("brand,model")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("pta_status", status)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -461,6 +476,7 @@ export async function activePhoneCitiesByPta(status: string, limit = 10, minimum
     .from("listings")
     .select("city_slug")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("pta_status", status)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -494,6 +510,7 @@ export async function activePhoneCitiesByBrand(brand: string, limit = 10, minimu
     .from("listings")
     .select("city_slug")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("brand", catalogBrand.name)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
     .limit(5000);
@@ -527,6 +544,7 @@ export async function activePhoneCitiesByModel(brand: string, model: string, lim
     .from("listings")
     .select("city_slug")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("brand", catalogBrand.name)
     .eq("model", model)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
@@ -561,6 +579,7 @@ export async function activePhoneModelsByCity(city: string, brand: string, limit
     .from("listings")
     .select("brand,model")
     .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
     .eq("city_slug", city)
     .eq("brand", catalogBrand.name)
     .in("category", categoryFilterValues(PHONE_CATEGORY))
@@ -588,7 +607,8 @@ export async function activePhoneModelsByCity(city: string, brand: string, limit
 export async function countBy(column: "brand" | "city_slug" | "pta_status" | "category", category?: string) {
   const supabase = await createServerSupabase();
   if (!supabase) return {} as Record<string, number>;
-  let query = supabase.from("listings").select(column).eq("status", "active");
+  let query = supabase.from("listings").select(column).eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER);
   if (category && column !== "category") {
     const values = categoryFilterValues(category);
     query = values.length > 1 ? query.in("category", values) : query.eq("category", values[0]);

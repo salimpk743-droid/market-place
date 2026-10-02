@@ -1,4 +1,5 @@
 import { createServerSupabase } from "@/lib/supabase/server";
+import { REMOVED_LISTING_FILTER } from "./listing-blocklist";
 import { stripPrivateFields } from "@/lib/market/public-fields";
 import { categoryFilterValues } from "@/lib/market/catalog";
 import { PUBLIC_LISTING_COLUMNS, type PublicListing } from "@/lib/market/types";
@@ -44,6 +45,7 @@ export async function searchPhoneSeoListings({
   const applyFilters = (base: any) => {
     let query = base
       .eq("status", "active")
+      .not("id", "in", REMOVED_LISTING_FILTER)
       .order("created_at", { ascending: false })
       .limit(limit);
     if (brand) query = query.eq("brand", brand);

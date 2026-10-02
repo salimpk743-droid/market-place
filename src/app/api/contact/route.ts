@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isRemovedListing } from "@/lib/market/listing-blocklist";
 import { createServerSupabase } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -10,6 +11,9 @@ export async function POST(request: Request) {
   const listingId = String(body?.listingId || "");
   if (!listingId || listingId.length > 80) {
     return NextResponse.json({ error: "Invalid listing." }, { status: 400 });
+  }
+  if (isRemovedListing(listingId)) {
+    return NextResponse.json({ error: "This listing is not available." }, { status: 404 });
   }
   const { data, error } = await supabase.rpc("reveal_listing_contact", { p_listing_id: listingId });
   if (error) {
