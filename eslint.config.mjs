@@ -15,6 +15,8 @@ export default tseslint.config(
       ".nitro/**",
       "node_modules/**",
       "src/routeTree.gen.ts",
+      ".next/**",
+      "next-env.d.ts",
     ],
   },
   js.configs.recommended,
@@ -40,6 +42,7 @@ export default tseslint.config(
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
       "@typescript-eslint/no-explicit-any": "off",
+      "prefer-const": ["error", { destructuring: "all" }],
     },
   },
   // Disable rules that conflict with Prettier formatting.
