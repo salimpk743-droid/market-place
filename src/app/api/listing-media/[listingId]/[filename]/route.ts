@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isRemovedListing } from "@/lib/market/listing-blocklist";
 import { createClient } from "@supabase/supabase-js";
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { createServerSupabase } from "@/lib/supabase/server";
@@ -34,6 +35,7 @@ export async function GET(
   if (!listingId || listingId.length > 80 || !FILENAME_RE.test(file)) {
     return notFound("filename");
   }
+  if (isRemovedListing(listingId)) return notFound("listing");
 
   const admin = createAdminSupabase();
   const sessionClient = await createServerSupabase();
