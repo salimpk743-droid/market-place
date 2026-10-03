@@ -20,7 +20,7 @@ export async function generateMetadata({
   const guide = placeGuideBySlug(slug);
   if (!guide) return {};
   return {
-    title: guide.title,
+    title: guide.seoTitle ?? guide.title,
     description: guide.description,
     alternates: { canonical: absoluteUrl(`/guides/${guide.slug}`) },
     robots: { index: true, follow: true },
@@ -49,7 +49,8 @@ export default async function PlaceGuidePage({
           })),
         }}
       />
-      <LegalPage title={guide.title} updated={guide.updated}>
+      <LegalPage title={guide.seoTitle ?? guide.title} updated={guide.updated}>
+        {guide.seoTitle ? <h2>{guide.title}</h2> : null}
         <p>{guide.intro}</p>
         {guide.sections.map((section) => (
           <section key={section.heading}>
