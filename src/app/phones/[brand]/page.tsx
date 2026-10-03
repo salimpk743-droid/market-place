@@ -4,10 +4,14 @@ import { notFound } from "next/navigation";
 import { ListingCard } from "@/components/ListingCard";
 import { EmptyState } from "@/components/EmptyState";
 import { JsonLd } from "@/components/JsonLd";
-import { getPhoneBrandBySlug } from "@/lib/market/catalog";
+import { getPhoneBrandBySlug, MODELS_BY_BRAND } from "@/lib/market/catalog";
 import { activePhoneCitiesByBrand, activePhoneModels, searchListings } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
 import { ListingGrid, Page, PageTitle } from "@/components/ui";
+import { BrandPriceTable, HubFaqs, HubSection } from "@/components/BrandHub";
+import { AuthorBox } from "@/components/GuideMeta";
+import { getBrandHub } from "@/lib/market/brand-hubs";
+import { formatCheckedDate, MODEL_PRICES, type ModelPriceData } from "@/lib/market/model-prices";
 
 type Props = { params: Promise<{ brand: string }> };
 
@@ -19,9 +23,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { brand } = await params;
   const b = getPhoneBrandBySlug(brand);
   if (!b) return { title: "Brand not found", robots: { index: false, follow: true } };
+  const hub = getBrandHub(b.slug);
   return {
-    title: `${b.name} Mobile Prices in Pakistan — Used, PTA & Non-PTA`,
-    description: `Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`,
+    title: hub?.title ?? `${b.name} Mobile Prices in Pakistan — Used, PTA & Non-PTA`,
+    description: hub?.description ?? `Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`,
     alternates: { canonical: absoluteUrl(`/phones/${b.slug}`) },
     robots: { index: true, follow: true },
   };
@@ -39,14 +44,30 @@ export default async function BrandPage({ params }: Props) {
   ]);
   const activeModels = rankedModels.filter((item) => item.brand === b.name).slice(0, 24);
   const cities = rankedCities;
+  const hub = getBrandHub(b.slug);
+  const catalogModels = MODELS_BY_BRAND[b.name] || [];
+  const priced: ModelPriceData[] = hub?.extraPrices ?? MODEL_PRICES.filter((m) => m.brand.toLowerCase() === b.name.toLowerCase());
+  const modelHref = (m: ModelPriceData) =>
+    m.guidePath ?? (catalogModels.includes(m.model) ? `/phones/${b.slug}/${slugify(m.model)}` : null);
 
   return (
     <Page>
       <PageTitle
         kicker="Mobile price database · Pakistan"
-        title={`${b.name} Mobile Prices in Pakistan`}
-        description={`Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`}
+        title={hub?.h1 ?? `${b.name} Mobile Prices in Pakistan`}
+        description={hub ? `Last updated ${formatCheckedDate(hub.updated)}. Prices, PTA status, used-phone checks and service in Pakistan.` : `Explore ${b.name} phone models, Pakistan market prices, used listings, storage, condition and PTA/non-PTA information on Mobile Market.`}
       />
+
+      {hub ? (
+        <>
+          <div className="mb-7 max-w-3xl">
+            {hub.intro.map((p) => (
+              <p key={p} className="mt-2 text-sm leading-relaxed text-ink-soft first:mt-0">{p}</p>
+            ))}
+          </div>
+          <BrandPriceTable brandName={b.name} models={priced} modelHref={modelHref} note={hub.priceNote} />
+        </>
+      ) : null}
 
       <section className="mb-7 grid gap-5 rounded-lg border border-line bg-surface p-4 sm:p-5 md:grid-cols-2">
         <div>
@@ -78,6 +99,28 @@ export default async function BrandPage({ params }: Props) {
         </div>
       </section>
 
+      {hub ? (
+        <>
+          <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5" aria-labelledby="brand-pta">
+            <h2 id="brand-pta" className="text-lg font-semibold text-ink">{b.name} PTA approval and PTA tax</h2>
+            {hub.ptaNotes.map((p) => (
+              <p key={p} className="mt-2 text-sm leading-relaxed text-ink-soft">{p}</p>
+            ))}
+            <p className="mt-2 text-sm">
+              <Link href="/guides/pta-status" className="link">PTA status guide</Link>
+              {" · "}
+              <Link href="/guides/pta-tax" className="link">PTA tax guide and calculator</Link>
+              {" · "}
+              <Link href="/pta-approved-phones" className="link">PTA-approved phones</Link>
+              {" · "}
+              <Link href="/non-pta-phones" className="link">Non-PTA phones</Link>
+            </p>
+          </section>
+          <HubSection section={hub.used} id="brand-used" />
+          <HubSection section={hub.service} id="brand-service" />
+        </>
+      ) : null}
+
       {cities.length ? (
         <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5">
           <h2 className="text-base font-semibold">{b.name} phones by city</h2>
@@ -97,12 +140,48 @@ export default async function BrandPage({ params }: Props) {
         <EmptyState title={`No live ${b.name} ads yet`} body="When a seller posts a real listing, it will show up here." actionHref="/sell" actionLabel="Sell your phone" />
       )}
 
+      {hub ? (
+        <div className="mt-8">
+          <HubFaqs hub={hub} />
+          <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5" aria-labelledby="brand-links">
+            <h2 id="brand-links" className="text-lg font-semibold text-ink">{b.name} prices, city markets and listings</h2>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {hub.links.map((l) => (
+                <Link key={l.href} href={l.href} className="rounded-md border border-line bg-white px-3 py-2 text-sm font-medium hover:border-brand/40">
+                  {l.label}
+                </Link>
+              ))}
+            </div>
+          </section>
+          {hub.sources.length ? (
+            <section className="mb-7 rounded-lg border border-line bg-surface p-4 sm:p-5" aria-labelledby="brand-sources">
+              <h2 id="brand-sources" className="text-lg font-semibold text-ink">Other sources on this page</h2>
+              <ul className="mt-2 list-disc space-y-1 pl-5 text-xs">
+                {hub.sources.map((src) => (
+                  <li key={src.href}>
+                    <a href={src.href} rel="nofollow noopener" target="_blank" className="link">{src.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ) : null}
+          <AuthorBox reviewed={formatCheckedDate(hub.updated)} sourcesNote="Prices and facts are taken from the brand, distributor, retailer and news pages listed on this page, with the date each was checked. Unverified items are marked as unavailable." />
+        </div>
+      ) : null}
+
       <div className="mt-8 flex flex-wrap gap-3 text-sm">
         <Link href="/used-mobile-phones" className="link">All used mobile phones</Link>
         <Link href="/mobile-prices-in-pakistan" className="link">Mobile prices in Pakistan</Link>
         <Link href="/guides/pta-status" className="link">PTA status guide</Link>
       </div>
 
+      {hub ? (
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: hub.faqs.map((f) => ({ "@type": "Question", name: f.question, acceptedAnswer: { "@type": "Answer", text: f.answer } })),
+        }} />
+      ) : null}
       <JsonLd data={{
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
