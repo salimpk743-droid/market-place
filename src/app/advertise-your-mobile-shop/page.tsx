@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ADVERTISE_EMAIL, ADVERTISE_MAILTO, ADVERTISE_PATH, absoluteUrl } from "@/lib/market/site";
+import { AdvertiseContact } from "@/components/AdvertiseContact";
+import { ADVERTISE_PATH, absoluteUrl } from "@/lib/market/site";
 
 const TITLE = "Advertise Your Mobile Shop";
 const DESCRIPTION =
@@ -30,12 +31,10 @@ export default function AdvertisePage() {
 
           <div className="rounded-xl border border-line bg-page p-4">
             <p className="font-semibold text-ink">Email us to advertise</p>
-            <p className="mt-2 text-lg">
-              <a className="font-semibold text-brand hover:underline" href={ADVERTISE_MAILTO}>
-                {ADVERTISE_EMAIL}
-              </a>
-            </p>
-            <p className="mt-1 text-xs text-muted">
+            <div className="mt-2">
+              <AdvertiseContact />
+            </div>
+            <p className="mt-3 text-xs text-muted">
               Subject: &ldquo;Advertise my mobile shop on mobilemarket.pk&rdquo;. Email is the only way to reach us about
               advertising for now.
             </p>

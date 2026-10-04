@@ -3,7 +3,10 @@ export const SUPPORT_EMAIL = "help@mobilemarket.pk";
 /** Shop advertising enquiries only. Support and other contact emails stay on SUPPORT_EMAIL. */
 export const ADVERTISE_EMAIL = "salimpk742@gmail.com";
 export const ADVERTISE_PATH = "/advertise-your-mobile-shop";
-export const ADVERTISE_MAILTO = `mailto:${ADVERTISE_EMAIL}?subject=${encodeURIComponent("Advertise my mobile shop on mobilemarket.pk")}`;
+export const ADVERTISE_SUBJECT = "Advertise my mobile shop on mobilemarket.pk";
+export const ADVERTISE_MAILTO = `mailto:${ADVERTISE_EMAIL}?subject=${encodeURIComponent(ADVERTISE_SUBJECT)}`;
+/** For visitors without a default mail app (common on Windows desktops): opens Gmail's compose window. */
+export const ADVERTISE_GMAIL_URL = `https://mail.google.com/mail/?view=cm&fs=1&to=${ADVERTISE_EMAIL}&su=${encodeURIComponent(ADVERTISE_SUBJECT)}`;
 export const DEFAULT_SITE_URL = "https://mobilemarket.pk";
 export const PAGE_SIZE = 24;
 

@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { ADVERTISE_EMAIL, ADVERTISE_MAILTO, BRAND, DEFAULT_SITE_URL, SUPPORT_EMAIL, safeInternalPath } from "./site.ts";
+import { ADVERTISE_EMAIL, ADVERTISE_GMAIL_URL, ADVERTISE_MAILTO, BRAND, DEFAULT_SITE_URL, SUPPORT_EMAIL, safeInternalPath } from "./site.ts";
 
 describe("branding and redirects", () => {
   it("uses Mobile Market and the support mailbox", () => {
@@ -28,5 +28,9 @@ describe("advertising contact", () => {
     assert.equal(ADVERTISE_EMAIL, "salimpk742@gmail.com");
     assert.equal(SUPPORT_EMAIL, "help@mobilemarket.pk");
     assert.equal(ADVERTISE_MAILTO, "mailto:salimpk742@gmail.com?subject=Advertise%20my%20mobile%20shop%20on%20mobilemarket.pk");
+    assert.equal(
+      ADVERTISE_GMAIL_URL,
+      "https://mail.google.com/mail/?view=cm&fs=1&to=salimpk742@gmail.com&su=Advertise%20my%20mobile%20shop%20on%20mobilemarket.pk",
+    );
   });
 });
