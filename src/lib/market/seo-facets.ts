@@ -5,6 +5,7 @@ import { categoryFilterValues } from "@/lib/market/catalog";
 import { PUBLIC_LISTING_COLUMNS, type PublicListing } from "@/lib/market/types";
 import { mediaUrlForPath } from "@/lib/market/listing-media.server";
 import { storagePathsFromStored } from "@/lib/market/media-path";
+import { fillMissingCovers } from "@/lib/market/cover-fallback.server";
 
 const PUBLIC_SELECT = PUBLIC_LISTING_COLUMNS.join(",");
 const PUBLIC_SELECT_LEGACY = PUBLIC_LISTING_COLUMNS.filter((column) => column !== "category").join(",");
@@ -24,7 +25,7 @@ function asRows(data: unknown): PublicListing[] {
     const record = row && typeof row === "object" && !Array.isArray(row)
       ? (row as Record<string, unknown>)
       : {};
-    return withSignedCover(stripPrivateFields(record));
+    return stripPrivateFields(record);
   });
 }
 
@@ -66,5 +67,5 @@ export async function searchPhoneSeoListings({
   }
 
   if (error) return { rows: [] as PublicListing[], total: 0 };
-  return { rows: asRows(data), total: count || 0 };
+  return { rows: (await fillMissingCovers(asRows(data))).map(withSignedCover), total: count || 0 };
 }

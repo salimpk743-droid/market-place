@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { SellForm } from "@/components/SellForm";
 import { getCurrentUser } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
+import { priceRefsForSellForm } from "@/lib/market/price-refs";
 
 export const metadata: Metadata = {
   title: "Sell your phone",
@@ -22,7 +23,7 @@ export default async function SellPage() {
         You can edit, mark sold or delete it later from My Ads.
       </p>
       <div className="card mt-6 p-5 sm:p-7">
-        <SellForm />
+        <SellForm priceRefs={priceRefsForSellForm()} />
       </div>
     </main>
   );

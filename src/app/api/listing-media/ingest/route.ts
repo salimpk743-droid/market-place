@@ -38,16 +38,19 @@ export async function POST(request: Request) {
   const path = String(body?.path || "");
   const parsed = parseListingStoragePath(path);
   if (!parsed || parsed.listingId !== listingId.toLowerCase() || parsed.sellerId !== user.id.toLowerCase()) {
+    console.warn("[post-ad] ingest rejected path", JSON.stringify({ seller: user.id, listingId: listingId.slice(0, 60) }));
     return NextResponse.json({ error: "Invalid photo path." }, { status: 400 });
   }
 
   const { data: owned } = await supabase.from("listings").select("id").eq("id", listingId).eq("seller_id", user.id).maybeSingle();
   if (!owned) {
+    console.warn("[post-ad] ingest for a listing the seller does not own", JSON.stringify({ seller: user.id, listingId }));
     return NextResponse.json({ error: "Not your listing." }, { status: 403 });
   }
 
   const stored = await ingestListingImage(parsed.path, supabase);
   if (!stored) {
+    console.error("[post-ad] ingest could not cache photo", JSON.stringify({ seller: user.id, listingId, file: parsed.filename }));
     return NextResponse.json({ error: "Could not publish that photo." }, { status: 400 });
   }
   return NextResponse.json({ ok: true, filename: parsed.filename });

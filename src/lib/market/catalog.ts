@@ -156,3 +156,34 @@ export function inferCategory(q: string) {
   if (/\b(car mount|selfie|memory card|otg|speaker|pop socket)\b/.test(t)) return "other";
   return undefined;
 }
+
+/**
+ * Extra phone brands sellers can choose on the Sell form. Each is sold in Pakistan (brand page live on
+ * priceoye.pk/mobiles/<brand>, checked 4 Oct 2026). They are kept out of BRANDS on purpose, so they do not
+ * add homepage brand tiles, filter options or /phones/<brand> pages that have no content yet.
+ */
+export const SELL_EXTRA_PHONE_BRANDS: Brand[] = [
+  { slug: "honor", name: "Honor" },
+  { slug: "itel", name: "Itel" },
+  { slug: "motorola", name: "Motorola" },
+  { slug: "nokia", name: "Nokia" },
+  { slug: "zte", name: "ZTE" },
+  { slug: "sparx", name: "Sparx" },
+  { slug: "asus", name: "Asus" },
+  { slug: "lenovo", name: "Lenovo" },
+];
+
+/** "Other" brand / model on the Sell form: the seller types the name. */
+export const OTHER_BRAND: Brand = { slug: "other", name: "Other" };
+export const OTHER_MODEL_VALUE = "__other__";
+
+/** Brands offered on the Sell form: browse brands first, then the extra sell-only brands, then Other. */
+export function sellBrandsForCategory(slug: string | null | undefined): Brand[] {
+  if (isPhoneCategory(slug)) return [...BRANDS, ...SELL_EXTRA_PHONE_BRANDS.filter((b) => !BRANDS.some((x) => x.name === b.name)), OTHER_BRAND];
+  return [...ALL_BRANDS.filter((b) => b.name !== OTHER_BRAND.name), OTHER_BRAND];
+}
+
+/** True when /phones/<slug> exists for this brand (it is one of the browse brands). */
+export function hasPhoneBrandPage(name: string | null | undefined) {
+  return BRANDS.some((b) => b.name.toLowerCase() === String(name || "").toLowerCase());
+}
