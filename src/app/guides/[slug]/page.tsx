@@ -65,6 +65,17 @@ export default async function PlaceGuidePage({
                 ))}
               </ul>
             ) : null}
+            {section.links ? (
+              <ul className="list-disc space-y-1 pl-6">
+                {section.links.map((link) => (
+                  <li key={link.href}>
+                    <Link href={link.href} className="link">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
           </section>
         ))}
         <h2>Questions people ask</h2>
