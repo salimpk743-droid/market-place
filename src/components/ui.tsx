@@ -123,7 +123,7 @@ export function StatusBadge({
     <span className="flex flex-wrap gap-1">
       {sold || status === "sold" ? <span className="badge bg-ink text-white">Sold</span> : null}
       {status === "removed" ? <span className="badge bg-danger/10 text-danger">Removed</span> : null}
-      {status === "pending_moderation" ? <span className="badge bg-brand-soft text-brand-ink">Pending</span> : null}
+      {status === "pending_moderation" ? <span className="badge bg-brand-soft text-brand-ink">Draft · not live</span> : null}
       {featured && !sold && status !== "sold" ? (
         <span className="badge border border-accent/40 bg-accent/15 text-accent-ink">Featured</span>
       ) : null}

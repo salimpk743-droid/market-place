@@ -8,12 +8,14 @@ const KEPT = [
   "a13ab52e-531f-4d22-816e-ae0f3ea6fcd1",
   "52b0eb06-483b-44f5-b273-0094c6b0a125",
   "a2a1a6ea-80b3-406a-a909-cb277f736790",
+  "705d03c0-be68-4dea-8dce-d25e30fdc910",
+  "1db923a7-2430-4dac-b5cd-4edc9957ef59",
 ];
 
 describe("removed listing blocklist", () => {
-  it("holds exactly the 12 approved UUIDs and none of the kept listings", () => {
-    assert.equal(REMOVED_LISTING_IDS.length, 12);
-    assert.equal(new Set(REMOVED_LISTING_IDS).size, 12);
+  it("holds exactly the 14 approved UUIDs and none of the kept listings", () => {
+    assert.equal(REMOVED_LISTING_IDS.length, 14);
+    assert.equal(new Set(REMOVED_LISTING_IDS).size, 14);
     for (const id of REMOVED_LISTING_IDS) assert.match(id, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
     for (const id of KEPT) assert.equal(isRemovedListing(id), false, id);
   });

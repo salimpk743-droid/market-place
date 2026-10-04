@@ -7,6 +7,7 @@ import { OWNER_LISTING_COLUMNS, PUBLIC_LISTING_COLUMNS, type ListingFilters, typ
 import { createAdminSupabase } from "@/lib/supabase/admin";
 import { downloadListingImage, mediaUrlsForPaths, mediaUrlForPath, readCachedImage } from "./listing-media.server";
 import { storagePathsFromStored } from "./media-path";
+import { fillMissingCovers } from "./cover-fallback.server";
 
 const PUBLIC_SELECT = PUBLIC_LISTING_COLUMNS.join(",");
 const OWNER_SELECT = OWNER_LISTING_COLUMNS.join(",");
@@ -36,6 +37,11 @@ function withSignedCover(listing: PublicListing): PublicListing {
 
 function withSignedCovers(listings: PublicListing[]): PublicListing[] {
   return listings.map(withSignedCover);
+}
+
+/** Card lists: fall back to the first saved photo when the cover is missing, then sign the cover URL. */
+async function withCardCovers(listings: PublicListing[]): Promise<PublicListing[]> {
+  return withSignedCovers(await fillMissingCovers(listings));
 }
 
 async function warmStoredImages(paths: string[], client: NonNullable<Awaited<ReturnType<typeof createServerSupabase>>>) {
@@ -131,7 +137,7 @@ export async function searchListings(filters: ListingFilters) {
   if (error) {
     return { rows: [] as PublicListing[], total: 0, page, pageCount: 1, configured: true, error: error.message };
   }
-  const rows = withSignedCovers(asListings(data));
+  const rows = await withCardCovers(asListings(data));
   const total = count || 0;
   return {
     rows,
@@ -180,7 +186,28 @@ export async function getListingById(id: string) {
     data = retry.data;
   }
   const listing = asListing(data);
-  return listing ? withSignedCover(listing) : null;
+  return listing ? withSignedCover((await fillMissingCovers([listing]))[0]) : null;
+}
+
+/** The owner's saved photos for the edit form (cover list + listing_images rows), with viewable URLs. */
+export async function getOwnListingPhotos(id: string): Promise<{ path: string; url: string }[]> {
+  const { supabase, user } = await getCurrentUser();
+  if (!supabase || !user) return [];
+  const { data } = await supabase.from("listings").select("id, image_url").eq("id", id).eq("seller_id", user.id).maybeSingle();
+  if (!data) return [];
+  const paths = storagePathsFromStored((data as { image_url?: string }).image_url);
+  const rows = await supabase
+    .from("listing_images")
+    .select("storage_path, public_url, sort_order")
+    .eq("listing_id", id)
+    .order("sort_order", { ascending: true });
+  for (const row of rows.data || []) paths.push(...storagePathsFromStored(row.storage_path || row.public_url));
+  const out: { path: string; url: string }[] = [];
+  for (const path of Array.from(new Set(paths))) {
+    const url = mediaUrlForPath(path);
+    if (url) out.push({ path, url });
+  }
+  return out;
 }
 
 export async function getOwnListingContact(id: string) {
@@ -240,7 +267,7 @@ export async function getRelatedListings(listing: Pick<PublicListing, "id" | "br
       .limit(3);
     data = retry.data;
   }
-  return withSignedCovers(asListings(data));
+  return withCardCovers(asListings(data));
 }
 
 export async function recentListings(limit = 12) {
@@ -264,7 +291,7 @@ export async function recentListings(limit = 12) {
     data = retry.data;
   }
   return {
-    rows: withSignedCovers(asListings(data)),
+    rows: await withCardCovers(asListings(data)),
     configured: true,
   };
 }
@@ -291,7 +318,7 @@ export async function featuredListings(limit = 6) {
       .limit(limit);
     data = retry.data;
   }
-  return withSignedCovers(asListings(data));
+  return withCardCovers(asListings(data));
 }
 
 export type ActivePhoneModel = { brand: string; model: string; count: number };
@@ -648,6 +675,6 @@ export async function myListings() {
   );
   return {
     user,
-    rows: withSignedCovers(rawRows),
+    rows: await withCardCovers(rawRows),
   };
 }

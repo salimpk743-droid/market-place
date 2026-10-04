@@ -47,6 +47,11 @@ export default async function MyAdsPage() {
                   {cityLabel(l.city_slug, l.area)} · {getCategory(l.category).short}
                   {ptaMeta(l.pta_status) ? ` · ${ptaMeta(l.pta_status)?.label}` : ""}
                 </p>
+                {l.status === "pending_moderation" ? (
+                  <Link href={`/sell/${l.id}`} className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-brand-ink underline">
+                    Finish this ad (add a photo and publish) →
+                  </Link>
+                ) : null}
                 <OwnerTools id={l.id} sold={l.status === "sold"} compact />
               </div>
             </article>

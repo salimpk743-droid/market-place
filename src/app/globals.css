@@ -133,6 +133,10 @@
     background: var(--color-page);
     color: var(--color-muted);
   }
+  /* Sell form: bigger tap targets on phones. */
+  .sell-form .input {
+    min-height: 3rem;
+  }
   textarea.input {
     min-height: 6.5rem;
     padding-top: 0.65rem;

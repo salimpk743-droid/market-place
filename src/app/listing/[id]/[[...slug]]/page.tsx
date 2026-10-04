@@ -7,7 +7,7 @@ import { ListingCard } from "@/components/ListingCard";
 import { ListingGallery } from "@/components/ListingGallery";
 import { JsonLd } from "@/components/JsonLd";
 import { ListingGrid, Page, SectionHead, StatusBadge } from "@/components/ui";
-import { cityLabel, brandSlug, categoryPath, getCategory, isPhoneCategory, ptaMeta } from "@/lib/market/catalog";
+import { cityLabel, brandSlug, hasPhoneBrandPage, categoryPath, getCategory, isPhoneCategory, ptaMeta } from "@/lib/market/catalog";
 import { formatPkr, listingPath, listingSeoTitle, listingSlug, listingTitle, timeAgo } from "@/lib/market/format";
 import { getListingById, getListingImages, getRelatedListings, isOwnListing } from "@/lib/market/listings";
 import { absoluteUrl } from "@/lib/market/site";
@@ -185,7 +185,7 @@ export default async function ListingPage({ params }: Props) {
         <section className="mt-12">
           <SectionHead
             title={`More ${listing.brand} ${phone ? "phones" : cat.short.toLowerCase()}`}
-            href={phone ? `/phones/${brandSlug(listing.brand)}` : categoryPath(listing.category)}
+            href={phone ? (hasPhoneBrandPage(listing.brand) ? `/phones/${brandSlug(listing.brand)}` : "/phones") : categoryPath(listing.category)}
           />
           <ListingGrid>
             {related.map((l) => (

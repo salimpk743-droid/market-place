@@ -1,5 +1,5 @@
 /**
- * Listings removed by the site owner (2 Oct 2026) that the database still marks active:
+ * Listings removed by the site owner (2 and 4 Oct 2026) that the database still marks active:
  * re-posted duplicates (the oldest listing with photos in each group is kept) and
  * implausible / off-topic ads. Remove an ID here only after its row is changed in the DB.
  *
@@ -21,6 +21,11 @@ export const REMOVED_LISTING_IDS: readonly string[] = [
   "22c5d744-92ad-424d-ace4-33f666591f71",
   // iPhone 13 Pro Max, Islamabad (kept: a2a1a6ea-80b3-406a-a909-cb277f736790)
   "ebcf7ca0-2254-4b7c-88ac-de3c76707929",
+  // Added 4 Oct 2026 (owner approved): double posts from the posting bug (area changed / double tap)
+  // Vivo Y11d 128GB, Lahore, Samanabad (kept: 705d03c0-be68-4dea-8dce-d25e30fdc910, Ichhra, 2 photos)
+  "d14a5b5c-f270-4fdd-903b-9be04b742f62",
+  // Nothing Phone (1) 128GB, Rawalpindi, posted 0.3 s apart (kept: 1db923a7-2430-4dac-b5cd-4edc9957ef59)
+  "85c270e5-cf9c-4cfe-abc1-9cd9f4b4646a",
   // Implausible / off-topic
   "f1764bcc-917a-40f7-993d-f973eff81fb0",
   "7eefc0e2-ad1b-43c5-a21f-3f8734b0c000",
