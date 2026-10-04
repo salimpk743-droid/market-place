@@ -49,6 +49,14 @@ export default async function AccessoriesPage({ searchParams }: { searchParams: 
           </Link>
         ))}
       </div>
+      <p className="mb-4 text-sm text-muted">
+        New prices, checked 4 October 2026:{" "}
+        <Link href="/accessories/airpods-price-in-pakistan" className="link">AirPods price in Pakistan</Link>,{" "}
+        <Link href="/accessories/earbuds-price-in-pakistan" className="link">earbuds by brand</Link> and{" "}
+        <Link href="/accessories/headphones-price-in-pakistan" className="link">headphones</Link>. Buying second hand? Read{" "}
+        <Link href="/guides/buy-used-airpods" className="link">buying used AirPods</Link> and{" "}
+        <Link href="/guides/fake-airpods" className="link">how to spot fake AirPods</Link>.
+      </p>
       <p className="mb-6 text-sm text-muted">
         Meet in public and inspect the item before you pay. Read{" "}
         <Link href="/guides/common-scams" className="link">

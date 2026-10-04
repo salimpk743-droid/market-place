@@ -44,6 +44,11 @@ const GUIDES = [
   { href: "/guides/pta-tax", title: "PTA tax on mobile phones (2026-27)", body: "FBR slabs, a calculator, iPhone 17 amounts and FBR values for used phones." },
   { href: "/guides/battery-health", title: "Battery health on used phones", body: "What the percentage means and how people fake it." },
   { href: "/guides/common-scams", title: "Common used-phone scams in Pakistan", body: "Advance payment, dummy units, cloned IMEIs, and too-cheap ads." },
+  { href: "/accessories/airpods-price-in-pakistan", title: "AirPods price in Pakistan", body: "AirPods 4, AirPods 5, Pro 3 and Max 2 at named retailers, checked 4 October 2026, with Apple model numbers." },
+  { href: "/accessories/earbuds-price-in-pakistan", title: "Earbuds price in Pakistan by brand", body: "Audionic, Ronin, Redmi Buds, Galaxy Buds, realme, Anker, Oraimo, Infinix, Sony and JBL, with dated prices." },
+  { href: "/accessories/headphones-price-in-pakistan", title: "Headphones price in Pakistan", body: "Budget to premium wireless headphones, each price linked to the retailer page." },
+  { href: "/guides/fake-airpods", title: "How to spot fake AirPods", body: "Model numbers, matching cases, Apple's coverage check and Find My." },
+  { href: "/guides/buy-used-airpods", title: "Buying used AirPods safely", body: "Find My Lock, case checks, AppleCare transfer and pricing against new." },
   { href: "/buyer-safety", title: "Buyer safety", body: "Public meetings, no advance money, and reporting." },
 ];
 
