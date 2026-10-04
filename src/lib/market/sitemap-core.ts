@@ -54,6 +54,7 @@ export const SITEMAP_CORE_PATHS = [
   "/guides/buy-used-airpods",
   "/about",
   "/contact",
+  "/advertise-your-mobile-shop",
   "/buyer-safety",
   "/privacy",
   "/terms",
@@ -113,4 +114,5 @@ export const SITEMAP_CORE_LASTMOD: Record<string, string> = {
   "/guides/buy-used-airpods": "2026-10-04",
   "/about": "2026-10-02",
   "/contact": "2026-10-02",
+  "/advertise-your-mobile-shop": "2026-10-04",
 };

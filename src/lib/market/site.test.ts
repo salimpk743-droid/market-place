@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { BRAND, DEFAULT_SITE_URL, SUPPORT_EMAIL, safeInternalPath } from "./site.ts";
+import { ADVERTISE_EMAIL, ADVERTISE_MAILTO, BRAND, DEFAULT_SITE_URL, SUPPORT_EMAIL, safeInternalPath } from "./site.ts";
 
 describe("branding and redirects", () => {
   it("uses Mobile Market and the support mailbox", () => {
@@ -20,5 +20,13 @@ describe("branding and redirects", () => {
     assert.equal(safeInternalPath("/%2f%2fevil.example"), "/my-ads");
     assert.equal(safeInternalPath("/login?next=https://evil.example"), "/my-ads");
     assert.equal(safeInternalPath(null, "/account"), "/account");
+  });
+});
+
+describe("advertising contact", () => {
+  it("uses the advertising address with a prefilled subject and leaves support email alone", () => {
+    assert.equal(ADVERTISE_EMAIL, "salimpk742@gmail.com");
+    assert.equal(SUPPORT_EMAIL, "help@mobilemarket.pk");
+    assert.equal(ADVERTISE_MAILTO, "mailto:salimpk742@gmail.com?subject=Advertise%20my%20mobile%20shop%20on%20mobilemarket.pk");
   });
 });

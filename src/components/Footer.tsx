@@ -8,6 +8,7 @@ const COLUMNS = [
       { href: "/about", label: "About Mobile Market" },
       { href: "/#how-it-works", label: "How it works" },
       { href: "/sell", label: "Sell your phone" },
+      { href: "/advertise-your-mobile-shop", label: "Advertise Your Mobile Shop" },
     ],
   },
   {
