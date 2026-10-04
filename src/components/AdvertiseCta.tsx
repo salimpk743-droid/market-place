@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ADVERTISE_EMAIL, ADVERTISE_MAILTO, ADVERTISE_PATH } from "@/lib/market/site";
+import { AdvertiseContact } from "@/components/AdvertiseContact";
+import { ADVERTISE_PATH } from "@/lib/market/site";
 
 /** Short call to action for shop owners, shown at the end of city market guides. */
 export function AdvertiseCta({ city }: { city?: string }) {
@@ -8,16 +9,15 @@ export function AdvertiseCta({ city }: { city?: string }) {
       <p className="font-semibold text-ink">Own a mobile shop{city ? ` in ${city}` : ""}?</p>
       <p className="mt-1">
         Promote your shop and products to people reading our city guides for new, used and second hand phones and
-        accessories. Sponsored placements are always clearly labelled.{" "}
+        accessories. Sponsored placements are always clearly labelled. See{" "}
         <Link href={ADVERTISE_PATH} className="link">
           Advertise Your Mobile Shop
         </Link>{" "}
-        or email{" "}
-        <a href={ADVERTISE_MAILTO} className="link">
-          {ADVERTISE_EMAIL}
-        </a>
-        .
+        for what to send, or email us:
       </p>
+      <div className="mt-3">
+        <AdvertiseContact compact />
+      </div>
     </aside>
   );
 }
