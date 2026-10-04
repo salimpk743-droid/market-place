@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AdvertiseCta } from "@/components/AdvertiseCta";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
 import { LegalPage } from "@/components/LegalPage";
 import { AuthorBox } from "@/components/GuideMeta";
 import { placeGuideBySlug, placeGuides } from "@/lib/market/place-guides";
 import { absoluteUrl } from "@/lib/market/site";
+
+/** "best-mobile-market-in-dera-ismail-khan" -> "Dera Ismail Khan"; undefined for non-city guides. */
+function cityFromSlug(slug: string) {
+  const m = /^best-mobile-market-in-(.+)$/.exec(slug);
+  return m ? m[1].split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" ") : undefined;
+}
 
 export function generateStaticParams() {
   return placeGuides.map((guide) => ({ slug: guide.slug }));
@@ -106,6 +113,7 @@ export default async function PlaceGuidePage({
           ))}
         </ul>
         <AuthorBox reviewed={guide.updated} sourcesNote="Shop names and addresses are copied from the distributor, brand or news pages listed above; we have not visited every counter." />
+        {guide.slug.startsWith("best-mobile-market") ? <AdvertiseCta city={cityFromSlug(guide.slug)} /> : null}
       </LegalPage>
     </>
   );

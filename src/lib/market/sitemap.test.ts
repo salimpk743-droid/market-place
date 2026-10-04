@@ -60,6 +60,7 @@ describe("sitemap core paths", () => {
       "/guides/buy-used-airpods",
       "/about",
       "/contact",
+      "/advertise-your-mobile-shop",
       "/buyer-safety",
       "/privacy",
       "/terms",

@@ -1,5 +1,9 @@
 export const BRAND = "Mobile Market";
 export const SUPPORT_EMAIL = "help@mobilemarket.pk";
+/** Shop advertising enquiries only. Support and other contact emails stay on SUPPORT_EMAIL. */
+export const ADVERTISE_EMAIL = "salimpk742@gmail.com";
+export const ADVERTISE_PATH = "/advertise-your-mobile-shop";
+export const ADVERTISE_MAILTO = `mailto:${ADVERTISE_EMAIL}?subject=${encodeURIComponent("Advertise my mobile shop on mobilemarket.pk")}`;
 export const DEFAULT_SITE_URL = "https://mobilemarket.pk";
 export const PAGE_SIZE = 24;
 
