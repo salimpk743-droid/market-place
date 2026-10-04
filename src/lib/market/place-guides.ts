@@ -347,7 +347,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories in Karachi",
         paragraphs: [
           "Cooperative Market in Saddar is where buyers go for accessories in bulk, and most Saddar counters sell covers, chargers, cables and earbuds alongside phones. Customs listed AirPods among the Apple goods seized at Star City in June 2025. Buy earbuds and chargers where you can test them, and keep the receipt."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "Buying tips and PTA check in Karachi",
@@ -767,7 +774,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories in Lahore",
         paragraphs: [
           "Hall Road is the old market for parts and accessories, and Hafeez Centre counters sell covers, chargers, cables and earbuds alongside phones. Test chargers and earbuds before you pay, and keep the receipt."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "Buying tips and PTA check in Lahore",
@@ -1139,7 +1153,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories in Islamabad",
         paragraphs: [
           "Markaz phone counters in Blue Area, G-9 and F-7 sell covers, chargers, cables and earbuds alongside phones. Rawalpindi's Singapore Plaza has more accessory counters in one building. Test anything that plugs in."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "Buying tips and PTA check in Islamabad",
@@ -1512,7 +1533,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories in Rawalpindi",
         paragraphs: [
           "Singapore Plaza's floors include accessory counters for covers, chargers, cables and earbuds. Test anything that plugs in before paying."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "Buying tips and PTA check in Rawalpindi",
@@ -1880,7 +1908,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories in Multan",
         paragraphs: [
           "Phone counters in Mall Plaza and Hussain Agahi sell covers, chargers, cables and earbuds alongside phones. Test anything that plugs in, and keep the receipt."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "Buying tips and PTA check in Multan",
@@ -2391,7 +2426,14 @@ export const placeGuides: PlaceGuide[] = [
         heading: "Mobile accessories wholesale in Peshawar",
         paragraphs: [
           "Saddar is the accessories hub. APP quoted wholesale dealers of mobile phones and accessories in the Main Saddar bazaar in 2020, and the January 2024 reports on the Time Centre Plaza fire described it as a wholesale hub for phone accessories. The same 2020 report said accessory prices roughly doubled when supplies from China stalled; a quote for covers or chargers can move quickly."
-        ]
+        ],
+        links: [
+          { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan (checked 4 October 2026)" },
+          { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" },
+          { href: "/accessories/headphones-price-in-pakistan", label: "Headphones price in Pakistan" },
+          { href: "/guides/fake-airpods", label: "How to spot fake AirPods" },
+          { href: "/accessories/earbuds", label: "Used earbuds and AirPods for sale" },
+        ],
       },
       {
         heading: "How to bargain in Saddar and Karkhano",

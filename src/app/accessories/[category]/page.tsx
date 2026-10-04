@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import Link from "next/link";
 import { CatalogResults } from "@/components/CatalogResults";
 import { ACCESSORY_SLUGS, canonicalCategory, getCategory } from "@/lib/market/catalog";
 import { searchListings } from "@/lib/market/listings";
@@ -36,8 +37,21 @@ export default async function AccessoryCategoryPage({ params, searchParams }: Pr
   const cat = getCategory(canonical);
   const f = await searchParams;
   const result = await searchListings({ ...f, category: cat.slug });
+  const audio = cat.slug === "earbuds" || cat.slug === "headphones";
   return (
     <CatalogResults
+      intro={
+        audio ? (
+          <p className="mb-4 max-w-3xl text-sm text-muted">
+            Compare with new prices checked 4 October 2026:{" "}
+            <Link href="/accessories/airpods-price-in-pakistan" className="link">AirPods</Link>,{" "}
+            <Link href="/accessories/earbuds-price-in-pakistan" className="link">earbuds by brand</Link> and{" "}
+            <Link href="/accessories/headphones-price-in-pakistan" className="link">headphones</Link>. Buying used AirPods? Read{" "}
+            <Link href="/guides/buy-used-airpods" className="link">our checklist</Link> and{" "}
+            <Link href="/guides/fake-airpods" className="link">how to spot fakes</Link>.
+          </p>
+        ) : undefined
+      }
       result={result}
       filters={{ ...f, category: cat.slug }}
       action={`/accessories/${cat.slug}`}

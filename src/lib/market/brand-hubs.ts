@@ -200,6 +200,8 @@ export const BRAND_HUBS: BrandHub[] = [
       { href: "/iphone-18-pro-price-in-pakistan", label: "iPhone 18 Pro price in Pakistan" },
       { href: "/iphone-18-pro-max-price-in-pakistan", label: "iPhone 18 Pro Max price in Pakistan" },
       ...COMMON_LINKS,
+      { href: "/accessories/airpods-price-in-pakistan", label: "AirPods price in Pakistan" },
+      { href: "/guides/buy-used-airpods", label: "Buying used AirPods" },
       ...CITY_LINKS("apple"),
     ],
     sources: [SRC.mercantileCare, SRC.airlinkStores, SRC.apple14, SRC.news24],
@@ -239,7 +241,7 @@ export const BRAND_HUBS: BrandHub[] = [
       { question: "Where is the Samsung service centre in Pakistan?", answer: "Samsung's service-centre page lists Galaxy Consultants points in Karachi, Lahore, Islamabad, Bahawalpur, Multan and Faisalabad. The helpline is 0800 7267864." },
       usedFaq("Samsung", "samsung"),
     ]),
-    links: [...COMMON_LINKS, ...CITY_LINKS("samsung")],
+    links: [...COMMON_LINKS, { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" }, ...CITY_LINKS("samsung")],
     sources: [SRC.samsungSc, SRC.samsungTi, SRC.samsungS24, SRC.news24],
   },
   {
@@ -275,7 +277,7 @@ export const BRAND_HUBS: BrandHub[] = [
       taxFaq("Xiaomi"),
       usedFaq("Xiaomi", "xiaomi"),
     ]),
-    links: [...COMMON_LINKS, ...CITY_LINKS("xiaomi")],
+    links: [...COMMON_LINKS, { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" }, ...CITY_LINKS("xiaomi")],
     sources: [SRC.airlinkWtb, SRC.news24],
   },
   {
@@ -379,7 +381,7 @@ export const BRAND_HUBS: BrandHub[] = [
       taxFaq("Infinix"),
       usedFaq("Infinix", "infinix"),
     ]),
-    links: [...COMMON_LINKS, ...CITY_LINKS("infinix")],
+    links: [...COMMON_LINKS, { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" }, ...CITY_LINKS("infinix")],
     sources: [SRC.carlcare, SRC.news24],
   },
   {
@@ -577,7 +579,7 @@ export const BRAND_HUBS: BrandHub[] = [
       { question: "How do I contact realme support in Pakistan?", answer: "realme Pakistan lists WhatsApp +92 339 3339988 and 042-38048018, Monday to Saturday, 9:30am to 6pm, excluding holidays." },
       usedFaq("realme", "realme"),
     ]),
-    links: [...COMMON_LINKS, ...CITY_LINKS("realme")],
+    links: [...COMMON_LINKS, { href: "/accessories/earbuds-price-in-pakistan", label: "Earbuds price in Pakistan by brand" }, ...CITY_LINKS("realme")],
     sources: [SRC.realmePk, SRC.news24],
   },
   {
