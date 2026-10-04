@@ -1,4 +1,5 @@
 import { ALL_BRANDS, CATEGORIES, CITIES } from "@/lib/market/catalog";
+import { ADVERTISE_PATH } from "@/lib/market/site";
 
 export function SearchForm({ compact = false }: { compact?: boolean }) {
   return (
@@ -53,6 +54,11 @@ export function SearchForm({ compact = false }: { compact?: boolean }) {
         <a href="/sell" className="btn btn-ghost">
           Sell your phone
         </a>
+        {compact ? null : (
+          <a href={ADVERTISE_PATH} className="btn btn-ghost">
+            Advertise Your Mobile Shop
+          </a>
+        )}
       </div>
     </form>
   );
