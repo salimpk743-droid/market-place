@@ -5,6 +5,7 @@ import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import { AuthHeader } from "@/components/AuthHeader";
 import { Header } from "@/components/Header";
+import { FollowBlock } from "@/components/FollowBlock";
 import { Footer } from "@/components/Footer";
 import { SkipLink } from "@/components/SkipLink";
 import { PreviewHostBridge } from "@/components/preview-bridge";
@@ -61,6 +62,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         </Suspense>
         <ConfigBanner configured={configured} />
         {children}
+        <FollowBlock />
         <Footer />
         {/* AdSense loads after the page is idle so it doesn't block first paint/LCP. */}
         <Script

@@ -2,7 +2,7 @@
 
 Pakistan-wide used-phone classifieds. Buyers and sellers deal with each other. Mobile Market does not inspect, certify, or sell phones.
 
-Support: **help@mobilemarket.pk**
+Support: **buildskillspk@gmail.com**
 
 This repository is the website. The Android app is a Trusted Web Activity wrapping the same site and is **not** changed in this migration.
 
