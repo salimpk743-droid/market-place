@@ -1,6 +1,6 @@
 export const BRAND = "Mobile Market";
-export const SUPPORT_EMAIL = "buildskillspk@gmail.com";
-/** Shop advertising enquiries. Same mailbox as SUPPORT_EMAIL: buildskillspk@gmail.com is the only site email. */
+export const SUPPORT_EMAIL = "help@mobilemarket.pk";
+/** Shop advertising enquiries only. Support and other contact emails stay on SUPPORT_EMAIL. */
 export const ADVERTISE_EMAIL = "buildskillspk@gmail.com";
 export const ADVERTISE_PATH = "/advertise-your-mobile-shop";
 export const ADVERTISE_SUBJECT = "Advertise my mobile shop on mobilemarket.pk";

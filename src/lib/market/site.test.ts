@@ -5,7 +5,7 @@ import { ADVERTISE_EMAIL, ADVERTISE_GMAIL_URL, ADVERTISE_MAILTO, BRAND, DEFAULT_
 describe("branding and redirects", () => {
   it("uses Mobile Market and the support mailbox", () => {
     assert.equal(BRAND, "Mobile Market");
-    assert.equal(SUPPORT_EMAIL, "buildskillspk@gmail.com");
+    assert.equal(SUPPORT_EMAIL, "help@mobilemarket.pk");
     assert.equal(DEFAULT_SITE_URL, "https://mobilemarket.pk");
     assert.match(DEFAULT_SITE_URL, /^https:\/\/mobilemarket\.pk$/);
     assert.doesNotMatch(DEFAULT_SITE_URL, /vercel\.app/);
@@ -26,7 +26,7 @@ describe("branding and redirects", () => {
 describe("advertising contact", () => {
   it("uses the advertising address with a prefilled subject and leaves support email alone", () => {
     assert.equal(ADVERTISE_EMAIL, "buildskillspk@gmail.com");
-    assert.equal(SUPPORT_EMAIL, "buildskillspk@gmail.com");
+    assert.equal(SUPPORT_EMAIL, "help@mobilemarket.pk");
     assert.equal(ADVERTISE_MAILTO, "mailto:buildskillspk@gmail.com?subject=Advertise%20my%20mobile%20shop%20on%20mobilemarket.pk");
     assert.equal(
       ADVERTISE_GMAIL_URL,
